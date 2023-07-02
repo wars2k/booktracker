@@ -1,0 +1,72 @@
+#editbox {
+    height: 30em;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: none;
+}
+
+#manualEntryBox {
+    height: 37em;
+    width: 100%;
+    background-color: white;
+    display: none;
+}
+
+#manualEntryBox input {
+    width: 400px;
+}
+
+.nav-itemMenu {
+    
+    all: unset;
+    height: 100%;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    
+}
+
+.nav-itemMenu:hover {
+    background-color: #f1f5f9;
+    cursor: pointer;
+    text-decoration: none;
+
+}
+
+.nav-itemMenu a {
+    all: unset;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-itemMenu a:hover {
+    text-decoration: none;
+}
+
+.menuTest {
+    height: 100%;
+
+}
+
+#titleColumn {
+    display: flex;
+    justify-content: space-between;
+}
+
+#databaseSearch {
+    width: 250px;
+}

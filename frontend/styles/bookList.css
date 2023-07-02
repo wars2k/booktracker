@@ -1,0 +1,15 @@
+#rightSideContainer {
+    display: flex;
+    gap: 15px;
+}
+
+#editBox {
+    display: none;
+    position: absolute;
+    width: 300px;
+    
+}
+
+.icon:hover {
+    cursor: pointer;
+}

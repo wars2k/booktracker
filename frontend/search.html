@@ -1,0 +1,215 @@
+<html>
+    <body>
+        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="styles/search.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+
+        <div class="page">
+            <!-- Sidebar -->
+            <header class="navbar navbar-expand-sm navbar-light d-print-none">
+              <div class="container-xl">
+                <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                  <a href="#">
+                    Book Tracker
+                  </a>
+                </h1>
+          
+                <div class="navbar-nav flex-row order-md-last">
+                  <div class="nav-item">
+                      <div class="d-none d-xl-block ps-2">
+                        <a class="btn" href="search.html">Add New Book</a>
+                        <button class="btn" onclick="logOut()">Log Out</button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+            <header class="navbar navbar-expand-sm navbar-light d-print-none">
+              <div class="container-xl">
+                <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest">
+                  <a class="nav-itemMenu" href="index.html">Book Database</a>
+                  <a class="nav-itemMenu" href="booklist.html">My Books</a>
+                  <a class="nav-itemMenu" href="users.html">Users</a>
+                  <a class="nav-itemMenu">Settings</a>
+                </div>
+              </div>
+            </header>
+            <div class="page-wrapper">
+              <div class="page-header d-print-none">
+                <div class="container-xl">
+                  <div class="row g-2 align-items-center">
+                    <div class="col">
+                      <h2 class="page-title">
+                        Add New Book
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="page-body" id="pageBody">
+                <div class="container-xl">
+                  <div class="row row-deck row-cards" id="row" style="margin-bottom: 20px">
+                    <div class="col-sm-6" style="width: 100%">
+
+                      <div class="card">
+                        <div class="card-body" style="height: 7rem">
+                            <div class="mb-3">
+                                <label class="form-label">Search</label>
+                                <div style="display: flex; gap: 15px;">
+                                <input style="width:400px;" type="text" class="form-control" name="example-text-input" placeholder="Search for a book" id="bookSearchID"/>
+                                <button class="btn searchBookButton" onclick="searchForBook(event)" type="button">Search</button> <button class="btn searchBookButton" onclick="manualEntry()">Manual Entry</button>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+
+
+                </div>
+
+                <div class="row row-deck row-cards" style="margin-bottom: 10px">
+                  <div class="col-sm-6" style="width: 100%">
+                  <fieldset class="form-fieldset" id="manualEntryBox">
+                    <p>Manual Entry</p>
+                    <div class="mb-3">
+                      <label class="form-label">Title</label>
+                      <input type="text" class="form-control manualEntryInput" autocomplete="off" id="titleManualInput"/>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Author</label>
+                      <input type="text" class="form-control manualEntryInput" autocomplete="off" id="authorManualInput"/>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Publisher</label>
+                      <input type="text" class="form-control manualEntryInput" autocomplete="off" id="publisherManualInput"/>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Date of Publication</label>
+                      <input type="text" class="form-control manualEntryInput" autocomplete="off" id="dateManualInput"/>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Link to Cover Image</label>
+                      <input type="text" class="form-control manualEntryInput" autocomplete="off" id="imageManualInput"/>
+                    </div>
+                    <button class="btn btn-success" id="submitEditButton" onclick="gatherManualEntryData()">Submit</button> <button class="btn" id="cancelEditButton" onclick="hideManualEntryBox()">Cancel</button>
+                  </fieldset>
+                  </div>
+
+
+                    <div class="col-sm-3">
+
+                        <div class="card" id="searchCard0" style="display:none">
+                            <!-- Photo -->
+                            <div class="img-responsive" id="searchCardImage0"></div>
+                            <div class="card-body">
+                              <h3 class="card-title" id="searchCardTitle0">Card with title and image</h3>
+                              <p class="text-muted" id="searchCardText0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam deleniti fugit incidunt, iste, itaque minima
+                                neque pariatur perferendis sed suscipit velit vitae voluptatem.</p>
+                                <button class="btn" onClick="addBook(0)">Add</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="card" id="searchCard1" style="display:none">
+                            <!-- Photo -->
+                            <div class="img-responsive" id="searchCardImage1"></div>
+                            <div class="card-body">
+                              <h3 class="card-title" id="searchCardTitle1">Card with title and image</h3>
+                              <p class="text-muted" id="searchCardText1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam deleniti fugit incidunt, iste, itaque minima
+                                neque pariatur perferendis sed suscipit velit vitae voluptatem.</p>
+                                <button class="btn" onClick="addBook(1)">Add</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="card" id="searchCard2" style="display:none">
+                            <!-- Photo -->
+                            <div class="img-responsive" id="searchCardImage2"></div>
+                            <div class="card-body">
+                              <h3 class="card-title" id="searchCardTitle2">Card with title and image</h3>
+                              <p class="text-muted" id="searchCardText2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam deleniti fugit incidunt, iste, itaque minima
+                                neque pariatur perferendis sed suscipit velit vitae voluptatem.</p>
+                                <button class="btn" onClick="addBook(2)">Add</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="row row-deck row-cards">
+                    <div class="col-sm-3">
+
+                        <div class="card" id="searchCard3" style="display:none">
+                            <!-- Photo -->
+                            <div class="img-responsive" id="searchCardImage3"></div>
+                            <div class="card-body">
+                              <h3 class="card-title" id="searchCardTitle3">Card with title and image</h3>
+                              <p class="text-muted" id="searchCardText3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam deleniti fugit incidunt, iste, itaque minima
+                                neque pariatur perferendis sed suscipit velit vitae voluptatem.</p>
+                                <button class="btn" onClick="addBook(3)">Add</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="card" id="searchCard4" style="display:none">
+                            <!-- Photo -->
+                            <div class="img-responsive" id="searchCardImage4"></div>
+                            <div class="card-body">
+                              <h3 class="card-title" id="searchCardTitle4">Card with title and image</h3>
+                              <p class="text-muted" id="searchCardText4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam deleniti fugit incidunt, iste, itaque minima
+                                neque pariatur perferendis sed suscipit velit vitae voluptatem.</p>
+                                <button class="btn" onClick="addBook(4)">Add</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-sm-3">
+
+                        <div class="card" id="searchCard5" style="display:none">
+                            <!-- Photo -->
+                            <div class="img-responsive" id="searchCardImage5"></div>
+                            <div class="card-body">
+                              <h3 class="card-title" id="searchCardTitle5">Card with title and image</h3>
+                              <p class="text-muted" id="searchCardText5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam deleniti fugit incidunt, iste, itaque minima
+                                neque pariatur perferendis sed suscipit velit vitae voluptatem.</p>
+                                <button class="btn" onClick="addBook(5)">Add</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+                    
+          
+
+    </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    
+    <script src="src/checkAuth.js"></script>
+    <script src="src/search.js"></script>
+</html>

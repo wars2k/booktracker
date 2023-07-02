@@ -1,0 +1,126 @@
+<html>
+    <body>
+        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone.css" rel="stylesheet" />
+    </body>
+
+    <div class="page">
+        <!-- Sidebar -->
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="#">
+                Book Tracker
+              </a>
+            </h1>
+      
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="nav-item">
+                  <div class="d-none d-xl-block ps-2">
+                    <a class="btn" href="search.html">Add New Book</a>
+                    <button class="btn" onclick="logOut()">Log Out</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl">
+            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest">
+              <a class="nav-itemMenu" href="index.html">Book Database</a>
+              <a class="nav-itemMenu" href="booklist.html">My Books</a>
+              <a class="nav-itemMenu" href="users.html">Users</a>
+              <a class="nav-itemMenu">Settings</a>
+            </div>
+          </div>
+        </header>
+        <div class="page-wrapper">
+          <div class="page-header d-print-none">
+            <div class="container-xl">
+              <div class="row g-2 align-items-center">
+                <div class="col" id="titleColumn">
+                  <h2 class="page-title">
+                    Settings
+                  </h2>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page-body" style="height: 77vh">
+            <div class="container-xl">
+              <div class="row row-deck row-cards">
+                <div class="col-sm-12" style="width:100%; height: 100%">
+                  <div class="card" style="overflow-y: auto">
+                    <div class="card-status-start bg-blue"></div>
+                    <div class="card-body" style="height: 100%">
+                        <h3 class="card-title">Metadata</h3>
+                        <div class="mb-3">
+                            <label class="form-label">Metadata Provider</label>
+                            <select class="form-select" style="max-width:200px">
+                                <option value="1">Google Books</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Results to Grab</label>
+                            <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"  style="max-width:200px"/>
+                        </div>
+                        <button class="btn">Save Changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row row-deck row-cards">
+                <div class="col-sm-12" style="width:100%; height: 100%">
+                  <div class="card" style="overflow-y: auto">
+                    <div class="card-status-start bg-blue"></div>
+                    <div class="card-body" style="height: 100%">
+                        <h3 class="card-title">Data Export</h3>
+                        <button class="btn" onclick="getExportData('csv')">Export as CSV</button>
+                        <button class="btn" onclick="getExportData('json')">Export as JSON</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row row-deck row-cards">
+                <div class="col-sm-12" style="width:100%; height: 100%">
+                  <div class="card" style="overflow-y: auto">
+                    <div class="card-status-start bg-blue"></div>
+                    <div class="card-body" style="height: 100%">
+                        <h3 class="card-title">Data Import</h3>
+                        <div class="mb-3">
+                            <label class="form-label">Import From</label>
+                            <select class="form-select" style="max-width:200px" id="importFormat">
+                                <option value="goodreads">Goodreads</option>
+                                <option value="googlebooks">Google Books</option>
+                            </select>
+                            <!--<form class="dropzone" id="dropzone-default" action="." autocomplete="off" novalidate style="border: 1px solid lightgray; margin-top: 10px">
+                                <div class="fallback">-->
+                                  <input name="file" type="file" id="fileInput" onchange="submitDataImport()"/>
+                                <!--</div>
+                              </form>-->
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone-min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          new Dropzone("#dropzone-default")
+        })
+      </script>
+    <script src="src/checkAuth.js"></script>
+    <script src="src/settings.js"></script>
+    
+</html>

@@ -1,0 +1,93 @@
+<html>
+    <body>
+        <link rel="stylesheet" href="styles/styles.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+        <link rel="stylesheet" href="styles/search.css">
+        <link rel="stylesheet" href="styles/collections.css">
+    </body>
+
+    <div class="page">
+        <!-- Sidebar -->
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="#">
+                Book Tracker
+              </a>
+            </h1>
+      
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="nav-item">
+                  <div class="d-none d-xl-block ps-2">
+                    <a class="btn" href="search.html">Add New Book</a>
+                    <button class="btn" onclick="logOut()">Log Out</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl">
+            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest">
+              <a class="nav-itemMenu" href="index.html">Book Database</a>
+              <a class="nav-itemMenu" href="booklist.html">My Books</a>
+              <a class="nav-itemMenu" href="users.html">Users</a>
+              <div class="dropdown">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="collections.html">Collections Home</a>
+                  <a class="dropdown-item" href="addNewCollection.html">Add New Collection</a>
+                </div>
+              </div>
+              <a class="nav-itemMenu" href="settings.html">Settings</a>
+            </div>
+          </div>
+        </header>
+        <div class="page-wrapper">
+          <div class="page-header d-print-none">
+            <div class="container-xl">
+              <div class="row g-2 align-items-center">
+                <div class="col" id="titleColumn">
+                  <h2 class="page-title">
+                    New Collection
+                  </h2>
+                  <div id="rightSideContainer">
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page-body" style="height: 77vh" id="pageBody">
+            <div class="container-xl" id="page">
+            <div id="newCollectionContainer">
+                <fieldset class="form-fieldset" id="newCollectionForm">
+                    <div class="mb-3">
+                      <label class="form-label required">Collection Name</label>
+                      <input type="text" id="collectionName" class="form-control" autocomplete="off"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="collectionDescription" name="example-textarea"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cover Image URL</label>
+                        <input type="text" id="collectionImage" class="form-control" autocomplete="off"/>
+                    </div>
+                    <button class="btn btn-green" onclick="handleNewCollection()">Submit</button>
+                </fieldset>
+            </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script src="src/checkAuth.js"></script>
+    <script src="src/newCollection.js"></script>
+    
+</html>

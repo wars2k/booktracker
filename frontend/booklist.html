@@ -1,0 +1,165 @@
+<html>
+    <body>
+        <link rel="stylesheet" href="styles/styles.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+        <link rel="stylesheet" href="styles/search.css">
+        <link rel="stylesheet" href="styles/bookList.css">
+    </body>
+
+    <div class="page">
+        <!-- Sidebar -->
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="#">
+                Book Tracker
+              </a>
+            </h1>
+      
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="nav-item">
+                  <div class="d-none d-xl-block ps-2">
+                    <a class="btn" href="search.html">Add New Book</a>
+                    <button class="btn" onclick="logOut()">Log Out</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl">
+            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest">
+              <a class="nav-itemMenu" href="index.html">Book Database</a>
+              <a class="nav-itemMenu" href="booklist.html">My Books</a>
+              <a class="nav-itemMenu" href="users.html">Users</a>
+              <div class="dropdown">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="collections.html">Collections Home</a>
+                  <a class="dropdown-item" href="#">Add New Collection</a>
+                </div>
+              </div>
+              <a class="nav-itemMenu">Settings</a>
+            </div>
+          </div>
+        </header>
+        <div class="page-wrapper">
+          <div class="page-header d-print-none">
+            <div class="container-xl">
+              <div class="row g-2 align-items-center">
+                <div class="col" id="titleColumn">
+                  <h2 class="page-title">
+                    My Books
+                  </h2>
+                  <div id="rightSideContainer">
+                    <div class="dropdown">
+                      <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">View</a>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="createBookCards()">Card</a>
+                        <a class="dropdown-item" href="#" onclick="createBookTable(bookData)">Table</a>
+                      </div>
+                    </div>
+                    <div class="dropdown">
+                      <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Filter</a>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" onclick="removeFilter()"><span class="status">SHOW ALL</span></a>
+                        <a class="dropdown-item" href="#" onclick="filterByStatus('UNASSIGNED')"><span class="status status-yellow">UNASSIGNED</span></a>
+                        <a class="dropdown-item" href="#" onclick="filterByStatus('READING')"><span class="status status-green">READING</span></a>
+                        <a class="dropdown-item" href="#" onclick="filterByStatus('UP NEXT')"><span class="status status-teal">UP NEXT</span></a>
+                        <a class="dropdown-item" href="#" onclick="filterByStatus('WISHLIST')"><span class="status status-blue">WISHLIST</span></a>
+                        <a class="dropdown-item" href="#" onclick="filterByStatus('FINISHED')"><span class="status status-purple">FINISHED</span></a>
+                      </div>
+                    </div>
+                    <input type="text" class="form-control" id="bookListSearch" placeholder="Search for a book." onkeyup="searchTable()"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page-body" style="height: 77vh">
+            <div class="container-xl">
+              <div class="row row-deck row-cards" style="height: 95%" id="row">
+                <div class="col-sm-10" style="width:100%; height: 100%" id="tableContainer">
+                  <div class="card" style="overflow-y: auto">
+                    <div class="card-body" style="height: 100%">
+                        <div class="table-responsive">
+                        <table class="table table-vcenter" id="bookListTable">
+                          <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Publisher</th>
+                                <th>Date of Publication</th>
+                                <th>Status</th>
+                                <th>Rating</th>
+                                <th>Date Started</th>
+                                <th>Date Completed</th>
+                                <th>Edit</th>
+                                <th>Open</th>
+                                
+                            </tr>
+                          </thead>
+                          <tbody id="bookListTableBody">
+
+                          </tbody>
+                        </table>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                      <fieldset class="form-fieldset" id="editBox">
+                        <p>Refresh to see changes take effect.</p>
+                        <p>Now Editing: <span id="nowEditing">TEST</span></p>
+                        <div class="mb-3">
+                          <div class="dropdown">
+                            <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="status" id="editStatusBox">NO CHANGES</span></a>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="#" onclick="updateStatusView('NO CHANGES', 'status')"><span class="status">NO CHANGES</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateStatusView('UNASSIGNED', 'status-yellow')"><span class="status status-yellow">UNASSIGNED</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateStatusView('READING', 'status-green')"><span class="status status-green">READING</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateStatusView('UP NEXT', 'status-teal')"><span class="status status-teal">UP NEXT</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateStatusView('WISHLIST', 'status-blue')"><span class="status status-blue">WISHLIST</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateStatusView('FINISHED', 'status-purple')"><span class="status status-purple">FINISHED</span></a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <div class="dropdown">
+                            <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="status" id="editRatingBox">NO CHANGES</span></a>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status')"><span class="status">NO CHANGES</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-green')"><span class="status status-green">&#9734&#9734&#9734&#9734&#9734</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-blue')"><span class="status status-blue">&#9734&#9734&#9734&#9734</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-yellow')"><span class="status status-yellow">&#9734&#9734&#9734</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-orange')"><span class="status status-orange">&#9734&#9734</span></a>
+                              <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-red')"><span class="status status-red">&#9734</span></a>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">Date Started</label>
+                          <input type="date" class="form-control" autocomplete="off" id="startDateEdit"/>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Date Finished</label>
+                          <input type="date" class="form-control" autocomplete="off" id="finishedDateEdit"/>
+                        </div>
+                        <button class="btn btn-success" id="submitEditButton">Submit</button> <button class="btn" id="cancelEditButton" onclick="hideEditBox()">Cancel</button> <button class="btn btn-danger" id="deleteBookButton">Delete</button>
+                      </fieldset>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script src="src/checkAuth.js"></script>
+    <script src="src/bookList.js"></script>
+    
+</html>

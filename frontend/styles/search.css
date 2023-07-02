@@ -1,0 +1,27 @@
+.bookContainer {
+    
+    height: auto;
+
+}
+.imageContainer {
+    width: 100%;
+    height: auto;
+    
+}
+.imageContainer img {
+    height: auto;
+    width: 100%;
+}
+.bookDetailsContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.basicInfo {
+    
+    width: 100%;
+    height: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+

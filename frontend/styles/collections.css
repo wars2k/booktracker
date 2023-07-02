@@ -1,0 +1,15 @@
+.card-body {
+    display: flex;
+    gap: 10px;
+}
+
+#newCollectionContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#newCollectionForm {
+    background-color: white;
+    width: 400px;
+}

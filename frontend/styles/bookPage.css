@@ -1,0 +1,54 @@
+#bottomContainer {
+    
+    min-height: 50%;
+    height: 60%;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+#imageContainer {
+    
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#metadataContainer {
+    
+    height: 100%;
+    
+    width: 50%;
+    padding: 10px;
+    padding-top: 30px;
+    
+    
+    
+}
+
+#coverImage {
+   width: 80%;
+   height: auto;
+   background-size: cover;
+   background-repeat: no-repeat;
+   background-position: center;
+    
+}
+.datagrid-item {
+    width: 100px;
+    
+}
+
+#metadataGrid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+
+}
+
+#buttonContainer {
+    margin-top: 25px;
+}
