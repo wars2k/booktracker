@@ -3,7 +3,7 @@
 checkForAdminUser()
 
 function checkForAdminUser() {
-    fetch('http://localhost:5000/api/register/canRegister', {
+    fetch('/api/register/canRegister', {
         method: 'GET'
     })
     .then(response => {

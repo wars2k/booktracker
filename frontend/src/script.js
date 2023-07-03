@@ -2,7 +2,7 @@
 function searchForBook() {
     sessionKey = localStorage.getItem("sessionKey");
     let searchBar = document.getElementById("bookSearchID");
-    fetch(`http://localhost:5000/api/books/new?name=${searchBar.value}&sessionKey=${sessionKey}`, {
+    fetch(`/api/books/new?name=${searchBar.value}&sessionKey=${sessionKey}`, {
     method: 'GET'
     })
     .then(response => response.json())
@@ -37,7 +37,7 @@ function searchForBook() {
   function addBook(i) {
     sessionKey = localStorage.getItem("sessionKey");
     let id = searchData[i].id;
-    fetch(`http://localhost:5000/api/books/save?id=${id}&sessionKey=${sessionKey}`, {
+    fetch(`/api/books/save?id=${id}&sessionKey=${sessionKey}`, {
     method: 'POST'
     })
     .then(response => response.json())
@@ -90,7 +90,7 @@ function searchForBook() {
   //the back-end returns the data in an array of objects with the following properties:
   //   id, title, author, publisher, publishedDate
   function getAllBooks() {
-    fetch('http://localhost:5000/api/books', {
+    fetch('/api/books', {
       method: 'GET'
     })
     .then(response => response.json())
@@ -156,7 +156,7 @@ function searchForBook() {
 
   function submitManualEntry(entryData) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/books/new/manual?sessionKey=${sessionKey}`, {
+    fetch(`/api/books/new/manual?sessionKey=${sessionKey}`, {
       method: 'POST',
       body: JSON.stringify(entryData),
       headers: {
@@ -191,7 +191,7 @@ function searchForBook() {
   //submits edits to the back end. ID goes after the first slash, then the edits are entered as key/value pairs. 
   function submitEdits(editData) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/books/${editData.id}?title=${editData.title}&author=${editData.author}&publisher=${editData.publisher}&date=${editData.date}&sessionKey=${sessionKey}`, {
+    fetch(`/api/books/${editData.id}?title=${editData.title}&author=${editData.author}&publisher=${editData.publisher}&date=${editData.date}&sessionKey=${sessionKey}`, {
       method: 'PUT'
       })
       .then(response => response.json())
@@ -201,7 +201,7 @@ function searchForBook() {
 
   function deleteBook(id) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/books/${id}/delete?sessionKey=${sessionKey}`, {
+    fetch(`/api/books/${id}/delete?sessionKey=${sessionKey}`, {
       method: 'DELETE'
     })
     .then(response => response.json())

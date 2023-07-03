@@ -25,7 +25,7 @@ namespace bookTrackerApi {
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Title V1");
-                c.RoutePrefix = string.Empty; // Set the Swagger UI at the root URL
+                c.RoutePrefix = "api/docs";
             });
 
             Api.configure(app);

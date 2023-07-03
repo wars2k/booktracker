@@ -19,7 +19,7 @@ function getBookData(id) {
     let payload = {
         "sessionKey": localStorage.getItem("sessionKey")
       }
-      return fetch(`http://localhost:5000/api/Booklist/${id}/data`, {
+      return fetch(`/api/Booklist/${id}/data`, {
           method: 'PUT',
           body: JSON.stringify(payload),
           headers: {

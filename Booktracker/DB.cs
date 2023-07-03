@@ -15,14 +15,14 @@ namespace bookTrackerApi {
         public static SqliteConnection? connection;
 
         public static SqliteConnection initiateConnection() {
-            string connectionString = "Data Source=external/database.db";
+            string connectionString = "Data Source=../external/database.db";
             SqliteConnection connection = new SqliteConnection(connectionString);
             connection.Open();
             return connection;
         }
 
         public static void InitiateDatabase() {
-            using (var connection = new SqliteConnection("Data Source=external/database.db"))
+            using (var connection = new SqliteConnection("Data Source=../external/database.db"))
             {
                 connection.Open();
 

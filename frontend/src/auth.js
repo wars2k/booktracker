@@ -11,7 +11,7 @@ function submitLoginRequest() {
         "Username": username,
         "Password": password
     }
-    fetch('http://localhost:5000/api/login', {
+    fetch('/api/login', {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
@@ -79,7 +79,7 @@ function submitRegisterRequest() {
         "password": password,
         "isAdmin": "1"
     }
-    fetch('http://localhost:5000/api/register', {
+    fetch('/api/register', {
         method: 'POST',
         body: JSON.stringify(payload),
         header: {
