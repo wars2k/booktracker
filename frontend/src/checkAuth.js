@@ -6,7 +6,7 @@ if (localStorage.getItem("sessionKey") == "undefined" || localStorage.getItem("s
 console.log(localStorage.getItem("sessionKey"))
 
 function logOut() {
-    fetch('/api/logout', {
+    fetch('http://localhost:5000/api/logout', {
         method: 'POST',
     })
     .then(response => {

@@ -1,7 +1,9 @@
 <html>
     <body>
         <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="styles/index.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+        
     </body>
 
     <div class="page">
@@ -27,10 +29,18 @@
         <header class="navbar navbar-expand-sm navbar-light d-print-none">
           <div class="container-xl">
             <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest">
-              <a class="nav-itemMenu" href="index.html">Book Database</a>
+              <a class="nav-itemMenu" href="index.html">Home</a>
+              <a class="nav-itemMenu" href="books.html">Book Database</a>
               <a class="nav-itemMenu" href="booklist.html">My Books</a>
               <a class="nav-itemMenu" href="users.html">Users</a>
-              <a class="nav-itemMenu">Settings</a>
+              <div class="dropdown">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="collections.html">Collections Home</a>
+                  <a class="dropdown-item" href="addNewCollection.html">Add New Collection</a>
+                </div>
+              </div>
+              <a class="nav-itemMenu" href="settings.html">Settings</a>
             </div>
           </div>
         </header>
@@ -40,64 +50,65 @@
               <div class="row g-2 align-items-center">
                 <div class="col" id="titleColumn">
                   <h2 class="page-title">
-                    Main Book Database
+                    Collections
                   </h2>
-                  <input type="text" class="form-control" id="databaseSearch" placeholder="Search for a book." onkeyup="searchTable()"/>
+                  <div id="rightSideContainer">
+                    
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="page-body" style="height: 77vh">
-            <div class="container-xl">
-              <div class="row row-deck row-cards" style="height: 95%">
-                <div class="col-sm-10" style="width:100%; height: 100%">
-                  <div class="card" style="overflow-y: auto">
-                    <div class="card-body" style="height: 100%">
-                        <div class="table-responsive">
-                        <table class="table table-vcenter" id="mainTable">
-                          <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Publisher</th>
-                                <th>Date of Publication</th>
-                                <th></th>
-                                
-                            </tr>
-                          </thead>
-                          <tbody id="mainTableBody">
+            <div class="container-xl" id="container">
+                <div class="row row-deck row-cards">
+                    <div class="col-sm-6">
+                      <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Currently Reading</h3>
+                        </div>
+                        <div class="card-body home-page-card" id="currentlyReading" style="display: flex">
 
-                          </tbody>
-                        </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Up Next</h3>
+                            </div>
+                          <div class="card-body home-page-card" id="upNext" style="">
+                          
+                          </div>
                         </div>
                     </div>
-                  </div>
-                </div>
                 
-                      <fieldset class="form-fieldset" id="editBox">
-                        <p>Refresh to see changes take effect.</p>
-                        <div class="mb-3">
-                          <label class="form-label">Title</label>
-                          <input type="text" class="form-control" autocomplete="off" id="titleEditInput"/>
+
+                
+                    <div class="col-sm-6">
+                      <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Collections</h3>
                         </div>
-                        <div class="mb-3">
-                          <label class="form-label">Author</label>
-                          <input type="text" class="form-control" autocomplete="off" id="authorEditInput"/>
+                        <div class="card-body" id="collections" style="height: 10rem">
+                            
                         </div>
-                        <div class="mb-3">
-                          <label class="form-label">Publisher</label>
-                          <input type="text" class="form-control" autocomplete="off" id="publisherEditInput"/>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Statistics</h3>
+                            </div>
+                          <div class="card-body" id="statistics" style="height: 15rem">
+                            <code>COMING SOON</code>
+                          </div>
                         </div>
-                        <div class="mb-3">
-                          <label class="form-label">Date of Publication</label>
-                          <input type="text" class="form-control" autocomplete="off" id="dateEditInput"/>
-                        </div>
-                        <button class="btn btn-success" id="submitEditButton">Submit</button> <button class="btn" id="cancelEditButton" onclick="hideEditBox()">Cancel</button> <button class="btn btn-danger" id="deleteBookButton">Delete</button>
-                      </fieldset>
-               
-              </div>
+                    </div>
+                </div>
+
             </div>
+            
           </div>
         </div>
       </div>
@@ -106,5 +117,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
     <script src="src/checkAuth.js"></script>
-    <script src="src/script.js"></script>
+    <script src="src/homePage.js"></script>
+    
 </html>

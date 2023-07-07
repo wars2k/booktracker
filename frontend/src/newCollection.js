@@ -24,7 +24,7 @@ async function handleNewCollection() {
 async function submitNewCollection(data) {
     try {
         const sessionKey = localStorage.getItem("sessionKey");
-        const response = await fetch(`/api/collections/new?sessionKey=${sessionKey}`, {
+        const response = await fetch(`http://localhost:5000/api/collections/new?sessionKey=${sessionKey}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

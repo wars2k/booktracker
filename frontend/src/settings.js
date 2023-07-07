@@ -1,6 +1,6 @@
 function getExportData(format) {
     let sessionKey = localStorage.getItem("sessionKey");
-    fetch(`/api/data/export?format=${format}&sessionKey=${sessionKey}`)
+    fetch(`http://localhost:5000/api/data/export?format=${format}&sessionKey=${sessionKey}`)
   .then(response => response.blob())
   .then(blob => {
     // Create a temporary URL for the blob object
@@ -34,7 +34,7 @@ function submitDataImport() {
     let file = fileInput.files[0];
     let formData = new FormData();
     formData.append('file', file);
-    fetch(`/api/data/import?format=${format}&sessionKey=${sessionKey}`, {
+    fetch(`http://localhost:5000/api/data/import?format=${format}&sessionKey=${sessionKey}`, {
         method: 'POST',
         body: formData
       })

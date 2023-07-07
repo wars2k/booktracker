@@ -1,0 +1,13 @@
+.cardImage {
+    height: 145px;
+    cursor: pointer;
+    min-width: 96px;
+}
+
+
+
+.home-page-card {
+    gap: 6px;
+    display: flex;
+    overflow-x: auto;
+}

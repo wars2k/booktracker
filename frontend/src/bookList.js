@@ -168,7 +168,7 @@ function createBookTable(bookList) {
     let payload = {
         "sessionKey": localStorage.getItem("sessionKey")
     }
-    fetch('/api/getBookList', {
+    fetch('http://localhost:5000/api/getBookList', {
         method: 'PUT',
         body: JSON.stringify(payload),
         header: {
@@ -298,7 +298,7 @@ function createBookTable(bookList) {
         "data": editData
     }
     console.log(payload);
-    fetch(`/api/BookList/${editData.id}`, {
+    fetch(`http://localhost:5000/api/BookList/${editData.id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
         header: {

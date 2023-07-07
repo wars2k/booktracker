@@ -2,7 +2,7 @@ function searchForBook(event) {
     //event.preventDefault();
     sessionKey = localStorage.getItem("sessionKey");
     let searchBar = document.getElementById("bookSearchID");
-    fetch(`/api/books/new?name=${searchBar.value}&sessionKey=${sessionKey}`, {
+    fetch(`http://localhost:5000/api/books/new?name=${searchBar.value}&sessionKey=${sessionKey}`, {
     method: 'GET'
     })
     .then(response => response.json())
@@ -44,7 +44,7 @@ function searchForBook(event) {
   function addBook(i) {
     sessionKey = localStorage.getItem("sessionKey");
     let id = searchData[i].id;
-    fetch(`/api/books/save?id=${id}&sessionKey=${sessionKey}`, {
+    fetch(`http://localhost:5000/api/books/save?id=${id}&sessionKey=${sessionKey}`, {
     method: 'POST'
     })
     .then(response => response.json())
@@ -75,7 +75,7 @@ function searchForBook(event) {
 
   function submitManualEntry(entryData) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`/api/books/new/manual?sessionKey=${sessionKey}`, {
+    fetch(`http://localhost:5000/api/books/new/manual?sessionKey=${sessionKey}`, {
       method: 'POST',
       body: JSON.stringify(entryData),
       headers: {
