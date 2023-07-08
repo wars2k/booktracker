@@ -14,6 +14,13 @@ namespace bookTrackerApi {
                 }
                 StatsTypes.StatusCounts statusCounts = StatsDB.GetStatusCounts(currentSession);
                 return Results.Ok(statusCounts);
+            })
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<StatsTypes.StatusCounts>(StatusCodes.Status200OK)
+            .WithTags("Statistics")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Retrieves the number of books assigned to each status for a given user."
             });
 
         }

@@ -24,12 +24,16 @@ namespace bookTrackerApi {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Title V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Booktracker API");
                 c.RoutePrefix = "api/docs";
             });
 
             Api.configure(app);
             Api.configureBookEndpoints(app);
+            BookListEndpoints.configure(app);
+            AuthEndpoints.configure(app);
+            UserEndpoints.configure(app);
+            SettingsEndpoints.configure(app);
             CollectionEndpoints.configureCollectionEndpoints(app);
             StatsEndpoints.configureEndpoints(app);
 

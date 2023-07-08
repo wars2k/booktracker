@@ -171,7 +171,7 @@ function createBookTable(bookList) {
     fetch('http://localhost:5000/api/getBookList', {
         method: 'PUT',
         body: JSON.stringify(payload),
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         }
     })
