@@ -11,3 +11,7 @@
     display: flex;
     overflow-x: auto;
 }
+
+.home-page-card code {
+    height: 20px;
+}

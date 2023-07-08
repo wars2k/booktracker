@@ -1,7 +1,7 @@
 <html>
     <body>
         <link rel="stylesheet" href="styles/styles.css">
-        <link rel="stylesheet" href="styles/index.css">
+        <link rel="stylesheet" href="styles/collectionPage.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
         
     </body>
@@ -45,76 +45,42 @@
           </div>
         </header>
         <div class="page-wrapper">
-          <div class="page-header d-print-none">
-            <div class="container-xl">
-              <div class="row g-2 align-items-center">
-                <div class="col" id="titleColumn">
-                  <h2 class="page-title">
-                    Home
-                  </h2>
-                  <div id="rightSideContainer">
-                    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          
           <div class="page-body" style="height: 77vh">
             <div class="container-xl" id="container">
                 <div class="row row-deck row-cards">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                       <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Currently Reading</h3>
+                            <h3 class="card-title">Collection Title</h3>
                         </div>
-                        <div class="card-body home-page-card" id="currentlyReading" style="display: flex">
-
+                        <div class="card-body">
+                            <div class="metadataContainer">
+                                <div id="createdDate">Created: </div>
+                            </div>
+                            <div class="cardContainer">
+                                <code>This collection is empty. Add some books!</code>
+                            </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-6">
+
+                    <div class="col-sm-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Up Next</h3>
-                            </div>
-                          <div class="card-body home-page-card" id="upNext">
-                          
+                          <div class="card-header">
+                              <h3 class="card-title">Add book</h3>
+                          </div>
+                          <div class="card-body">
+                              <div class="metadataContainer">
+                                  <div id="createdDate">Created: </div>
+                              </div>
+                              <div class="cardContainer">
+                                  <code>This collection is empty. Add some books!</code>
+                              </div>
                           </div>
                         </div>
                     </div>
-                
-
-                
-                    <div class="col-sm-6">
-                      <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Collections</h3>
-                        </div>
-                        <div class="card-body table-responsive" id="collections">
-                            <table class="table table-vcenter">
-                                <thead>
-                                  <tr>
-                                    <th style="width: 80%">Name</th>
-                                    <th>Count</th>
-                                  </tr>
-                                </thead>
-                                <tbody id="collectionTableBody">
-
-                                </tbody>
-                            </table>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Statistics</h3>
-                            </div>
-                          <div class="card-body" id="statistics">
-                            <code>COMING SOON</code>
-                          </div>
-                        </div>
-                    </div>
+                    
                 </div>
 
             </div>
@@ -127,6 +93,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
     <script src="src/checkAuth.js"></script>
-    <script src="src/homePage.js"></script>
+    <script src="src/collectionPage.js"></script>
     
 </html>
