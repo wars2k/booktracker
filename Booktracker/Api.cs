@@ -36,6 +36,14 @@ namespace bookTrackerApi {
                 Log.externalAPIquery(name, currentSession);
                 return Results.Ok(content);
                 
+            })
+            .Produces<List<object>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Books")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Retrieves book objects from the Google Books API."
             });
 
             app.MapPost("/api/books/new/manual", async (HttpContext context, string sessionKey) => {
@@ -58,12 +66,29 @@ namespace bookTrackerApi {
                     return TypedResults.Ok(payload);
                 }
                 return Results.BadRequest();
+            })
+            .Accepts<ManualEntry>("application/json")
+            .Produces<ManualEntry>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Books")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Manually adds a book to the database."
             });
 
             //retrieves an array of all Books from the DB to display on the front-end. 
             app.MapGet("/api/books", () => {
                 var content = DB.getAllBooks();
                 return TypedResults.Ok(content);
+            })
+            .Produces<DB.BookInfo>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Books")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Retrieves an array of all books in the database."
             });
 
             //receives an ID from the front end. This ID is searched on Google Books API, and the result is added to the Database. 
@@ -83,6 +108,14 @@ namespace bookTrackerApi {
                 DB.addToBookList(bookId, currentSession.AssociatedID);
                 return Results.Ok(book);
                 
+            })
+            .Produces<VolumeInfo>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Books")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Adds a given book to the database and to the user's bookList by Google Books ID."
             });
 
             //receives an ID along with the desired updates to an entry. The updates are compiled into an EditBookData instance,
@@ -107,6 +140,14 @@ namespace bookTrackerApi {
                 editInfo.Date = date;
                 DB.editEntry(editInfo);
                 return Results.Ok(editInfo);
+            })
+            .Produces<EditBookData>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Books")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Updates the info for a given book."
             });
 
             //receives an ID for a given book. The ID is passed along to a function that deletes it from the database.
@@ -123,286 +164,14 @@ namespace bookTrackerApi {
                     return Results.Unauthorized();
                 }
                 
-            });
-
-            //receives a username and password. Checks that with the database of users.
-            //if both are correct, starts a new session and returns the session key to the client.
-            app.MapPost("/api/login", async (HttpContext context) => {
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<UserInfo>(requestBody);
-                if (payload == null) {
-                    return Results.BadRequest();
-                }
-                if (payload.Username == null || payload.Password == null) {
-                    return Results.BadRequest();
-                }
-                DB.UserInfo userInfo = DB.retrieveUserInfo(payload.Username);
-                if (userInfo.Password == payload.Password) {
-                    string generateSession = generateSessionKey(32);
-                    SessionInfo newSession  = new SessionInfo();
-                    newSession.Session = generateSession;
-                    newSession.AssociatedID = userInfo.Id;
-                    newSession.Username = userInfo.Username;
-                    newSession.IsAdmin = userInfo.IsAdmin;
-                    Program.Sessions.Add(newSession);
-                    Log.logSuccessfulLoginAttempt(payload.Username);
-                    return Results.Ok(generateSession);
-                } else {
-                    Log.logFailedLoginAttempt(payload.Username);
-                    return Results.Unauthorized();
-                }   
-            });
-
-            //logs out the user on the server-side by nullifying the sessionKey & associatedID
-            app.MapPost("/api/logout", (string sessionKey) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession != null) {
-                    Log.logSuccessfulLogout(currentSession);
-                    Program.Sessions.Remove(currentSession);
-                }
-                return Results.Ok();
-            });
-
-            app.MapGet("/api/register/canRegister", () => {
-                Boolean adminExists = DB.checkForAdminUser();
-                if (adminExists) {
-                    return Results.Unauthorized();
-                } else {
-                    return Results.Ok();
-                }
-            });
-
-            app.MapPost("/api/register", async (HttpContext context) => {
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<RegisterInfo>(requestBody);
-                if (payload == null) {
-                    return Results.BadRequest();
-                }
-                DB.registerUser(payload);
-                return Results.Ok();
-            });
-
-            //retrieves a user's bookList based on user ID if provided sessionkey is correct
-            app.MapPut("/api/getBookList", async (HttpContext context) => {
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<BookListRequestBody>(requestBody);
-                if (payload == null) {
-                    Log.AlertFailedBookListRetrieval("emptyPayload", null);
-                    return Results.BadRequest("emptyPayload");
-                }
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == payload.SessionKey);
-                if (currentSession == null) {
-                    Log.AlertFailedBookListRetrieval("noBackEndSession", null);
-                    return Results.BadRequest("noBackEndSession");
-                }
-                if (payload.SessionKey == currentSession.Session) {
-                    List<DB.BookListInfo> bookList = DB.getBookListForUser(currentSession.AssociatedID);
-                    return Results.Ok(bookList);
-                }
-                Log.AlertFailedBookListRetrieval("incorrectSessionKey", null);
-                return Results.Unauthorized();
-            });
-
-            //updates an entry for a given userID's booklist
-            app.MapPut("/api/BookList/{id}", async (HttpContext context) => {
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<BookListEdit>(requestBody);
-                if (payload == null) {
-                    Log.AlertFailedBookListEdit("emptyPayload", null);
-                    return Results.BadRequest();
-                }
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == payload.SessionKey);
-                if (currentSession == null) {
-                    Log.AlertFailedBookListEdit("noBackEndSession", null);
-                    return Results.BadRequest();
-                }
-                if (payload.SessionKey == currentSession.Session && payload.Data != null) {
-                    DB.updateBookList(payload.Data);
-                    Log.AlertSuccessfulBookListEdit(payload.Data, currentSession);
-                    return Results.Ok();
-                }
-                if (payload.SessionKey != currentSession.AssociatedID) {
-                    Log.AlertFailedBookListEdit("incorrectSessionKey", currentSession);
-                    return Results.Unauthorized();
-                }
-                Log.AlertFailedBookListEdit("unknownError", currentSession);
-                return Results.BadRequest();
-                
-            });
-
-            //deletes a book from a user's booklist, but does not delete it from the main book database
-            //requires id in URL and sessionKey in body
-            app.MapDelete("/api/Booklist/{id}/delete", async (String id, HttpContext context) => {
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<BookListRequestBody>(requestBody);
-                if (payload == null) {
-                    Log.AlertFailedBookListDelete("emptyPayload", null);
-                    return Results.BadRequest();
-                }
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == payload.SessionKey);
-                if (currentSession == null) {
-                    Log.AlertFailedBookListDelete("noBackEndSession", null);
-                    return Results.BadRequest();
-                }
-                if (payload.SessionKey == currentSession.Session) {
-                    DB.deleteFromBookList(id);
-                    Log.AlertSuccessfulBookListDelete(id, currentSession);
-                    return Results.Ok();
-                }
-                if (payload.SessionKey != currentSession.AssociatedID) {
-                    Log.AlertFailedBookListDelete("incorrectSessionKey", currentSession);
-                    return Results.Unauthorized();
-                }
-                Log.AlertFailedBookListDelete("unknownError", currentSession);
-                return Results.BadRequest();
-            });
-
-            //retreives all of the data for a given booklist ID
-            //requires id in URL and sessionKey in body
-            app.MapPut("/api/Booklist/{id}/data", async (String id, HttpContext context) => {
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<BookListRequestBody>(requestBody);
-                if (payload == null) {
-                    return Results.BadRequest();
-                }
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == payload.SessionKey);
-                if (currentSession == null) {
-                    return Results.BadRequest();
-                }
-                if (payload.SessionKey == currentSession.Session) {
-                    DB.BookPageInfo data = DB.getBookPageData(id);
-                    return Results.Ok(data);
-                }
-                if (payload.SessionKey != currentSession.Session) {
-                    return Results.Unauthorized();
-                }
-                return Results.BadRequest(); 
-            });
-
-            app.MapPost("/api/users/new", async (String sessionKey, HttpContext context) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession == null) {
-                    //log failed attempt to create new user
-                    return Results.BadRequest();
-                }
-                if (currentSession.IsAdmin == 0) {
-                    //log unauthorized user attempted to add new user
-                    return Results.Unauthorized();
-                }
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<NewUserPayload>(requestBody);
-                if (payload == null) {
-                    return Results.BadRequest();
-                }
-                if (payload.Username == null || payload.Password == null) {
-                    return Results.BadRequest("Must include new username & password in request body");
-                }
-                DB.createNewUser(payload);
-                Log.writeLog($"New user ({payload.Username}) created by admin user {currentSession.Username}.", "INFO");
-                return Results.Ok();
-            });
-
-            app.MapGet("/api/users", (String sessionKey) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession == null) {
-                    //log failed attempt to access user list
-                    return Results.BadRequest();
-                }
-                if (currentSession.IsAdmin == 0) {
-                    //log unauthorized user attempted to access user list
-                    return Results.Unauthorized();
-                }
-                List<UserData> userData = DB.getUserData();
-                return Results.Ok(userData);
             })
-            .Produces<List<UserData>>(StatusCodes.Status200OK)
-            .Produces<string>(StatusCodes.Status403Forbidden)
-            .Produces(StatusCodes.Status500InternalServerError)
-            .WithTags("Users")
+            .Produces<string>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
-                Summary = "Retrieves a list of all users."
-            });
-
-            app.MapPut("/api/users/{id}", async (String id, String sessionKey, HttpContext context) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession == null) {
-                    //log failed attempt to create new user
-                    return Results.BadRequest();
-                }
-                if (currentSession.IsAdmin == 0) {
-                    //log unauthorized user attempted to add new user
-                    return Results.Unauthorized();
-                }
-                using var reader = new StreamReader(context.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-                var payload = JsonConvert.DeserializeObject<UserData>(requestBody);
-                if (payload == null) {
-                    return Results.BadRequest();
-                }
-                DB.updateUser(int.Parse(id), payload);
-                return Results.Ok();
-            });
-
-            app.MapDelete("/api/users/{id}", async (String id, String sessionKey) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession == null) {
-                    return Results.BadRequest();
-                }
-                if (currentSession.IsAdmin == 0) {
-                    return Results.Unauthorized();
-                }
-                DB.deleteUser(int.Parse(id));
-                return Results.Ok();
-            });
-
-            app.MapGet("/api/data/export", async (String format, String sessionKey) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession == null) {
-                    return Results.BadRequest();
-                }
-                List<DB.BookPageInfo> ListOfBookData = DB.getBookDataForExport(int.Parse(currentSession.AssociatedID));
-                if (format == "json") {
-                    Export.ExportDataAsJSON(ListOfBookData, currentSession.Username);
-                } else if (format == "csv") {
-                    Export.ExportDataAsCSV(ListOfBookData, currentSession.Username);
-                } else {
-                    return Results.BadRequest();
-                }
-                byte[] test = File.ReadAllBytes($"external/{currentSession.Username}-export.{format}");
-                return Results.File(test, "text/csv", $"bookExport.{format}");
-            });
-
-            app.MapPost("/api/data/import", async (String format, String sessionKey, IFormFile file) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession == null) {
-                    return Results.BadRequest();
-                }
-                if (format == "goodreads") {
-                    Import.ImportFromGoodreads(file, currentSession);
-                }
-                return Results.Ok();
-                //read the file
-            });
-
-            app.MapGet("/api/test/test", async () => {
-                return Results.Ok("test");
-            });
-
-            app.MapPut("/api/settings", async (String results, String sessionKey) => {
-                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
-                if (currentSession == null) {
-                    return Results.BadRequest();
-                }
-                ApiClient.Results = int.Parse(results);
-                return Results.Ok();
+                Summary = "Deletes a book from the database and all user's bookLists."
             });
 
 

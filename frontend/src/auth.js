@@ -82,7 +82,7 @@ function submitRegisterRequest() {
     fetch('http://localhost:5000/api/register', {
         method: 'POST',
         body: JSON.stringify(payload),
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         }
     })
