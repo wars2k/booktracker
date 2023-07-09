@@ -62,7 +62,8 @@ namespace bookTrackerApi {
                 }
                 if (payload != null && payload.Title != null) {
                     Log.logManualEntry(payload.Title, currentSession);
-                    DB.addManualEntry(payload);
+                    int id = DB.addManualEntry(payload);
+                    DB.addToBookList(id, currentSession.AssociatedID);
                     return TypedResults.Ok(payload);
                 }
                 return Results.BadRequest();

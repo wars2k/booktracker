@@ -112,7 +112,7 @@ namespace bookTrackerApi {
 
         }
 
-        public static void addManualEntry(Api.ManualEntry payload) {
+        public static int addManualEntry(Api.ManualEntry payload) {
             SqliteConnection connection = initiateConnection();
             string sql = "INSERT INTO books (title, author, pub_date, publisher, cover_image) VALUES (@title, @authors, @pubDate, @publisher, @coverImage)";
             SqliteCommand command = new SqliteCommand(sql, connection);
@@ -123,6 +123,20 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@coverImage", payload.Image);
             command.ExecuteNonQuery();
             closeConnection(connection);
+            sql = "SELECT id FROM books WHERE title = @title AND author = @authors";
+            int id = -1;
+            SqliteConnection connection2 = initiateConnection();
+            using (SqliteCommand command2 = new SqliteCommand(sql, connection2)) {
+                command2.Parameters.AddWithValue("@title", payload.Title);
+                command2.Parameters.AddWithValue("@authors", payload.Author);
+                using (SqliteDataReader reader = command2.ExecuteReader()) {
+                    while (reader.Read()) { 
+                        id = reader.GetInt32(0);
+                    }
+                    closeConnection(connection2);
+                }
+            }
+            return id;
         }
 
         public static void deleteEntry(string id) {
