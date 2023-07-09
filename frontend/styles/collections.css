@@ -1,6 +1,7 @@
 .card-body {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 #newCollectionContainer {
@@ -12,4 +13,8 @@
 #newCollectionForm {
     background-color: white;
     width: 400px;
+}
+
+.coverCard {
+    max-width: 100px;
 }

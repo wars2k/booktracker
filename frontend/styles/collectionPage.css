@@ -1,0 +1,31 @@
+.bookListTable {
+    max-width: 800px !important;
+}
+
+.tableButton {
+    width: 40px;
+    height: 20px;
+}
+
+.title {
+    width: 60%;
+}
+
+#collectionBookContainer {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.coverCard {
+    max-width: 100px;
+}
+
+#cardHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+

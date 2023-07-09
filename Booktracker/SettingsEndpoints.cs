@@ -43,7 +43,6 @@ namespace bookTrackerApi {
                 return Results.Ok();
                 //read the file
             })
-            .Accepts<IFormFile>("application/csv")
             .Produces<string>(StatusCodes.Status400BadRequest)
             .Produces<string>(StatusCodes.Status200OK)
             .WithTags("Settings")

@@ -50,37 +50,82 @@
             <div class="container-xl" id="container">
                 <div class="row row-deck row-cards">
                     <div class="col-sm-12">
-                      <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Collection Title</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="metadataContainer">
-                                <div id="createdDate">Created: </div>
+                      <div class="card" id="collectionCard">
+                        <div class="card-header" id="cardHeader">
+                            <h3 class="card-title" id="collectionTitle">Collection Title</h3>
+                            <div id="rightSideContainer">
+                              <a class="btn" id="editCollectionButton">Edit Metadata</a>
+                              <button class="btn" onclick="initiateEditMode()">Remove Books</button>
+                              <button class="btn btn-red" onclick="toggleModal()">Delete</button>
                             </div>
-                            <div class="cardContainer">
-                                <code>This collection is empty. Add some books!</code>
+                        </div>
+                        <div class="card-body" id="collectionDataContainer">
+                          <div class="metadataContainer">
+                            <div id="createdDate">Created: </div>
+                            <div id="description">Hello. This is a description.</div>
+                            <div class="hr-text">Collection Contents</div>
+                        </div>
+                            <div class="cardContainer" id="collectionBookContainer">
+                                
                             </div>
                         </div>
                       </div>
                     </div>
 
                     <div class="col-sm-12">
-                        <div class="card">
+                        <div class="card" id="addBookCard">
                           <div class="card-header">
                               <h3 class="card-title">Add book</h3>
                           </div>
                           <div class="card-body">
-                              <div class="metadataContainer">
-                                  <div id="createdDate">Created: </div>
-                              </div>
-                              <div class="cardContainer">
-                                  <code>This collection is empty. Add some books!</code>
+                              <div class="cardContainer table-responsive" id="bookListTableContainer">
+                                <table class="table table-vcenter bookListTable">
+                                  <thead>
+                                    <tr>
+                                      <th>Title</th>
+                                      <th>Author</th>
+                                      <th class="w-1">Add</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="bookListTableBody" id="bookListTableBody">
+                                    
+                                  </tbody>
+                                </table>
                               </div>
                           </div>
                         </div>
                     </div>
                     
+                </div>
+
+                <div class="modal" id="deleteModal" style="display: none">
+                  <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                      
+                      <div class="modal-status bg-danger"></div>
+                      <div class="modal-body text-center py-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path d="M12 9v2m0 4v.01" />
+                          <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                        </svg>
+                        <h3>Are you sure?</h3>
+                        <div class="text-muted">Do you really want to delete this collection? This action cannot be undone.</div>
+                      </div>
+                      <div class="modal-footer">
+                        <div class="w-100">
+                          <div class="row">
+                            <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal" onclick="toggleModal()">
+                                Cancel
+                              </a></div>
+                            <div class="col"><a href="#" class="btn btn-danger w-100" data-bs-dismiss="modal" onclick="submitCollectionDelete()">
+                                Delete
+                              </a></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
             </div>

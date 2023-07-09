@@ -39,7 +39,7 @@ async function displayCollectionData(data) {
                 
                 let cardBody = document.getElementById(`collection${collection.collectionID}`);
                 
-                body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}"><img src="${imageURLs[j]}"></a>`;
+                body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}"><img src="${imageURLs[j]}" class="coverCard"></a>`;
             }
         } else {
             body.innerHTML = "This collection doesn't have any books yet.";
