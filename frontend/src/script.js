@@ -90,15 +90,21 @@ function searchForBook() {
   //the back-end returns the data in an array of objects with the following properties:
   //   id, title, author, publisher, publishedDate
   function getAllBooks() {
-    fetch('http://localhost:5000/api/books', {
+    sessionKey = localStorage.getItem("sessionKey");
+    fetch(`http://localhost:5000/api/books?sessionKey=${sessionKey}`, {
       method: 'GET'
     })
     .then(response => response.json())
     .then(data => createBookTable(data))
-    .catch(error => console.error(error));
+    .catch(error => alertError(error));
   }
 
   getAllBooks();
+
+  function alertError(error) {
+    let cardBody = document.getElementById("cardBody");
+    cardBody.innerHTML = "<code>ERROR: Admin privileges required to view main book database.</code>"
+  }
 
   //called from the buttons on each row.
   //First, removes all old eventListeners by cloning the button. 

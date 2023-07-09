@@ -41,15 +41,17 @@ function submitDataImport() {
         .then(response => {
           // Handle the response
           if (response.ok) {
-            // File upload successful
+            alert("Import completed successfully.");
             console.log('File uploaded successfully');
           } else {
             // File upload failed
+            alert("Import failed");
             console.error('File upload failed');
           }
         })
         .catch(error => {
           // Handle any errors
+          alert("Import failed");
           console.error('Error uploading file:', error);
         });
 }

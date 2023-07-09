@@ -78,7 +78,16 @@ namespace bookTrackerApi {
             });
 
             //retrieves an array of all Books from the DB to display on the front-end. 
-            app.MapGet("/api/books", () => {
+            app.MapGet("/api/books", (string sessionKey) => {
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    //log failed attempt to access user list
+                    return Results.BadRequest();
+                }
+                if (currentSession.IsAdmin == 0) {
+                    //log unauthorized user attempted to access user list
+                    return Results.Unauthorized();
+                }
                 var content = DB.getAllBooks();
                 return TypedResults.Ok(content);
             })

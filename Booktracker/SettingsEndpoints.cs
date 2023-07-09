@@ -32,13 +32,15 @@ namespace bookTrackerApi {
                 Description = "Format depends on the 'format' inline parameter. The options are 'csv' and 'json'."
             });
 
-            app.MapPost("/api/data/import", (String format, String sessionKey, IFormFile file) => {
+
+
+            app.MapPost("/api/data/import", async (String format, String sessionKey, IFormFile file) => {
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
                     return Results.BadRequest();
                 }
                 if (format == "goodreads") {
-                    Import.ImportFromGoodreads(file, currentSession);
+                    await Import.ImportFromGoodreads(file, currentSession);
                 }
                 return Results.Ok();
                 //read the file
@@ -52,11 +54,15 @@ namespace bookTrackerApi {
                 Description = "Format depends on the 'format' inline parameter. The options are 'goodreads'."
             });
 
+            
+
             app.MapGet("/api/test/test", () => {
                 return Results.Ok("test");
             })
             .Produces<string>(StatusCodes.Status200OK)
             .WithTags("Settings");
+
+
 
             app.MapPut("/api/settings", (String results, String sessionKey) => {
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);

@@ -1,4 +1,5 @@
 using Microsoft.Data.Sqlite;
+using System.Text.RegularExpressions;
 
 namespace bookTrackerApi {
 
@@ -484,7 +485,7 @@ namespace bookTrackerApi {
             }
         }
 
-        public static async void addGoodreadsImportedBook(GoodreadsImportRow book, SessionInfo sessionInfo) {
+        public static async Task<int> addGoodreadsImportedBook(GoodreadsImportRow book, SessionInfo sessionInfo) {
             string? ImageLink = "";
             string? Description = "";
             string? Categories = "";
@@ -503,6 +504,7 @@ namespace bookTrackerApi {
                     Categories = bookList[0].Categories[0];
                 }
             }
+            string cleanedISBN = Regex.Replace(book.ISBN13, "[^0-9]", "");
             
             SqliteConnection connection = initiateConnection();
             
@@ -515,7 +517,7 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@cover_image", ImageLink);
             command.Parameters.AddWithValue("@description", Description);
             command.Parameters.AddWithValue("@page_count", book.PageCount);
-            command.Parameters.AddWithValue("@isbn", book.ISBN13);
+            command.Parameters.AddWithValue("@isbn", cleanedISBN);
             command.Parameters.AddWithValue("@category", Categories);
             command.ExecuteNonQuery();
             closeConnection(connection);
@@ -548,6 +550,7 @@ namespace bookTrackerApi {
                     closeConnection(connection3);
                 }
             }
+            return id;
         }
 
         public class BookListInfo {
