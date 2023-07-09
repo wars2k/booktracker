@@ -48,7 +48,11 @@ function handleCollectionError(error) {
 async function handleCollectionData(data) {
     let imageLinks = await getBookDataFromBookListArray(data.listOfBookID);
     displayCollectionData(data);
-    displayImageLinks(imageLinks, data.listOfBookID);
+    if (imageLinks.length == 0) {
+        displayNoBooksAlert();
+    } else {
+        displayImageLinks(imageLinks, data.listOfBookID);
+    }
     getBookListData(data.listOfBookID);
 }
 
@@ -240,4 +244,9 @@ function submitCollectionDelete() {
     .then(response => response.json())
     .then(data => refreshPage(data))
     .catch(error => console.log(error));
+}
+
+function displayNoBooksAlert() {
+    let container = document.getElementById("collectionBookContainer");
+    container.innerHTML = "<code>This collection doesn't have any books yet. Add some below!</code>";
 }

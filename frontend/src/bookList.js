@@ -301,7 +301,7 @@ function createBookTable(bookList) {
     fetch(`http://localhost:5000/api/BookList/${editData.id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         }
     })
@@ -377,7 +377,7 @@ function createBookTable(bookList) {
     fetch(`http://localhost:5000/api/BookList/${id}/delete`, {
         method: 'DELETE',
         body: JSON.stringify(payload),
-        header: {
+        headers: {
             'Content-Type': 'application/json'
         }
     })
