@@ -29,10 +29,23 @@
         <header class="navbar navbar-expand-sm navbar-light d-print-none">
           <div class="container-xl">
             <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest">
-              <a class="nav-itemMenu" href="index.html">Book Database</a>
+              <a class="nav-itemMenu" href="index.html">Home</a>
               <a class="nav-itemMenu" href="booklist.html">My Books</a>
-              <a class="nav-itemMenu" href="users.html">Users</a>
-              <a class="nav-itemMenu" href="settings.html">Settings</a>
+              <div class="dropdown">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="collections.html">Collections Home</a>
+                  <a class="dropdown-item" href="addNewCollection.html">Add New Collection</a>
+                </div>
+              </div>
+              <div class="dropdown">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Settings</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                  <a class="dropdown-item" href="books.html">Main Book Database</a>
+                  <a class="dropdown-item" href="users.html">User Management</a>
+                </div>
+              </div>
             </div>
           </div>
         </header>
