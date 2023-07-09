@@ -9,6 +9,10 @@ function getCollections() {
 }
 
 async function displayCollectionData(data) {
+    if (data.length == 0) {
+        displayNoCollectionsAlert()
+        return;
+    }
     console.log(data);
     let container = document.getElementById("container");
     for (let i = 0; i < data.length; i++) {
@@ -77,3 +81,27 @@ async function getImagesFromBookListID(listOfBookID) {
 }
 
 getCollections();
+
+function displayNoCollectionsAlert() {
+    let row = document.createElement("div");
+        row.classList.add("col-sm-12");
+        row.style.width = "100%";
+        row.style.marginBottom = "10px";
+        let card = document.createElement("div");
+        card.classList.add("card");
+        card.style.overflowY = "auto";
+        let header = document.createElement("div");
+        header.classList.add("card-header");
+        card.append(header);
+        let title = document.createElement("h3");
+        title.classList.add("card-title");
+        header.append(title);
+        title.innerHTML = `Error: No collections found.`;
+        let body = document.createElement("div");
+        body.classList.add("card-body");
+        body.innerHTML = "<code>Create a new collection now!</code>"
+        card.append(body);
+        row.append(card);
+        let container = document.getElementById("container");
+        container.append(row);
+}
