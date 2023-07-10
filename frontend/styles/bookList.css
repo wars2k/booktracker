@@ -13,3 +13,28 @@
 .icon:hover {
     cursor: pointer;
 }
+
+#bookListTableBody {
+    font-size: 10pt !important;
+    border-spacing: 0px;
+}
+
+td {
+    overflow-x: scroll !important;
+    padding: 5px !important;
+    margin: 0px !important;
+}
+
+.status {
+    font-size: 9pt !important;
+    margin: 0;
+}
+
+#bookListTableBody button {
+    font-size: 9pt;
+}
+
+tr {
+    height: 40px !important; 
+    padding: 0px;
+}

@@ -33,6 +33,7 @@ async function displayCollectionData(data) {
         title.innerHTML = `<a href="collectionPage.html?collectionID=${collection.collectionID}">${collection.name}</a>`;
         let body = document.createElement("div");
         body.classList.add("card-body");
+        body.style.overflowX = "auto";
         body.id = "collection" + collection.collectionID;
         
         card.append(body);

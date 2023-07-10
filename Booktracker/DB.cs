@@ -92,7 +92,7 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@description", content.Description);
             command.Parameters.AddWithValue("@page_count", content.PageCount);
             command.Parameters.AddWithValue("@isbn", content.IndustryIdentifiers[1].Identifier);
-            command.Parameters.AddWithValue("@category", content.Categories != null ? content.Categories[0] : null);
+            command.Parameters.AddWithValue("@category", content.Categories != null ? content.Categories[0] : "");
             command.ExecuteNonQuery();
             closeConnection(connection);
             sql = "SELECT id FROM books WHERE title = @title AND author = @authors";

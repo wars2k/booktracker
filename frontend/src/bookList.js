@@ -123,7 +123,7 @@ function createBookTable(bookList) {
         row.append(ratingBox);
 
         let dateStarted = document.createElement("td");
-        if (bookList[i].rating != null) {
+        if (bookList[i].dateStarted != null) {
             dateStarted.innerText = bookList[i].dateStarted;
         }
         row.append(dateStarted);
@@ -139,8 +139,8 @@ function createBookTable(bookList) {
         editButtonData.append(editButton);
         editButton.innerText = "Edit";
         editButton.classList.add("btn");
-        editButton.style.height = "25px";
-        editButton.style.width = "50px"
+        editButton.style.height = "20px";
+        editButton.style.width = "30px"
         editButton.addEventListener("click", function() {
           editBookListEntry(bookList[i].id);
         })
@@ -152,7 +152,7 @@ function createBookTable(bookList) {
         detailButton.src = "styles/list-details.svg";
         detailButton.classList.add("icon");
         //detailButton.style.height = "25px";
-        detailButton.style.width = "20px";
+        detailButton.style.width = "15px";
         detailButton.addEventListener("click", function() {
           openBookDataPage(bookList[i].id);
         })

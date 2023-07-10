@@ -69,7 +69,8 @@ namespace bookTrackerApi {
                     IndustryIdentifiers = result.VolumeInfo.IndustryIdentifiers,
                     Categories = result.VolumeInfo.Categories
                 };
-            Console.WriteLine(book.ToString());
+            string stringBook = JsonConvert.SerializeObject(book);
+            Log.writeLog(stringBook, "SPECIAL INFO");
             return book;
         }
     }
