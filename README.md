@@ -23,18 +23,26 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 1. Paste this `docker-compose.yml` file into an empty directory, replacing with the correct info where necessary
     
     ```yaml
-    # sample docker-compose.yml file
+    version: "3.3"
+
+    services:
+        booktracker:
+            image: wars2k/booktrackerprivate:latest
+            restart: unless-stopped
+            volumes:
+                - ./data:/app/external
+            ports:
+            - 2341:80 #replace 2341 with your desired port.
     ```
     
-2. In the same directory, create two subdirectories: 
-    
-    ```bash
-    mkdir logs && mkdir db
-    ```
+2. Create the `data` directory with the following three subdirectories: 
+    - `db`
+    - `logs`
+    - `export`
     
 3. Start the container (from the same directory as your `docker-compose.yml` file): 
     
-    ```yaml
+    ```bash
     docker-compose up -d
     ```
 
