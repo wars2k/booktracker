@@ -32,7 +32,7 @@ Using metadata grabbed from Google Books, easily add books and organize them int
             volumes:
                 - ./data:/app/external
             ports:
-            - 2341:80 #replace 2341 with your desired port.
+                - 2341:80 #replace 2341 with your desired port.
     ```
     
 2. Create the `data` directory with the following three subdirectories: 
