@@ -62,12 +62,9 @@ async function getImagesFromBookListID(listOfBookID) {
             const body = {
                 "sessionKey": sessionKey
             }
-            const response = await fetch(`http://localhost:5000/api/Booklist/${id}/data`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(body)
+            const response = await fetch(`http://localhost:5000/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
+              method: 'GET',
+              
             });
             const data = await response.json();
             imageLinks.push(data.imageLink);

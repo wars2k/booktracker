@@ -27,6 +27,12 @@ namespace bookTrackerApi {
 
         }
 
+        public static List<StatsTypes.MonthlyFinishedBooks> GetBooksFinishedPerMonth(SessionInfo session) {
+            List<StatsTypes.MonthlyFinishedBooks> monthlyFinishedBooks = new List<StatsTypes.MonthlyFinishedBooks>();
+            
+            return monthlyFinishedBooks;
+        }
+
     }
 
     public static class StatsTypes {
@@ -37,6 +43,11 @@ namespace bookTrackerApi {
             public int? UpNext { get; set; }
             public int? Wishlist { get; set; }
             public int? Finished { get; set; }
+        }
+
+        public class MonthlyFinishedBooks {
+            public int? Month { get; set; }
+            public int? Count { get; set; }
         }
 
     }

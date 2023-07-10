@@ -1,9 +1,13 @@
+let globalBookListID = null;
 setUpBookPage()
+
+document.getElementById('editButton').href = `editBook.html?bookListID=${globalBookListID}`
 
 //gets the bookList ID located in the URL that is passed from the bookList table.
 function getBookIDfromURL() {
     let urlParams = new URLSearchParams(window.location.search);
     bookListID = urlParams.get('bookListId');
+    globalBookListID = bookListID;
     return bookListID
 }
 
@@ -16,15 +20,10 @@ async function setUpBookPage() {
 }
 
 function getBookData(id) {
-    let payload = {
-        "sessionKey": localStorage.getItem("sessionKey")
-      }
-      return fetch(`http://localhost:5000/api/Booklist/${id}/data`, {
-          method: 'PUT',
-          body: JSON.stringify(payload),
-          headers: {
-              'Content-Type': 'application/json'
-          }
+    let sessionKey = localStorage.getItem("sessionKey");
+      
+      return fetch(`http://localhost:5000/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
+          method: 'GET',
       })
       .then(response => {
           if (response.status === 401) {

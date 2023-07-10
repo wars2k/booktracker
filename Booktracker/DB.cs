@@ -567,6 +567,24 @@ namespace bookTrackerApi {
             return id;
         }
 
+        public static void updateBookListMetadata(BookListEndpoints.BookListTypes.UpdateRequestBody requestBody) {
+            SqliteConnection connection = initiateConnection();
+            string sql = "UPDATE books SET title=@title, author=@author, publisher=@publisher, pub_date=@pubDate, cover_image = @coverImage, description = @description, page_count = @pageCount, isbn = @isbn, category = @category WHERE id=@id";
+            SqliteCommand command = new SqliteCommand(sql, connection);
+            command.Parameters.AddWithValue("@id", requestBody.BookID);
+            command.Parameters.AddWithValue("@title", requestBody.Title);
+            command.Parameters.AddWithValue("@author", requestBody.Author);
+            command.Parameters.AddWithValue("@publisher", requestBody.Publisher);
+            command.Parameters.AddWithValue("@pubDate", requestBody.datePublished);
+            command.Parameters.AddWithValue("@coverImage", requestBody.ImageLink);
+            command.Parameters.AddWithValue("@description", requestBody.Description);
+            command.Parameters.AddWithValue("@pageCount", requestBody.PageCount);
+            command.Parameters.AddWithValue("@isbn", requestBody.Isbn);
+            command.Parameters.AddWithValue("@category", requestBody.Category);
+            command.ExecuteNonQuery();
+            closeConnection(connection);
+        }
+
         public class BookListInfo {
             public int? Id { get; set; }
             public int? IdUser { get; set; }
