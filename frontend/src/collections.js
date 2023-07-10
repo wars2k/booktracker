@@ -1,6 +1,6 @@
 function getCollections() {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/collections?include=all&sessionKey=${sessionKey}`, {
+    fetch(`/api/collections?include=all&sessionKey=${sessionKey}`, {
     method: 'GET'
     })
     .then(response => response.json())
@@ -63,7 +63,7 @@ async function getImagesFromBookListID(listOfBookID) {
             const body = {
                 "sessionKey": sessionKey
             }
-            const response = await fetch(`http://localhost:5000/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
+            const response = await fetch(`/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
               method: 'GET',
               
             });

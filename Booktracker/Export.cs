@@ -12,7 +12,7 @@ namespace bookTrackerApi {
                 WriteIndented = true
             });
 
-            File.WriteAllText($"../external/{username}-export.json", jsonString);
+            File.WriteAllText($"external/export/{username}-export.json", jsonString);
 
         }
 
@@ -36,7 +36,7 @@ namespace bookTrackerApi {
 
         public static void ExportDataAsCSV(List<DB.BookPageInfo> listOfBooks, string username)
         {
-            using (StreamWriter writer = new StreamWriter($"../external/{username}-export.csv"))
+            using (StreamWriter writer = new StreamWriter($"external/export/{username}-export.csv"))
             {
                 string columns = "id,bookID,title,author,publishedDate,publisher,imageLink,status,rating,dateStarted,dateFinished,description,pageCount,isbn,category";
                 writer.WriteLine(columns);

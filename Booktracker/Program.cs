@@ -21,10 +21,12 @@ namespace bookTrackerApi {
             builder.Services.AddMvcCore().AddApiExplorer();
             var app = builder.Build();
 
-            app.UseSwagger();
+            app.UseSwagger(c => {
+                c.RouteTemplate = "api/docs/{documentName}/swagger.json";
+            });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Booktracker API");
+                c.SwaggerEndpoint("v1/swagger.json", "Booktracker API");
                 c.RoutePrefix = "api/docs";
             });
 

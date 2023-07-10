@@ -5,7 +5,7 @@ function getBooklist() {
     let payload = {
         "sessionKey": localStorage.getItem("sessionKey")
     }
-    fetch('http://localhost:5000/api/getBookList', {
+    fetch('/api/getBookList', {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
@@ -92,7 +92,7 @@ function getBooklist() {
 
   function getCollections() {
     let sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/collections?include=all&sessionKey=${sessionKey}`, {
+    fetch(`/api/collections?include=all&sessionKey=${sessionKey}`, {
         method: 'GET',
     })
     .then(response => {

@@ -22,7 +22,7 @@ async function setUpBookPage() {
 function getBookData(id) {
     let sessionKey = localStorage.getItem("sessionKey");
       
-      return fetch(`http://localhost:5000/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
+      return fetch(`/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
           method: 'GET',
       })
       .then(response => {

@@ -29,7 +29,7 @@ function getCollectionIDfromURL() {
 //gets collection data and passes it into a data handler
 function getCollectionData(collectionID) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
+    fetch(`/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
     method: 'GET'
     })
     .then(response => response.json())
@@ -65,7 +65,7 @@ async function getBookDataFromBookListArray(listOfBookID) {
             const body = {
                 "sessionKey": sessionKey
             }
-            const response = await fetch(`http://localhost:5000/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
+            const response = await fetch(`/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
               method: 'GET',
               
             });
@@ -100,7 +100,7 @@ function getBookListData(alreadyAddedIDs) {
     let payload = {
         "sessionKey": localStorage.getItem("sessionKey")
     }
-    fetch('http://localhost:5000/api/getBookList', {
+    fetch('/api/getBookList', {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
@@ -146,7 +146,7 @@ function handleClick(bookListID) {
 }
 function addToCollection(bookListID) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/collections/${globalCollectionID}/add/${bookListID}?sessionKey=${sessionKey}`, {
+    fetch(`/api/collections/${globalCollectionID}/add/${bookListID}?sessionKey=${sessionKey}`, {
     method: 'POST'
     })
     .then(response => response.json())
@@ -216,7 +216,7 @@ function submitDeletes() {
     }
     for (let i = 0; i < booksToBeRemoved.length; i++) {
         sessionKey = localStorage.getItem("sessionKey");
-        fetch(`http://localhost:5000/api/collections/${globalCollectionID}/remove/${booksToBeRemoved[i]}?sessionKey=${sessionKey}`, {
+        fetch(`/api/collections/${globalCollectionID}/remove/${booksToBeRemoved[i]}?sessionKey=${sessionKey}`, {
         method: 'DELETE'
         })
         .then(response => response.json())
@@ -236,7 +236,7 @@ function toggleModal() {
 
 function submitCollectionDelete() {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/collections/${globalCollectionID}?sessionKey=${sessionKey}`, {
+    fetch(`/api/collections/${globalCollectionID}?sessionKey=${sessionKey}`, {
     method: 'DELETE'
     })
     .then(response => response.json())

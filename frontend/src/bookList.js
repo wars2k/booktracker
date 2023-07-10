@@ -149,7 +149,7 @@ function createBookTable(bookList) {
         let detailButtonData = document.createElement("td");
         let detailButton = document.createElement("img");
         detailButtonData.append(detailButton);
-        detailButton.src = "styles/list-details.svg";
+        detailButton.src = "styles/list-details.png";
         detailButton.classList.add("icon");
         //detailButton.style.height = "25px";
         detailButton.style.width = "15px";
@@ -168,7 +168,7 @@ function createBookTable(bookList) {
     let payload = {
         "sessionKey": localStorage.getItem("sessionKey")
     }
-    fetch('http://localhost:5000/api/getBookList', {
+    fetch('/api/getBookList', {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
@@ -302,7 +302,7 @@ function createBookTable(bookList) {
         "data": editData
     }
     console.log(payload);
-    fetch(`http://localhost:5000/api/BookList/${editData.id}`, {
+    fetch(`/api/BookList/${editData.id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
         headers: {
@@ -378,7 +378,7 @@ function createBookTable(bookList) {
     let payload = {
       "sessionKey": localStorage.getItem("sessionKey")
     }
-    fetch(`http://localhost:5000/api/BookList/${id}/delete`, {
+    fetch(`/api/BookList/${id}/delete`, {
         method: 'DELETE',
         body: JSON.stringify(payload),
         headers: {

@@ -2,7 +2,7 @@ getAllUsers();
 
 function getAllUsers() {
     let sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/users?sessionKey=${sessionKey}`, {
+    fetch(`/api/users?sessionKey=${sessionKey}`, {
       method: 'GET'
     })
     .then(response => {
@@ -119,7 +119,7 @@ function createUserTable(userList) {
 
   function pushData(data) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/users/new?sessionKey=${sessionKey}`, {
+    fetch(`/api/users/new?sessionKey=${sessionKey}`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -182,7 +182,7 @@ function createUserTable(userList) {
 
   function pushEditData(id, data) {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/users/${id}?sessionKey=${sessionKey}`, {
+    fetch(`/api/users/${id}?sessionKey=${sessionKey}`, {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {
@@ -196,7 +196,7 @@ function createUserTable(userList) {
 
   function deleteUser(id) {
     let sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/users/${id}?sessionKey=${sessionKey}`, {
+    fetch(`/api/users/${id}?sessionKey=${sessionKey}`, {
       method: 'DELETE'
     })
     .then(response => response.json())

@@ -1,7 +1,7 @@
 namespace bookTrackerApi {
 
     public static class Log {
-        private static string logFilePath = "../external/log.txt";
+        private static string logFilePath = "external/log/log.txt";
 
         public static void writeLog(string message, string urgency) {
             string logEntry = $"[{urgency}] {DateTime.Now}: {message}";

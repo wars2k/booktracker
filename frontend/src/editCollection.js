@@ -37,7 +37,7 @@ async function handleEditCollection() {
 
 function fillInCurrentData() {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
+    fetch(`/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
     method: 'GET'
     })
     .then(response => response.json())
@@ -78,7 +78,7 @@ function gatherEditData() {
 async function submitEdits(data) {
     try {
         const sessionKey = localStorage.getItem("sessionKey");
-        const response = await fetch(`http://localhost:5000/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
+        const response = await fetch(`/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'

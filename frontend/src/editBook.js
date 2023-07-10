@@ -43,7 +43,7 @@ function informUnauthorized() {
 
 function fillInCurrentData() {
     sessionKey = localStorage.getItem("sessionKey");
-    fetch(`http://localhost:5000/api/Booklist/${bookListID}/data?sessionKey=${sessionKey}`, {
+    fetch(`/api/Booklist/${bookListID}/data?sessionKey=${sessionKey}`, {
     method: 'GET',
     })
     .then(response => response.json())
@@ -96,7 +96,7 @@ function gatherEditData() {
 async function submitEdits(data) {
     try {
         const sessionKey = localStorage.getItem("sessionKey");
-        const response = await fetch(`http://localhost:5000/api/Booklist/${bookListID}/data?sessionKey=${sessionKey}`, {
+        const response = await fetch(`/api/Booklist/${bookListID}/data?sessionKey=${sessionKey}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
