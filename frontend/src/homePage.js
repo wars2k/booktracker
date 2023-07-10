@@ -34,7 +34,7 @@ function getBooklist() {
     for (let i = 0; i < data.length; i++) {
         let book = data[i];
         if (book.status == "READING") {
-            console.log(book.status);
+            
             currentlyReading.push(book);
         }
         
@@ -47,7 +47,7 @@ function getBooklist() {
     for (let i = 0; i < data.length; i++) {
         let book = data[i];
         if (book.status == "UP NEXT") {
-            console.log(book.status);
+            
             upNext.push(book);
         }
         
