@@ -213,6 +213,10 @@ function createBookTable(bookList) {
 
   function hideEditBox() {
     let editBox = document.getElementById("editBox");
+    updateStatusView('NO CHANGES', 'status');
+    updateRatingView({innerText: "NO CHANGES"}, 'status')
+    document.getElementById("startDateEdit").value = "";
+    document.getElementById("finishedDateEdit").value = "";
     editBox.style.display = "none";
   }
 

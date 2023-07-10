@@ -20,7 +20,7 @@ namespace bookTrackerApi {
                 } else {
                     return Results.BadRequest();
                 }
-                byte[] test = File.ReadAllBytes($"external/{currentSession.Username}-export.{format}");
+                byte[] test = File.ReadAllBytes($"../external/{currentSession.Username}-export.{format}");
                 return Results.File(test, "text/csv", $"bookExport.{format}");
             })
             .Produces<string>(StatusCodes.Status400BadRequest)

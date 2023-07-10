@@ -205,6 +205,7 @@ function cancelEditMode() {
         }
         isEditModeActive = false;
     }
+    isEditModeActive = false;
     document.getElementById("banner").style.display = "none";
     booksToBeRemoved = [];
 }
