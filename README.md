@@ -43,7 +43,7 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 3. Start the container (from the same directory as your `docker-compose.yml` file): 
     
     ```bash
-    docker-compose up -d
+    docker compose up -d
     ```
 
 ## Coming Soon
