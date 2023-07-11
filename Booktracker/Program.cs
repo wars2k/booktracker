@@ -29,6 +29,8 @@ namespace bookTrackerApi {
                 c.SwaggerEndpoint("v1/swagger.json", "Booktracker API");
                 c.RoutePrefix = "api/docs";
             });
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             Api.configure(app);
             Api.configureBookEndpoints(app);
