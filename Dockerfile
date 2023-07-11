@@ -12,7 +12,7 @@ COPY --from=build /app/out ./
 COPY Booktracker/init.sql ./
 COPY Booktracker/wwwroot ./wwwroot/
 
-COPY external ./external
+COPY Booktracker/external ./external
 EXPOSE 5000
 
 CMD dotnet Booktracker.dll
