@@ -160,6 +160,9 @@ function createBookTable(bookList) {
 
       table.append(row); 
     }
+    if (localStorage.getItem("filter") != "null") {
+      filterByStatus(localStorage.getItem("filter"));
+    }
   }
   //queries the database for a list of all books, then calls createBookTable() to display the queried data.
   //the back-end returns the data in an array of objects with the following properties:
@@ -270,30 +273,7 @@ function createBookTable(bookList) {
   }
 
   function getStarCount(stars) {
-    
-    let numberOfStars;
-    switch (stars) {
-      case "☆☆☆☆☆":
-        numberOfStars = "5";
-        break;
-      case "☆☆☆☆":
-        numberOfStars = "4";
-        break;
-      case "☆☆☆":
-        numberOfStars = "3";
-        break;
-      case "☆☆":
-        numberOfStars = "2";
-        break;
-      case "☆":
-        numberOfStars = "1";
-        break;
-      default:
-        numberOfStars = null;
-        break;
-    }
-    
-    return numberOfStars;
+    return stars.length;
   }
 
   function submitEditData(editData) {
@@ -326,6 +306,7 @@ function createBookTable(bookList) {
 
   function filterByStatus(status) {
     removeFilter();
+    localStorage.setItem("filter", status);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
       //console.log(child.children[4].innerText);
@@ -336,6 +317,7 @@ function createBookTable(bookList) {
   }
 
   function removeFilter() {
+    localStorage.setItem("filter", null);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
       child.style.display = "";

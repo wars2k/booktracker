@@ -48,7 +48,7 @@ function searchForBook(event) {
     method: 'POST'
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => createSuccessBanner(data))
     .catch(error => console.error(error));
     
   }
@@ -83,7 +83,7 @@ function searchForBook(event) {
       }
       })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => createSuccessBanner(data))
       .catch(error => console.error(error));
   }
   function hideManualEntryBox() {
@@ -109,3 +109,25 @@ function searchForBook(event) {
                       </div>`
     document.getElementById("row").append(card);
   }
+
+  function watchForEnter() {
+    let input = document.getElementById("bookSearchID");
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        searchForBook();
+      }
+    })
+  }
+
+  watchForEnter();
+
+  function createSuccessBanner(data) {
+    let banner = document.createElement("div");
+    banner.classList.add("alert");
+    banner.classList.add("alert-success");
+    let title = document.createElement("h4");
+    title.classList.add("alert-title");
+    title.innerHTML = "Success!"
+    banner.append(title);
+    document.getElementById("row").prepend(banner);
+}
