@@ -81,11 +81,17 @@ function createBookTable(bookList) {
               case "UP NEXT":
                 status.classList.add("status-teal");
                 break;
+              case "TO READ":
+                status.classList.add("status-azure");
+                break;
               case "WISHLIST":
                 status.classList.add("status-blue");
                 break;
               case "FINISHED":
                 status.classList.add("status-purple");
+                break;
+              case "DNF":
+                status.classList.add("status-red");
                 break;
             }
         }
@@ -325,20 +331,20 @@ function createBookTable(bookList) {
   }
 
   function searchTable() {
-    // Get input element and table element
+    
     var input = document.getElementById("bookListSearch");
     var table = document.getElementById("bookListTableBody");
   
-    // Get all rows in the table
+    
     var rows = table.getElementsByTagName("tr");
   
-    // Loop through all rows and hide those that do not match the search query
+    
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
       var cells = row.getElementsByTagName("td");
       var showRow = false;
   
-      // Loop through all cells in the row and check for a match with the search query
+      
       for (var j = 0; j < cells.length; j++) {
         var cell = cells[j];
         if (cell.innerHTML.toLowerCase().indexOf(input.value.toLowerCase()) > -1) {
@@ -346,8 +352,7 @@ function createBookTable(bookList) {
           break;
         }
       }
-  
-      // Show or hide the row based on the search query
+
       if (showRow) {
         row.style.display = "";
       } else {

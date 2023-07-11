@@ -248,3 +248,34 @@ function displayNoBooksAlert() {
     let container = document.getElementById("collectionBookContainer");
     container.innerHTML = "<code>This collection doesn't have any books yet. Add some below!</code>";
 }
+
+function searchTable() {
+    
+    var input = document.getElementById("bookListSearch");
+    var table = document.getElementById("bookListTableBody");
+  
+    
+    var rows = table.getElementsByTagName("tr");
+  
+    
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var cells = row.getElementsByTagName("td");
+      var showRow = false;
+  
+      
+      for (var j = 0; j < cells.length; j++) {
+        var cell = cells[j];
+        if (cell.innerHTML.toLowerCase().indexOf(input.value.toLowerCase()) > -1) {
+          showRow = true;
+          break;
+        }
+      }
+
+      if (showRow) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    }
+  }
