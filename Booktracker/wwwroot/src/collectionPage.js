@@ -2,6 +2,8 @@ let globalCollectionID = null;
 let globalImageIDs = null;
 let isEditModeActive = false;
 let booksToBeRemoved = [];
+let isAddEditModeActive = false;
+let booksToBeAdded = [];
 
 initiateCollectionDisplay();
 
@@ -130,7 +132,7 @@ function createBookListTable(data, alreadyAddedIDs) {
         let addButton = document.createElement("td");
         title.innerText = bookData.title;
         author.innerText = bookData.author;
-        addButton.innerHTML = `<button class='btn tableButton' onclick='addToCollection(${bookData.id})'>Add</button`
+        addButton.innerHTML = `<button class='btn tableButton' id="button${bookData.id}" onclick='addToCollection(${bookData.id})'>Add</button`
         row.append(title);
         row.append(author);
         row.append(addButton);
@@ -145,6 +147,10 @@ function handleClick(bookListID) {
     }
 }
 function addToCollection(bookListID) {
+    if (isAddEditModeActive) {
+        highlightButton(bookListID);
+        return;
+    }
     sessionKey = localStorage.getItem("sessionKey");
     fetch(`/api/collections/${globalCollectionID}/add/${bookListID}?sessionKey=${sessionKey}`, {
     method: 'POST'
@@ -214,16 +220,19 @@ function submitDeletes() {
     if (booksToBeRemoved.length == 0) {
         return;
     }
-    for (let i = 0; i < booksToBeRemoved.length; i++) {
-        sessionKey = localStorage.getItem("sessionKey");
-        fetch(`/api/collections/${globalCollectionID}/remove/${booksToBeRemoved[i]}?sessionKey=${sessionKey}`, {
-        method: 'DELETE'
+    sessionKey = localStorage.getItem("sessionKey");
+    fetch(`/api/collection/${globalCollectionID}/bulkAdd?sessionKey=${sessionKey}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+        "Data": booksToBeRemoved
+        })
         })
         .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(data));
-    }
-    refreshPage();
+        .then(data => refreshPage(data))
+        .catch(error => refreshPage(error));
 }
 
 function toggleModal() {
@@ -279,3 +288,80 @@ function searchTable() {
       }
     }
   }
+
+  function initiateAddEditMode() {
+    if (isAddEditModeActive) {
+        cancelAddEditMode()
+        return;
+    }
+    isAddEditModeActive = true;
+    displayAddEditModeBanner();
+}
+
+function displayAddEditModeBanner() {
+    let banner = document.createElement("div");
+    banner.id = "Addbanner";
+    banner.classList.add("alert");
+    banner.classList.add("alert-info");
+    let title = document.createElement("h4");
+    title.classList.add("alert-title");
+    title.innerHTML = "Add Books to Collection"
+    let info = document.createElement("p");
+    info.classList.add("text-muted");
+    info.innerHTML = "Click 'Add' on the books that should be added."
+    let buttons = document.createElement("div");
+    buttons.classList.add("btn-list");
+    buttons.innerHTML = "<button class=btn onclick='submitAdds()'>Add Selected Books (<span id='addCount'>0</span>)</button>"
+    buttons.innerHTML += "<button class=btn onclick='cancelAddEditMode()'>Cancel</button>"
+    banner.append(title);
+    banner.append(info);
+    banner.append(buttons);
+    document.getElementById("container").prepend(banner);
+}
+
+function cancelAddEditMode() {
+    if (booksToBeAdded.length > 0) {
+        for (let i = 0; i < booksToBeAdded.length; i++) {
+            let button = document.getElementById(`button${booksToBeAdded[i]}`);
+            button.classList.remove("btn-green");
+        }
+        isAddEditModeActive = false;
+    }
+    isAddEditModeActive = false;
+    document.getElementById("Addbanner").style.display = "none";
+    booksToBeRemoved = [];
+}
+
+function highlightButton(bookListID) {
+    let button = document.getElementById(`button${bookListID}`);
+    if (booksToBeAdded.includes(bookListID)) {
+        button.classList.remove("btn-green");
+        let index = booksToBeAdded.indexOf(bookListID);
+        booksToBeAdded.splice(index, 1);
+        document.getElementById("addCount").innerText = booksToBeAdded.length;
+        return;
+    }
+    button.classList.add("btn-green");
+    booksToBeAdded.push(bookListID);
+    document.getElementById("addCount").innerText = booksToBeAdded.length;
+
+}
+
+function submitAdds() {
+    if (booksToBeAdded.length == 0) {
+        return;
+    }
+    sessionKey = localStorage.getItem("sessionKey");
+    fetch(`/api/collection/${globalCollectionID}/bulkAdd?sessionKey=${sessionKey}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+        "Data": booksToBeAdded
+        })
+        })
+        .then(response => response.json())
+        .then(data => refreshPage(data))
+        .catch(error => refreshPage(error));
+}

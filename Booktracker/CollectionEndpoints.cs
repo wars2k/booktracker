@@ -172,12 +172,48 @@ namespace bookTrackerApi {
             })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
-            .Produces<string>(StatusCodes.Status500InternalServerError)
+            .Produces<string>(StatusCodes.Status400BadRequest)
             .WithTags("Collections")
             .WithOpenApi(operation => new(operation)
             {
                 Summary = "Adds a given BookID to a collection by ID."
             });
+
+            app.MapPost("/api/collection/{id}/bulkAdd", async (String sessionKey, int id, HttpContext context) => {
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    return Results.BadRequest("Invalid session key");
+                }
+                using var reader = new StreamReader(context.Request.Body);
+                var requestBody = await reader.ReadToEndAsync();
+                var payload = JsonConvert.DeserializeObject<APITypes.bulkCollectionBody>(requestBody);
+                if (payload == null) {
+                    return Results.BadRequest("incorrect format for body");
+                }
+                CollectionTypes.Collection currentInfo = CollectionsDB.getById(id);
+                currentInfo.listOfBookID = CollectionsDB.getCollectionBookIDs(id);
+                if (int.Parse(currentSession.AssociatedID) != currentInfo.OwnerID) {
+                    return Results.Unauthorized();
+                }
+                for (int i = 0; i < payload.Data.Count; i++) {
+                    Boolean isBookAlreadyAdded = currentInfo.listOfBookID.Contains(payload.Data[i]);
+                    Boolean isValidBookId = CollectionsDB.checkBookId(payload.Data[i], int.Parse(currentSession.AssociatedID));
+                    if (isValidBookId && !isBookAlreadyAdded) {
+                        CollectionsDB.addBook(id, payload.Data[i]);
+                    }
+                }
+                return Results.Ok();
+            })
+            .Accepts<APITypes.bulkCollectionBody>("application/json")
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Collections")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Adds a given array of BookIDs to a collection by ID."
+            });
+
 
             app.MapDelete("/api/collections/{id}/remove/{bookId}", (String sessionKey, int id, int bookId) => {
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
@@ -207,6 +243,41 @@ namespace bookTrackerApi {
                 Summary = "Removes a given BookID from a collection by ID."
             });
 
+            app.MapDelete("/api/collection/{id}/bulkAdd", async (String sessionKey, int id, HttpContext context) => {
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    return Results.BadRequest("Invalid session key");
+                }
+                using var reader = new StreamReader(context.Request.Body);
+                var requestBody = await reader.ReadToEndAsync();
+                var payload = JsonConvert.DeserializeObject<APITypes.bulkCollectionBody>(requestBody);
+                if (payload == null) {
+                    return Results.BadRequest("incorrect format for body");
+                }
+                CollectionTypes.Collection currentInfo = CollectionsDB.getById(id);
+                currentInfo.listOfBookID = CollectionsDB.getCollectionBookIDs(id);
+                if (int.Parse(currentSession.AssociatedID) != currentInfo.OwnerID) {
+                    return Results.Unauthorized();
+                }
+                for (int i = 0; i < payload.Data.Count; i++) {
+                    Boolean isBookAlreadyAdded = currentInfo.listOfBookID.Contains(payload.Data[i]);
+                    Boolean isValidBookId = CollectionsDB.checkBookId(payload.Data[i], int.Parse(currentSession.AssociatedID));
+                    if (isValidBookId && isBookAlreadyAdded) {
+                        CollectionsDB.deleteBook(id, payload.Data[i]);
+                    }
+                }
+                return Results.Ok();
+            })
+            .Accepts<APITypes.bulkCollectionBody>("application/json")
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .WithTags("Collections")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Deketes a given array of BookIDs from a collection by ID."
+            });
+
 
         }
 
@@ -220,6 +291,12 @@ namespace bookTrackerApi {
             public string? Description { get; set; }
             public string? CoverImage { get; set; }
         }
+
+        public class bulkCollectionBody {
+            public List<int>? Data { get; set ;}
+        }
+
+        
 
     }
 }
