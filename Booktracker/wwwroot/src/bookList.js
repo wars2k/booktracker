@@ -30,7 +30,7 @@ function hideBookCards() {
 
 
 function createBookTable(bookList) {
-    console.log(bookList);
+    //console.log(bookList);
     if (bookList == null) {
       bookList = bookData
     }
@@ -206,7 +206,7 @@ function createBookTable(bookList) {
     editBox.style.display = "block";
     clone.addEventListener("click", function() {
       gatherEdits(id);
-      console.log("test");
+      //console.log("test");
       hideEditBox();
       getAllBooks();
       
@@ -299,12 +299,12 @@ function createBookTable(bookList) {
         if (response.status === 401) {
             informIncorrectPassword()
         }
-        console.log("TEST");
+        //console.log("TEST");
         setTimeout(getAllBooks(), 150);
-        return response.json()
+        return //response.json()
     })
     .then(data => {
-      console.log(data);
+      //console.log(data);
       
     })
     .catch(error => console.error(error));
@@ -376,7 +376,7 @@ function createBookTable(bookList) {
         if (response.status === 401) {
             informIncorrectPassword()
         }
-        console.log("TEST");
+        //console.log("TEST");
         setTimeout(getAllBooks(), 150);
         return response.json()
     })
