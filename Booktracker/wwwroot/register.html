@@ -33,22 +33,28 @@
                             <p id="registerTitle">Register</p>
                             <div class="mb-3">
                                 <label class="form-label">Name</label>
-                                <input type="text" class="form-control manualEntryInput required" autocomplete="off" id="nameRegisterInput"/>
+                                <input type="text" class="form-control manualEntryInput" autocomplete="off" id="nameRegisterInput"/>
                             </div>
                             <div class="mb-3">
                               <label class="form-label">Email</label>
-                              <input type="text" class="form-control manualEntryInput required" autocomplete="off" id="emailRegisterInput"/>
+                              <input type="text" class="form-control manualEntryInput" autocomplete="off" id="emailRegisterInput"/>
                           </div>
 
                             <div class="mb-3">
-                              <label class="form-label">Username</label>
-                              <input type="text" class="form-control manualEntryInput required" autocomplete="off" id="usernameRegisterInput"/>
+                              <label class="form-label required">Username</label>
+                              <input type="text" class="form-control manualEntryInput" autocomplete="off" id="usernameRegisterInput"/>
                             </div>
                             
                             <div class="mb-3">
-                              <label class="form-label">Password</label>
-                              <input type="password" class="form-control manualEntryInput required" autocomplete="off" id="passwordRegisterInput"/>
+                              <label class="form-label required">Password</label>
+                              <input type="password" class="form-control manualEntryInput" autocomplete="off" id="passwordRegisterInput"/>
                             </div>
+
+                            <div class="mb-3">
+                              <label class="form-label required">Confirm Password</label>
+                              <input type="password" class="form-control manualEntryInput" autocomplete="off" id="passwordRegisterInput2"/>
+                            </div>
+
                             <button class="btn" onclick="submitRegisterRequest()">Register</button>
                         </fieldset>
                     </div>
