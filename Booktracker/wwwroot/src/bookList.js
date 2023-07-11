@@ -30,7 +30,7 @@ function hideBookCards() {
 
 
 function createBookTable(bookList) {
-    console.log(bookList);
+    //console.log(bookList);
     if (bookList == null) {
       bookList = bookData
     }
@@ -81,11 +81,17 @@ function createBookTable(bookList) {
               case "UP NEXT":
                 status.classList.add("status-teal");
                 break;
+              case "TO READ":
+                status.classList.add("status-azure");
+                break;
               case "WISHLIST":
                 status.classList.add("status-blue");
                 break;
               case "FINISHED":
                 status.classList.add("status-purple");
+                break;
+              case "DNF":
+                status.classList.add("status-red");
                 break;
             }
         }
@@ -160,6 +166,9 @@ function createBookTable(bookList) {
 
       table.append(row); 
     }
+    if (localStorage.getItem("filter") != "null") {
+      filterByStatus(localStorage.getItem("filter"));
+    }
   }
   //queries the database for a list of all books, then calls createBookTable() to display the queried data.
   //the back-end returns the data in an array of objects with the following properties:
@@ -197,7 +206,7 @@ function createBookTable(bookList) {
     editBox.style.display = "block";
     clone.addEventListener("click", function() {
       gatherEdits(id);
-      console.log("test");
+      //console.log("test");
       hideEditBox();
       getAllBooks();
       
@@ -270,30 +279,7 @@ function createBookTable(bookList) {
   }
 
   function getStarCount(stars) {
-    
-    let numberOfStars;
-    switch (stars) {
-      case "☆☆☆☆☆":
-        numberOfStars = "5";
-        break;
-      case "☆☆☆☆":
-        numberOfStars = "4";
-        break;
-      case "☆☆☆":
-        numberOfStars = "3";
-        break;
-      case "☆☆":
-        numberOfStars = "2";
-        break;
-      case "☆":
-        numberOfStars = "1";
-        break;
-      default:
-        numberOfStars = null;
-        break;
-    }
-    
-    return numberOfStars;
+    return stars.length;
   }
 
   function submitEditData(editData) {
@@ -313,12 +299,12 @@ function createBookTable(bookList) {
         if (response.status === 401) {
             informIncorrectPassword()
         }
-        console.log("TEST");
+        //console.log("TEST");
         setTimeout(getAllBooks(), 150);
-        return response.json()
+        return //response.json()
     })
     .then(data => {
-      console.log(data);
+      //console.log(data);
       
     })
     .catch(error => console.error(error));
@@ -326,6 +312,7 @@ function createBookTable(bookList) {
 
   function filterByStatus(status) {
     removeFilter();
+    localStorage.setItem("filter", status);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
       //console.log(child.children[4].innerText);
@@ -336,6 +323,7 @@ function createBookTable(bookList) {
   }
 
   function removeFilter() {
+    localStorage.setItem("filter", null);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
       child.style.display = "";
@@ -343,20 +331,20 @@ function createBookTable(bookList) {
   }
 
   function searchTable() {
-    // Get input element and table element
+    
     var input = document.getElementById("bookListSearch");
     var table = document.getElementById("bookListTableBody");
   
-    // Get all rows in the table
+    
     var rows = table.getElementsByTagName("tr");
   
-    // Loop through all rows and hide those that do not match the search query
+    
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
       var cells = row.getElementsByTagName("td");
       var showRow = false;
   
-      // Loop through all cells in the row and check for a match with the search query
+      
       for (var j = 0; j < cells.length; j++) {
         var cell = cells[j];
         if (cell.innerHTML.toLowerCase().indexOf(input.value.toLowerCase()) > -1) {
@@ -364,8 +352,7 @@ function createBookTable(bookList) {
           break;
         }
       }
-  
-      // Show or hide the row based on the search query
+
       if (showRow) {
         row.style.display = "";
       } else {
@@ -389,7 +376,7 @@ function createBookTable(bookList) {
         if (response.status === 401) {
             informIncorrectPassword()
         }
-        console.log("TEST");
+        //console.log("TEST");
         setTimeout(getAllBooks(), 150);
         return response.json()
     })

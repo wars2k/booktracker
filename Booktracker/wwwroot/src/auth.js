@@ -58,13 +58,18 @@ function submitRegisterRequest() {
     let emailInput = document.getElementById("emailRegisterInput");
     let usernameInput = document.getElementById("usernameRegisterInput");
     let passwordInput = document.getElementById("passwordRegisterInput");
+    let passwordInput2 = document.getElementById("passwordRegisterInput2");
+    if (passwordInput.value != passwordInput2.value) {
+        informPasswordsDontMatch();
+        return;
+    }
     let name = nameInput.value;
     if (name == "") {
-        name = null;
+        name = "";
     }
     let email = emailInput.value;
     if (email == "") {
-        email = null;
+        email = "";
     }
     let username = usernameInput.value;
     let password = passwordInput.value;
@@ -98,6 +103,16 @@ function submitRegisterRequest() {
 function informNecessaryValues() {
     registerInfo = document.getElementById("registerTitle");
     registerInfo.innerText = "Username & Password are required for registration.";
+    registerInfo.style.color = "red";
+    document.getElementById("usernameRegisterInput").classList.add("is-invalid");
+    document.getElementById("passwordRegisterInput").classList.add("is-invalid");
+    document.getElementById("passwordRegisterInput2").classList.add("is-invalid");
+}
+function informPasswordsDontMatch() {
+    document.getElementById("passwordRegisterInput").classList.add("is-invalid");
+    document.getElementById("passwordRegisterInput2").classList.add("is-invalid");
+    registerInfo = document.getElementById("registerTitle");
+    registerInfo.innerText = "Passwords must match.";
     registerInfo.style.color = "red";
 }
 

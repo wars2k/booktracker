@@ -41,14 +41,20 @@
                           </div>
 
                             <div class="mb-3">
-                              <label class="form-label">Username</label>
+                              <label class="form-label required">Username</label>
                               <input type="text" class="form-control manualEntryInput" autocomplete="off" id="usernameRegisterInput"/>
                             </div>
                             
                             <div class="mb-3">
-                              <label class="form-label">Password</label>
+                              <label class="form-label required">Password</label>
                               <input type="password" class="form-control manualEntryInput" autocomplete="off" id="passwordRegisterInput"/>
                             </div>
+
+                            <div class="mb-3">
+                              <label class="form-label required">Confirm Password</label>
+                              <input type="password" class="form-control manualEntryInput" autocomplete="off" id="passwordRegisterInput2"/>
+                            </div>
+
                             <button class="btn" onclick="submitRegisterRequest()">Register</button>
                         </fieldset>
                     </div>
