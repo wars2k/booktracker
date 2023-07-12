@@ -39,6 +39,16 @@ Using metadata grabbed from Google Books, easily add books and organize them int
     - `db`
     - `logs`
     - `export`
+
+   Before starting the container, make sure that the directory strucutre looks like this: 
+    ```
+   booktracker/
+    ├── docker-compose.yml
+    └── data/
+        ├── db
+        ├── logs
+        └── export
+    ```
     
 3. Start the container (from the same directory as your `docker-compose.yml` file): 
     
