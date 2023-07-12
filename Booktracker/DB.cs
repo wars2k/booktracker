@@ -528,11 +528,11 @@ public class DB : IDisposable
         {
             command.Parameters.AddWithValue("@title", book.Title);
             command.Parameters.AddWithValue("@authors", book.Author);
-            command.Parameters.AddWithValue("@pubDate", book.PublishedDate);
+            command.Parameters.AddWithValue("@pubDate", book.PublishedDate ?? 0);
             command.Parameters.AddWithValue("@publisher", book.Publisher);
             command.Parameters.AddWithValue("@cover_image", ImageLink);
             command.Parameters.AddWithValue("@description", Description);
-            command.Parameters.AddWithValue("@page_count", book.PageCount);
+            command.Parameters.AddWithValue("@page_count", book.PageCount ?? 0);
             command.Parameters.AddWithValue("@isbn", cleanedISBN);
             command.Parameters.AddWithValue("@category", Categories);
             try
