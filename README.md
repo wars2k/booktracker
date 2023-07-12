@@ -46,7 +46,7 @@ Using metadata grabbed from Google Books, easily add books and organize them int
     ├── docker-compose.yml
     └── data/
         ├── db
-        ├── logs
+        ├── log
         └── export
     ```
     
