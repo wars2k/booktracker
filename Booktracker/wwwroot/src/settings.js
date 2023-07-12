@@ -1,30 +1,30 @@
 function getExportData(format) {
     let sessionKey = localStorage.getItem("sessionKey");
     fetch(`/api/data/export?format=${format}&sessionKey=${sessionKey}`)
-  .then(response => response.blob())
-  .then(blob => {
-    // Create a temporary URL for the blob object
-    const url = URL.createObjectURL(blob);
+        .then(response => response.blob())
+        .then(blob => {
+            // Create a temporary URL for the blob object
+            const url = URL.createObjectURL(blob);
 
-    // Create a link element
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `export.${format}`;
+            // Create a link element
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `export.${format}`;
 
-    // Append the link to the document body
-    document.body.appendChild(link);
+            // Append the link to the document body
+            document.body.appendChild(link);
 
-    // Programmatically click the link to trigger the file download
-    link.click();
+            // Programmatically click the link to trigger the file download
+            link.click();
 
-    // Clean up the temporary URL and remove the link element
-    URL.revokeObjectURL(url);
-    link.remove();
-  })
-  .catch(error => {
-    // Handle any errors
-    console.error('Error downloading file:', error);
-  });
+            // Clean up the temporary URL and remove the link element
+            URL.revokeObjectURL(url);
+            link.remove();
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error('Error downloading file:', error);
+        });
 }
 
 function submitDataImport() {
@@ -37,21 +37,18 @@ function submitDataImport() {
     fetch(`/api/data/import?format=${format}&sessionKey=${sessionKey}`, {
         method: 'POST',
         body: formData
-      })
+    })
         .then(response => {
-          // Handle the response
-          if (response.ok) {
-            alert("Import completed successfully.");
-            console.log('File uploaded successfully');
-          } else {
-            // File upload failed
-            alert("Import failed");
-            console.error('File upload failed');
-          }
+            // Handle the response
+            if (response.ok) {
+                alert("Import completed successfully.");
+            } else {
+                // File upload failed
+                alert("Import failed");
+            }
         })
         .catch(error => {
-          // Handle any errors
-          alert("Import failed");
-          console.error('Error uploading file:', error);
+            // Handle any errors
+            alert("Import failed with error: " + error.value);
         });
 }

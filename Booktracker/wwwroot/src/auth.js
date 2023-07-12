@@ -18,39 +18,33 @@ function submitLoginRequest() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        console.log("TEST");
-        if (response.status === 401) {
-            console.log("WE MADE IT HERE");
-            throw new Error("Incorrect Username/Password");
-        }
-        console.log("WE MADE IT HERE");
-        return response.json()
-    })
-    .then(data => storeSessionKey(data))
-    .catch(error => {
-        informIncorrectPassword();
-        console.error(error)
-    });
+        .then(response => {
+            if (response.status === 401) {
+                throw new Error("Incorrect Username/Password");
+            }
+            return response.json()
+        })
+        .then(data => storeSessionKey(data))
+        .catch(error => {
+            informIncorrectPassword();
+            console.error(error)
+        });
 }
 
 //if login is successful, store the session key in localstorage for the rest of the site to use. 
 function storeSessionKey(key) {
     localStorage.setItem("sessionKey", key);
-    console.log("WE MADE IT HERE");
-    setTimeout(function() {
+    setTimeout(function () {
         window.location.href = "index.html";
-      }, 5);
+    }, 5);
 }
 
 function informIncorrectPassword() {
-    console.log("TEST2");
     loginInfo = document.getElementById("loginInfo");
     loginInfo.innerText = "Incorrect Username/Password";
     loginInfo.style.color = "red";
-    
-}
 
+}
 
 
 function submitRegisterRequest() {
@@ -73,7 +67,7 @@ function submitRegisterRequest() {
     }
     let username = usernameInput.value;
     let password = passwordInput.value;
-    if (username == "" || password== "") {
+    if (username == "" || password == "") {
         informNecessaryValues()
         return;
     }
@@ -91,13 +85,13 @@ function submitRegisterRequest() {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (response.status === 401) {
-            return
-        }
-    })
-    .then(data => redirectToLogin(data))
-    .catch(error => console.error(error));
+        .then(response => {
+            if (response.status === 401) {
+
+            }
+        })
+        .then(data => redirectToLogin(data))
+        .catch(error => console.error(error));
 }
 
 function informNecessaryValues() {
@@ -108,6 +102,7 @@ function informNecessaryValues() {
     document.getElementById("passwordRegisterInput").classList.add("is-invalid");
     document.getElementById("passwordRegisterInput2").classList.add("is-invalid");
 }
+
 function informPasswordsDontMatch() {
     document.getElementById("passwordRegisterInput").classList.add("is-invalid");
     document.getElementById("passwordRegisterInput2").classList.add("is-invalid");

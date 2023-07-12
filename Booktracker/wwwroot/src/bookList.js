@@ -2,29 +2,29 @@ let bookData = {}
 getAllBooks();
 
 function createBookCards() {
-  hideBookCards();
-  document.getElementById("tableContainer").style.display = "none";
-  document.getElementById("row").style.height = "auto";
-  for (let i = 0; i < bookData.length; i++) {
-    let card = document.createElement("div");
-    card.classList.add("col-2");
-    card.classList.add("bookResponse");
-    card.innerHTML = `<div class="card" onclick="openBookDataPage(${bookData[i].id})" onmouseover="this.style.cursor='pointer';"> \
+    hideBookCards();
+    document.getElementById("tableContainer").style.display = "none";
+    document.getElementById("row").style.height = "auto";
+    for (let i = 0; i < bookData.length; i++) {
+        let card = document.createElement("div");
+        card.classList.add("col-2");
+        card.classList.add("bookResponse");
+        card.innerHTML = `<div class="card" onclick="openBookDataPage(${bookData[i].id})" onmouseover="this.style.cursor='pointer';"> \
                         <div class="card-body bookContainer"> \
                           <div class="imageContainer"> \
                             <img src=${bookData[i].imageLink}> \
                           </div> \
                         </div>\
                       </a>`
-    document.getElementById("row").append(card); 
-  } 
+        document.getElementById("row").append(card);
+    }
 }
 
 function hideBookCards() {
-  let bookCards = document.getElementsByClassName("bookResponse");
-  let bookCardsArray = Array.from(bookCards);
+    let bookCards = document.getElementsByClassName("bookResponse");
+    let bookCardsArray = Array.from(bookCards);
     for (let i = 0; i < bookCardsArray.length; i++) {
-      bookCardsArray[i].style.display = "none"; 
+        bookCardsArray[i].style.display = "none";
     }
 }
 
@@ -32,7 +32,7 @@ function hideBookCards() {
 function createBookTable(bookList) {
     //console.log(bookList);
     if (bookList == null) {
-      bookList = bookData
+        bookList = bookData
     }
     hideBookCards();
     bookData = bookList;
@@ -41,7 +41,7 @@ function createBookTable(bookList) {
     table.style.display = "";
     table.innerHTML = "";
     for (let i = 0; i < bookList.length; i++) {
-      let row = document.createElement("tr");
+        let row = document.createElement("tr");
 
         let title = document.createElement("td");
         title.innerText = bookList[i].title;
@@ -53,46 +53,46 @@ function createBookTable(bookList) {
 
         let publisher = document.createElement("td");
         if (bookList[i].publisher != null) {
-          publisher.innerText = bookList[i].publisher;
+            publisher.innerText = bookList[i].publisher;
         }
         row.append(publisher);
 
         let publishedDate = document.createElement("td");
         if (bookList[i].publishedDate != null) {
-          publishedDate.innerText = bookList[i].publishedDate;
+            publishedDate.innerText = bookList[i].publishedDate;
         }
         row.append(publishedDate);
 
         let statusBox = document.createElement("td");
         let status = document.createElement("div");
-        
+
         if (bookList[i].status != null) {
             status.innerText = bookList[i].status;
             status.classList.add("status");
             status.classList.add("statusChanges");
-            
+
             switch (bookList[i].status) {
-              case "UNASSIGNED":
-                status.classList.add("status-yellow")
-                break;
-              case "READING":
-                status.classList.add("status-green")
-                break;
-              case "UP NEXT":
-                status.classList.add("status-teal");
-                break;
-              case "TO READ":
-                status.classList.add("status-azure");
-                break;
-              case "WISHLIST":
-                status.classList.add("status-blue");
-                break;
-              case "FINISHED":
-                status.classList.add("status-purple");
-                break;
-              case "DNF":
-                status.classList.add("status-red");
-                break;
+                case "UNASSIGNED":
+                    status.classList.add("status-yellow")
+                    break;
+                case "READING":
+                    status.classList.add("status-green")
+                    break;
+                case "UP NEXT":
+                    status.classList.add("status-teal");
+                    break;
+                case "TO READ":
+                    status.classList.add("status-azure");
+                    break;
+                case "WISHLIST":
+                    status.classList.add("status-blue");
+                    break;
+                case "FINISHED":
+                    status.classList.add("status-purple");
+                    break;
+                case "DNF":
+                    status.classList.add("status-red");
+                    break;
             }
         }
         statusBox.append(status);
@@ -103,26 +103,26 @@ function createBookTable(bookList) {
         if (bookList[i].rating != null) {
             rating.classList.add("status");
             switch (bookList[i].rating) {
-              case "1":
-                rating.classList.add("status-red");
-                rating.innerHTML = "&#9734";
-                break;
-              case "2":
-                rating.classList.add("status-orange");
-                rating.innerHTML = "&#9734&#9734"
-                break;
-              case "3":
-                rating.classList.add("status-yellow");
-                rating.innerHTML = "&#9734&#9734&#9734";
-                break;
-              case "4":
-                rating.classList.add("status-blue");
-                rating.innerHTML = "&#9734&#9734&#9734&#9734";
-                break;
-              case "5":
-                rating.classList.add("status-green");
-                rating.innerHTML = "&#9734&#9734&#9734&#9734&#9734";
-                break;
+                case "1":
+                    rating.classList.add("status-red");
+                    rating.innerHTML = "&#9734";
+                    break;
+                case "2":
+                    rating.classList.add("status-orange");
+                    rating.innerHTML = "&#9734&#9734"
+                    break;
+                case "3":
+                    rating.classList.add("status-yellow");
+                    rating.innerHTML = "&#9734&#9734&#9734";
+                    break;
+                case "4":
+                    rating.classList.add("status-blue");
+                    rating.innerHTML = "&#9734&#9734&#9734&#9734";
+                    break;
+                case "5":
+                    rating.classList.add("status-green");
+                    rating.innerHTML = "&#9734&#9734&#9734&#9734&#9734";
+                    break;
             }
         }
         ratingBox.append(rating);
@@ -147,8 +147,8 @@ function createBookTable(bookList) {
         editButton.classList.add("btn");
         editButton.style.height = "20px";
         editButton.style.width = "30px"
-        editButton.addEventListener("click", function() {
-          editBookListEntry(bookList[i].id);
+        editButton.addEventListener("click", function () {
+            editBookListEntry(bookList[i].id);
         })
         row.append(editButtonData);
 
@@ -159,21 +159,22 @@ function createBookTable(bookList) {
         detailButton.classList.add("icon");
         //detailButton.style.height = "25px";
         detailButton.style.width = "15px";
-        detailButton.addEventListener("click", function() {
-          openBookDataPage(bookList[i].id);
+        detailButton.addEventListener("click", function () {
+            openBookDataPage(bookList[i].id);
         })
         row.append(detailButtonData);
 
-      table.append(row); 
+        table.append(row);
     }
     if (localStorage.getItem("filter") != "null") {
-      filterByStatus(localStorage.getItem("filter"));
+        filterByStatus(localStorage.getItem("filter"));
     }
-  }
-  //queries the database for a list of all books, then calls createBookTable() to display the queried data.
-  //the back-end returns the data in an array of objects with the following properties:
-  //   id, title, author, publisher, publishedDate
-  function getAllBooks() {
+}
+
+//queries the database for a list of all books, then calls createBookTable() to display the queried data.
+//the back-end returns the data in an array of objects with the following properties:
+//   id, title, author, publisher, publishedDate
+function getAllBooks() {
     let payload = {
         "sessionKey": localStorage.getItem("sessionKey")
     }
@@ -184,18 +185,18 @@ function createBookTable(bookList) {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (response.status === 401) {
-            informIncorrectPassword()
-        }
-        return response.json()
-    })
-    .then(data => createBookTable(data))
-    .catch(error => console.error(error));
-  }
+        .then(response => {
+            if (response.status === 401) {
+                informIncorrectPassword()
+            }
+            return response.json()
+        })
+        .then(data => createBookTable(data))
+        .catch(error => console.error(error));
+}
 
 
-  function editBookListEntry(id) {
+function editBookListEntry(id) {
     let submitButton = document.getElementById("submitEditButton");
     let clone = submitButton.cloneNode(true);
     submitButton.parentNode.replaceChild(clone, submitButton);
@@ -204,90 +205,88 @@ function createBookTable(bookList) {
     deleteButton.parentNode.replaceChild(deleteClone, deleteButton);
     let editBox = document.getElementById("editBox");
     editBox.style.display = "block";
-    clone.addEventListener("click", function() {
-      gatherEdits(id);
-      //console.log("test");
-      hideEditBox();
-      getAllBooks();
-      
+    clone.addEventListener("click", function () {
+        gatherEdits(id);
+        hideEditBox();
+        getAllBooks();
+
     })
-    deleteClone.addEventListener("click", function() {
-      deleteBookFromList(id);
-      hideEditBox();
-      getAllBooks();
+    deleteClone.addEventListener("click", function () {
+        deleteBookFromList(id);
+        hideEditBox();
+        getAllBooks();
     })
 
-    
-  }
 
-  function hideEditBox() {
+}
+
+function hideEditBox() {
     let editBox = document.getElementById("editBox");
     updateStatusView('NO CHANGES', 'status');
     updateRatingView({innerText: "NO CHANGES"}, 'status')
     document.getElementById("startDateEdit").value = "";
     document.getElementById("finishedDateEdit").value = "";
     editBox.style.display = "none";
-  }
+}
 
-  function updateStatusView(status, classes) {
+function updateStatusView(status, classes) {
     let editStatusBox = document.getElementById("editStatusBox");
     editStatusBox.className = "";
     editStatusBox.classList.add("status");
     editStatusBox.classList.add(classes);
     editStatusBox.innerText = status;
-  }
+}
 
-  function updateRatingView(content, classes) {
+function updateRatingView(content, classes) {
     let editRatingBox = document.getElementById("editRatingBox");
     editRatingBox.className = "";
     editRatingBox.classList.add("status");
     editRatingBox.classList.add(classes);
     editRatingBox.innerText = content.innerText;
 
-  }
+}
 
-  function gatherEdits(id) {
+function gatherEdits(id) {
     let editData = {}
- 
+
     let editStatusBox = document.getElementById("editStatusBox");
     let editRatingBox = document.getElementById("editRatingBox");
     let startDate = document.getElementById("startDateEdit");
     let finishedDate = document.getElementById("finishedDateEdit");
     if (editStatusBox.innerText != "NO CHANGES") {
-      editData.status = editStatusBox.innerText;
+        editData.status = editStatusBox.innerText;
     } else {
-      editData.status = null;
+        editData.status = null;
     }
     if (editRatingBox.innerText != "NO CHANGES") {
-      editData.rating = getStarCount(editRatingBox.innerHTML);
+        editData.rating = getStarCount(editRatingBox.innerHTML);
     } else {
-      editData.rating = null;
+        editData.rating = null;
     }
     if (startDate.value == "") {
-      editData.startDate = null;
+        editData.startDate = null;
     } else {
-      editData.startDate = startDate.value;
+        editData.startDate = startDate.value;
     }
     if (finishedDate.value == "") {
-      editData.finishedDate = null;
+        editData.finishedDate = null;
     } else {
-      editData.finishedDate = finishedDate.value;
+        editData.finishedDate = finishedDate.value;
     }
     editData.id = id;
 
     submitEditData(editData);
-  }
+}
 
-  function getStarCount(stars) {
+function getStarCount(stars) {
     return stars.length;
-  }
+}
 
-  function submitEditData(editData) {
+function submitEditData(editData) {
     let payload = {
         "sessionKey": localStorage.getItem("sessionKey"),
         "data": editData
     }
-    console.log(payload);
     fetch(`/api/BookList/${editData.id}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
@@ -295,75 +294,69 @@ function createBookTable(bookList) {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (response.status === 401) {
-            informIncorrectPassword()
-        }
-        //console.log("TEST");
-        setTimeout(getAllBooks(), 150);
-        return //response.json()
-    })
-    .then(data => {
-      //console.log(data);
-      
-    })
-    .catch(error => console.error(error));
-  }
+        .then(response => {
+            if (response.status === 401) {
+                informIncorrectPassword()
+            }
+            setTimeout(getAllBooks(), 150);
+        })
+        .catch(error => console.error(error));
+}
 
-  function filterByStatus(status) {
+function filterByStatus(status) {
     removeFilter();
     localStorage.setItem("filter", status);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
-      //console.log(child.children[4].innerText);
-      if (child.children[4].innerText != status) {
-        child.style.display = "none";
-      }
+        //console.log(child.children[4].innerText);
+        if (child.children[4].innerText != status) {
+            child.style.display = "none";
+        }
     }
-  }
+}
 
-  function removeFilter() {
+function removeFilter() {
     localStorage.setItem("filter", null);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
-      child.style.display = "";
+        child.style.display = "";
     }
-  }
+}
 
-  function searchTable() {
-    
+function searchTable() {
+
     var input = document.getElementById("bookListSearch");
     var table = document.getElementById("bookListTableBody");
-  
-    
+
+
     var rows = table.getElementsByTagName("tr");
-  
-    
+
+
     for (var i = 0; i < rows.length; i++) {
-      var row = rows[i];
-      var cells = row.getElementsByTagName("td");
-      var showRow = false;
-  
-      
-      for (var j = 0; j < cells.length; j++) {
-        var cell = cells[j];
-        if (cell.innerHTML.toLowerCase().indexOf(input.value.toLowerCase()) > -1) {
-          showRow = true;
-          break;
+        var row = rows[i];
+        var cells = row.getElementsByTagName("td");
+        var showRow = false;
+
+
+        for (var j = 0; j < cells.length; j++) {
+            var cell = cells[j];
+            if (cell.innerHTML.toLowerCase().indexOf(input.value.toLowerCase()) > -1) {
+                showRow = true;
+                break;
+            }
         }
-      }
 
-      if (showRow) {
-        row.style.display = "";
-      } else {
-        row.style.display = "none";
-      }
+        if (showRow) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
     }
-  }
+}
 
-  function deleteBookFromList(id) {
+function deleteBookFromList(id) {
     let payload = {
-      "sessionKey": localStorage.getItem("sessionKey")
+        "sessionKey": localStorage.getItem("sessionKey")
     }
     fetch(`/api/BookList/${id}/delete`, {
         method: 'DELETE',
@@ -372,19 +365,18 @@ function createBookTable(bookList) {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (response.status === 401) {
-            informIncorrectPassword()
-        }
-        //console.log("TEST");
-        setTimeout(getAllBooks(), 150);
-        return response.json()
-    })
-    .catch(error => console.error(error));
-  }
+        .then(response => {
+            if (response.status === 401) {
+                informIncorrectPassword()
+            }
+            setTimeout(getAllBooks(), 150);
+            return response.json()
+        })
+        .catch(error => console.error(error));
+}
 
-  function openBookDataPage(id) {
+function openBookDataPage(id) {
     let url = "bookPage.html?bookListId=" + id;
     window.location.href = url;
-  }
+}
   

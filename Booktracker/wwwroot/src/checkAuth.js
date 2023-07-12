@@ -3,22 +3,16 @@
 if (localStorage.getItem("sessionKey") == "undefined" || localStorage.getItem("sessionKey") == "null" || localStorage.getItem("sessionKey") == null) {
     window.location.href = "login.html";
 }
-console.log(localStorage.getItem("sessionKey"))
 
 function logOut() {
     fetch('/api/logout', {
         method: 'POST',
     })
-    .then(response => {
-        if (response.status === 200) {
-            console.log("200");
-        } else {
-            console.log("FAILED");
-        }
-        return response.json()
-    })
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
+        .then(response => {
+            return response.json()
+        })
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
     localStorage.removeItem("sessionKey");
     window.location.href = "login.html";
 }
