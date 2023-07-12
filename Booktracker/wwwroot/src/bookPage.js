@@ -16,27 +16,24 @@ async function setUpBookPage() {
     let data = await getBookData(id);
     fillBookData(data);
     fillBookMetaData(data);
-    console.log(data);
 }
 
 function getBookData(id) {
     let sessionKey = localStorage.getItem("sessionKey");
-      
-      return fetch(`/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
-          method: 'GET',
-      })
-      .then(response => {
-          if (response.status === 401) {
-              informIncorrectPassword()
-          }
-          console.log("TEST");
-          return response.json()
-      })
-      .then(data => {
-        console.log("TEST2")
-        return data;
-      })
-      .catch(error => console.error(error));
+
+    return fetch(`/api/Booklist/${id}/data?sessionKey=${sessionKey}`, {
+        method: 'GET',
+    })
+        .then(response => {
+            if (response.status === 401) {
+                informIncorrectPassword()
+            }
+            return response.json()
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(error => console.error(error));
 }
 
 function fillBookData(data) {
@@ -82,54 +79,54 @@ function fillBookMetaData(data) {
     bookListID.innerText = data.id;
 
     let rating = document.getElementById("rating");
-        if (data.rating != null) {
-            rating.classList.add("status");
-            switch (data.rating) {
-              case "1":
+    if (data.rating != null) {
+        rating.classList.add("status");
+        switch (data.rating) {
+            case "1":
                 rating.classList.add("status-red");
                 rating.innerHTML = "&#9734";
                 break;
-              case "2":
+            case "2":
                 rating.classList.add("status-orange");
                 rating.innerHTML = "&#9734&#9734"
                 break;
-              case "3":
+            case "3":
                 rating.classList.add("status-yellow");
                 rating.innerHTML = "&#9734&#9734&#9734";
                 break;
-              case "4":
+            case "4":
                 rating.classList.add("status-blue");
                 rating.innerHTML = "&#9734&#9734&#9734&#9734";
                 break;
-              case "5":
+            case "5":
                 rating.classList.add("status-green");
                 rating.innerHTML = "&#9734&#9734&#9734&#9734&#9734";
                 break;
-            }
         }
+    }
 
-        let status = document.getElementById("status");
-        if (data.status != null) {
-            status.innerText = data.status;
-            status.classList.add("status");
-            status.classList.add("statusChanges");
-            
-            switch (data.status) {
-              case "UNASSIGNED":
+    let status = document.getElementById("status");
+    if (data.status != null) {
+        status.innerText = data.status;
+        status.classList.add("status");
+        status.classList.add("statusChanges");
+
+        switch (data.status) {
+            case "UNASSIGNED":
                 status.classList.add("status-yellow")
                 break;
-              case "READING":
+            case "READING":
                 status.classList.add("status-green")
                 break;
-              case "UP NEXT":
+            case "UP NEXT":
                 status.classList.add("status-teal");
                 break;
-              case "WISHLIST":
+            case "WISHLIST":
                 status.classList.add("status-blue");
                 break;
-              case "FINISHED":
+            case "FINISHED":
                 status.classList.add("status-purple");
                 break;
-            }
         }
+    }
 }

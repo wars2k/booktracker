@@ -1,11 +1,9 @@
-
 let collectionID = null;
 checkIfEditIsAllowed()
 
 function checkIfEditIsAllowed() {
     setCollectionID();
     if (collectionID == null) {
-        console.log("hello");
         informUnauthorized()
         return;
     }
@@ -38,11 +36,11 @@ async function handleEditCollection() {
 function fillInCurrentData() {
     sessionKey = localStorage.getItem("sessionKey");
     fetch(`/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
-    method: 'GET'
+        method: 'GET'
     })
-    .then(response => response.json())
-    .then(data => displayCollectionData(data))
-    .catch(error => informError(error));
+        .then(response => response.json())
+        .then(data => displayCollectionData(data))
+        .catch(error => informError(error));
 }
 
 function displayCollectionData(data) {
@@ -79,18 +77,18 @@ async function submitEdits(data) {
     try {
         const sessionKey = localStorage.getItem("sessionKey");
         const response = await fetch(`/api/collections/${collectionID}?sessionKey=${sessionKey}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
         const statusCode = response.status;
         return statusCode;
-      } catch (error) {
+    } catch (error) {
         console.error(error);
         throw error;
-      }
+    }
 }
 
 function createSuccessBanner() {

@@ -24,7 +24,6 @@ checkIfEditIsAllowed()
 function checkIfEditIsAllowed() {
     setBookListID();
     if (bookListID == null) {
-        console.log("hello");
         informUnauthorized()
         return;
     }
@@ -44,11 +43,11 @@ function informUnauthorized() {
 function fillInCurrentData() {
     sessionKey = localStorage.getItem("sessionKey");
     fetch(`/api/Booklist/${bookListID}/data?sessionKey=${sessionKey}`, {
-    method: 'GET',
+        method: 'GET',
     })
-    .then(response => response.json())
-    .then(data => displayBookData(data))
-    .catch(error => informError(error));
+        .then(response => response.json())
+        .then(data => displayBookData(data))
+        .catch(error => informError(error));
 }
 
 function displayBookData(data) {
@@ -80,7 +79,7 @@ async function handleEdit() {
 
 function gatherEditData() {
     let editData = {};
-    editData.bookID =  globalData.bookID;
+    editData.bookID = globalData.bookID;
     editData.title = document.getElementById("title").value;
     editData.author = document.getElementById("author").value;
     editData.datePublished = document.getElementById("publishedDate").value;
@@ -97,18 +96,18 @@ async function submitEdits(data) {
     try {
         const sessionKey = localStorage.getItem("sessionKey");
         const response = await fetch(`/api/Booklist/${bookListID}/data?sessionKey=${sessionKey}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
         const statusCode = response.status;
         return statusCode;
-      } catch (error) {
+    } catch (error) {
         console.error(error);
         throw error;
-      }
+    }
 }
 
 function createSuccessBanner() {
