@@ -27,7 +27,7 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 
     services:
         booktracker:
-            image: wars2k/booktracker:v0.2-beta
+            image: wars2k/booktracker:v0.2.1-beta
             restart: unless-stopped
             volumes:
                 - ./data:/app/external
