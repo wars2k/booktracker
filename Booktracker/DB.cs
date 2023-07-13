@@ -89,7 +89,7 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@pubDate", content.PublishedDate);
             command.Parameters.AddWithValue("@publisher", content.Publisher);
             command.Parameters.AddWithValue("@coverImage", content.ImageLinks.Thumbnail != null ? content.ImageLinks?.Thumbnail : "");
-            command.Parameters.AddWithValue("@description", content.Description);
+            command.Parameters.AddWithValue("@description", content.Description != null? content.Description : "");
             command.Parameters.AddWithValue("@page_count", content.PageCount);
             command.Parameters.AddWithValue("@isbn", content.IndustryIdentifiers != null? content.IndustryIdentifiers[1].Identifier : "");
             command.Parameters.AddWithValue("@category", content.Categories != null ? content.Categories[0] : "");
