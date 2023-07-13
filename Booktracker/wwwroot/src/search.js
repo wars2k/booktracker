@@ -48,7 +48,7 @@ function searchForBook(event) {
     method: 'POST'
     })
     .then(response => response.json())
-    .then(data => createSuccessBanner(data))
+    .then(data => createSuccessIndicator(data, i))
     .catch(error => console.error(error));
     
   }
@@ -97,17 +97,20 @@ function searchForBook(event) {
     card.classList.add("bookResponse");
     card.innerHTML = `<div class="card"> \
                         <div class="card-body bookContainer"> \
-                          <div class="imageContainer"> \
+                          <div class="imageContainer" id="imageContainer${index}"> \
                             <img src=${data.imageLink}> \
                           </div> \
                           <div class="bookInfo"> \
                             <h3>${data.title}</h3> \
                             <p>${data.author}</p>\
-                            <button class="btn" onclick="addBook(${index})">Save</button>\
+                            <button class="btn" id="button${index}" onclick="addBook(${index})">Save</button>\
                           </div>\
                         </div>\
                       </div>`
     document.getElementById("row").append(card);
+    if (data.imageLink == null) {
+      document.getElementById(`imageContainer${index}`).style.display = "none";
+    }
   }
 
   function watchForEnter() {
@@ -130,4 +133,9 @@ function searchForBook(event) {
     title.innerHTML = "Success!"
     banner.append(title);
     document.getElementById("row").prepend(banner);
+}
+
+function createSuccessIndicator(data, index) {
+  let button = document.getElementById("button" + index);
+  button.classList.add("btn-green");
 }

@@ -88,10 +88,10 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@authors", string.Join(", ", content.Authors));
             command.Parameters.AddWithValue("@pubDate", content.PublishedDate);
             command.Parameters.AddWithValue("@publisher", content.Publisher);
-            command.Parameters.AddWithValue("@coverImage", content.ImageLinks?.Thumbnail);
-            command.Parameters.AddWithValue("@description", content.Description);
+            command.Parameters.AddWithValue("@coverImage", content.ImageLinks.Thumbnail != null ? content.ImageLinks?.Thumbnail : "");
+            command.Parameters.AddWithValue("@description", content.Description != null? content.Description : "");
             command.Parameters.AddWithValue("@page_count", content.PageCount);
-            command.Parameters.AddWithValue("@isbn", content.IndustryIdentifiers[1].Identifier);
+            command.Parameters.AddWithValue("@isbn", content.IndustryIdentifiers != null? content.IndustryIdentifiers[1].Identifier : "");
             command.Parameters.AddWithValue("@category", content.Categories != null ? content.Categories[0] : "");
             command.ExecuteNonQuery();
             closeConnection(connection);
@@ -307,7 +307,7 @@ namespace bookTrackerApi {
 
             sql += " WHERE iduser_books = @id";
             parameters.Add(new SqliteParameter("@id", IdNumber));
-            Log.sqlQuery(sql);
+            //Log.sqlQuery(sql);
 
             SqliteCommand command = new SqliteCommand(sql, connection);
             command.Parameters.AddRange(parameters.ToArray());
@@ -458,7 +458,7 @@ namespace bookTrackerApi {
 
             sql += " WHERE idusers = @id";
             parameters.Add(new SqliteParameter("@id", id));
-            Log.sqlQuery(sql);
+            //Log.sqlQuery(sql);
 
             SqliteCommand command = new SqliteCommand(sql, connection);
             command.Parameters.AddRange(parameters.ToArray());
