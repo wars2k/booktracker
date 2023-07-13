@@ -48,7 +48,7 @@ function searchForBook(event) {
     method: 'POST'
     })
     .then(response => response.json())
-    .then(data => createSuccessBanner(data))
+    .then(data => createSuccessIndicator(data, i))
     .catch(error => console.error(error));
     
   }
@@ -103,7 +103,7 @@ function searchForBook(event) {
                           <div class="bookInfo"> \
                             <h3>${data.title}</h3> \
                             <p>${data.author}</p>\
-                            <button class="btn" onclick="addBook(${index})">Save</button>\
+                            <button class="btn" id="button${index}" onclick="addBook(${index})">Save</button>\
                           </div>\
                         </div>\
                       </div>`
@@ -130,4 +130,9 @@ function searchForBook(event) {
     title.innerHTML = "Success!"
     banner.append(title);
     document.getElementById("row").prepend(banner);
+}
+
+function createSuccessIndicator(data, index) {
+  let button = document.getElementById("button" + index);
+  button.classList.add("btn-green");
 }
