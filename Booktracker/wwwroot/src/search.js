@@ -97,7 +97,7 @@ function searchForBook(event) {
     card.classList.add("bookResponse");
     card.innerHTML = `<div class="card"> \
                         <div class="card-body bookContainer"> \
-                          <div class="imageContainer"> \
+                          <div class="imageContainer" id="imageContainer${index}"> \
                             <img src=${data.imageLink}> \
                           </div> \
                           <div class="bookInfo"> \
@@ -108,6 +108,9 @@ function searchForBook(event) {
                         </div>\
                       </div>`
     document.getElementById("row").append(card);
+    if (data.imageLink == null) {
+      document.getElementById(`imageContainer${index}`).style.display = "none";
+    }
   }
 
   function watchForEnter() {
