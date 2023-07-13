@@ -34,6 +34,7 @@
     justify-content: center;
     padding-left: 15px;
     padding-right: 15px;
+    max-height: 48px;
     
 }
 
@@ -59,6 +60,7 @@
 
 .menuTest {
     height: 100%;
+    flex-wrap: wrap !important;
 
 }
 
@@ -69,4 +71,8 @@
 
 #databaseSearch {
     width: 250px;
+}
+
+#test {
+    flex-wrap: nowrap !important;
 }

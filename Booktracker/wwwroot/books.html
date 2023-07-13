@@ -7,7 +7,7 @@
     <div class="page">
         <!-- Sidebar -->
         <header class="navbar navbar-expand-sm navbar-light d-print-none">
-          <div class="container-xl">
+          <div class="container-xl" id="test">
             <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
               <a href="index.html">
                 Book Tracker
@@ -16,7 +16,7 @@
       
             <div class="navbar-nav flex-row order-md-last">
               <div class="nav-item">
-                  <div class="d-none d-xl-block ps-2">
+                  <div>
                     <a class="btn" href="search.html">Add New Book</a>
                     <button class="btn" onclick="logOut()">Log Out</button>
                   </div>
@@ -24,19 +24,19 @@
             </div>
           </div>
         </header>
-        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+        <header class="navbar navbar-expand-sm navbar-light d-print-none" style="max-height: 56px">
           <div class="container-xl">
-            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest">
+            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest" style="flex-wrap: nowrap;">
               <a class="nav-itemMenu" href="index.html">Home</a>
               <a class="nav-itemMenu" href="booklist.html">My Books</a>
-              <div class="dropdown">
+              <div class="dropdown" style="height: 48px !important">
                 <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
                 <div class="dropdown-menu">
                   <a class="dropdown-item" href="collections.html">Collections Home</a>
                   <a class="dropdown-item" href="addNewCollection.html">Add New Collection</a>
                 </div>
               </div>
-              <div class="dropdown">
+              <div class="dropdown" style="height: 48px !important">
                 <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Settings</a>
                 <div class="dropdown-menu">
                   <a class="dropdown-item" href="settings.html">Settings</a>
