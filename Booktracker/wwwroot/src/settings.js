@@ -55,3 +55,23 @@ function submitDataImport() {
           console.error('Error uploading file:', error);
         });
 }
+getMostRecentVersion();
+function getMostRecentVersion() {
+  fetch(`https://api.github.com/repos/wars2k/booktracker/releases`, {
+    method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => displayMostRecentVersion(data))
+    .catch(error => console.error(error));
+}
+
+function displayMostRecentVersion(data) {
+  let version = document.getElementById("mostRecentVersion");
+  version.innerText = data[0].tag_name;
+}
+
+function displayErrorGettingVersion(error) {
+  let version = document.getElementById("mostRecentVersion");
+  version.innerText = "Error getting latest version from Github.";
+  console.error(error);
+}
