@@ -22,3 +22,20 @@ function logOut() {
     localStorage.removeItem("sessionKey");
     window.location.href = "login.html";
 }
+checkIfSessionIsValid();
+function checkIfSessionIsValid() {
+    let sessionKey = localStorage.getItem("sessionKey");
+    fetch(`/api/checkSession?sessionKey=${sessionKey}`, {
+        method: 'GET',
+    })
+    .then(response => {
+        if (response.status === 200) {
+            console.log("valid session");
+            return;
+        } else {
+            localStorage.removeItem("sessionKey");
+            window.location.href = "login.html";
+            return;
+        }
+    })
+}

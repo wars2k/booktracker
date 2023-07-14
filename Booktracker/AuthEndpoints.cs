@@ -98,6 +98,15 @@ namespace bookTrackerApi {
                 Summary = "Registers an admin user on the site."
             });
 
+            app.MapGet("/api/checkSession", (string sessionKey) => {
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    return Results.Unauthorized();
+                } else {
+                    return Results.Ok();
+                }
+            });
+
         }
 
     }
