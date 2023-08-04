@@ -10,15 +10,22 @@ namespace bookTrackerApi {
             //receives a username and password. Checks that with the database of users.
             //if both are correct, starts a new session and returns the session key to the client.
             app.MapPost("/api/login", async (HttpContext context) => {
+
                 using var reader = new StreamReader(context.Request.Body);
                 var requestBody = await reader.ReadToEndAsync();
                 var payload = JsonConvert.DeserializeObject<Api.UserInfo>(requestBody);
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+
                 if (payload == null) {
-                    return Results.BadRequest();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.missing_request_body, "login", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
+
                 if (payload.Username == null || payload.Password == null) {
-                    return Results.BadRequest();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_request_body, "login", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
+
                 DB.UserInfo userInfo = DB.retrieveUserInfo(payload.Username);
                 if (userInfo.Password == payload.Password) {
                     string generateSession = Api.generateSessionKey(32);
@@ -28,10 +35,10 @@ namespace bookTrackerApi {
                     newSession.Username = userInfo.Username;
                     newSession.IsAdmin = userInfo.IsAdmin;
                     Program.Sessions.Add(newSession);
-                    Log.logSuccessfulLoginAttempt(payload.Username);
+                    JsonLog.writeLog("Successful login", "INFO", "login", newSession, remoteIp);
                     return Results.Ok(generateSession);
                 } else {
-                    Log.logFailedLoginAttempt(payload.Username);
+                    JsonLog.writeLog("Login attempt failed due to invalid credentials.", "WARNING", "login", null, remoteIp);
                     return Results.Unauthorized();
                 }   
             })
@@ -47,9 +54,11 @@ namespace bookTrackerApi {
             });
 
             //logs out the user on the server-side by nullifying the sessionKey & associatedID
-            app.MapPost("/api/logout", (string sessionKey) => {
+            app.MapPost("/api/logout", (string sessionKey, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession != null) {
+                    JsonLog.writeLog("Successful logout", "INFO", "logout", currentSession, remoteIp);
                     Log.logSuccessfulLogout(currentSession);
                     Program.Sessions.Remove(currentSession);
                 }
@@ -80,12 +89,15 @@ namespace bookTrackerApi {
             });
 
             app.MapPost("/api/register", async (HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 using var reader = new StreamReader(context.Request.Body);
                 var requestBody = await reader.ReadToEndAsync();
                 var payload = JsonConvert.DeserializeObject<Api.RegisterInfo>(requestBody);
                 if (payload == null) {
-                    return Results.BadRequest();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.missing_request_body, "registration", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
+                JsonLog.writeLog($"Initial admin account created. Username: '{payload.Username}'", "INFO", "registration", null, remoteIp);
                 DB.registerUser(payload);
                 return Results.Ok();
             })
