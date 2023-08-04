@@ -19,9 +19,9 @@ namespace bookTrackerApi {
         public static int Results = 12;
         
 
-        public static async Task<List<object>> CallApiAsync(string name) {
+        public static async Task<List<object>> CallApiAsync(string name, string results) {
             var client = new HttpClient();
-            var response = await client.GetAsync($"https://www.googleapis.com/books/v1/volumes?q=" + name + $"&maxResults={Results}");
+            var response = await client.GetAsync($"https://www.googleapis.com/books/v1/volumes?q=" + name + $"&maxResults={results}");
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();

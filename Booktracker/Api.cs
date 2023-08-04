@@ -19,7 +19,7 @@ namespace bookTrackerApi {
 
             //receives a title from the front-end as "name", then searches for that title in the Google Books API. 
             //the Google Books API returns the top 5 results, which are then returned to the front-end to be displayed.
-            app.MapGet("/api/books/new", async (string name, string sessionKey, HttpContext context) => {
+            app.MapGet("/api/books/new", async (string name, string sessionKey, string results, HttpContext context) => {
                 string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 if (name == null || sessionKey == null) {
                     ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.missing_parameter, "book_search", null, remoteIp);
@@ -30,7 +30,7 @@ namespace bookTrackerApi {
                     ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_search", null, remoteIp);
                     return Results.BadRequest(errorMessage);
                 }
-                var content = await ApiClient.CallApiAsync(name);
+                var content = await ApiClient.CallApiAsync(name, results);
                 JsonLog.writeLog($"Google Books API queried for '{name}'.", "INFO", "book_search", currentSession, remoteIp);
                 return Results.Ok(content);
                 

@@ -2,7 +2,10 @@ function searchForBook(event) {
     //event.preventDefault();
     sessionKey = localStorage.getItem("sessionKey");
     let searchBar = document.getElementById("bookSearchID");
-    fetch(`/api/books/new?name=${searchBar.value}&sessionKey=${sessionKey}`, {
+    let results = document.getElementById("resultsToSearch")
+    resultsValue = results.value;
+    console.log(resultsValue);
+    fetch(`/api/books/new?name=${searchBar.value}&results=${resultsValue}&sessionKey=${sessionKey}`, {
     method: 'GET'
     })
     .then(response => response.json())
