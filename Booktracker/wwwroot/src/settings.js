@@ -75,3 +75,30 @@ function displayErrorGettingVersion(error) {
   version.innerText = "Error getting latest version from Github.";
   console.error(error);
 }
+
+function getCurrentLoggingLevel() {
+  let sessionKey = localStorage.getItem("sessionKey");
+  fetch(`/api/settings/loggingLevel?sessionKey=${sessionKey}`, {
+    method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => displayLoggingLevel(data))
+    .catch(error => console.error(error));
+}
+
+function displayLoggingLevel(data) {
+  document.getElementById("loggingLevel").value = data;
+}
+
+getCurrentLoggingLevel();
+
+function updateLoggingLevel() {
+  let sessionKey = localStorage.getItem("sessionKey");
+  let level = document.getElementById("loggingLevel").value;
+  fetch(`/api/settings/loggingLevel?level=${level}&sessionKey=${sessionKey}`, {
+    method: 'PUT',
+  })
+  .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+}

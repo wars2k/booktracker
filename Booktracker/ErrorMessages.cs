@@ -27,7 +27,7 @@ namespace bookTrackerApi {
 
         public static ErrorMessage invalid_sessionKey = new ErrorMessage {
             Code = "invalid_sessionKey",
-            Message = "Request failed due to invalid or mising session key.",
+            Message = "Request failed due to invalid or missing session key.",
             Details = "A valid session key is required for most requests. Session keys are created with the '/api/login' endpoint."
         };
 

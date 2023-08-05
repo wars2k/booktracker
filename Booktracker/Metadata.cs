@@ -70,7 +70,6 @@ namespace bookTrackerApi {
                     Categories = result.VolumeInfo.Categories
                 };
             string stringBook = JsonConvert.SerializeObject(book);
-            Log.writeLog(stringBook, "SPECIAL INFO");
             return book;
         }
     }

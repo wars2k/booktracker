@@ -5,6 +5,8 @@ namespace bookTrackerApi {
     public static class Program {
 
         public static List<SessionInfo> Sessions = new List<SessionInfo>();
+
+        
         public static void Main(string[] args) {
             DB.InitiateDatabase();
             DB.initiateConnection();
@@ -43,6 +45,9 @@ namespace bookTrackerApi {
 
             app.Run();
         }
+
+        public static string loggingLevel = SettingsDB.getLoggingLevel();
+        
     }
 
     public class SessionInfo {

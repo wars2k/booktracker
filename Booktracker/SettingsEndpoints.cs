@@ -90,6 +90,56 @@ namespace bookTrackerApi {
                 Summary = "Changes settings globally for all users."
             });
 
+            app.MapPut("/api/settings/loggingLevel", (String level, String sessionKey, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "settings_loggingLevel", null, remoteIp); 
+                    return Results.BadRequest(errorMessage);
+                }
+                if (currentSession.IsAdmin == 0) {
+                    JsonLog.writeLog("Unauthorized attempt to delete a user.", "WARNING", "settings_loggingLevel", currentSession, remoteIp);
+                    return Results.Unauthorized();
+                }
+                if (level == LoggingLevels.all || level == LoggingLevels.error_only || level == LoggingLevels.error_and_warning) {
+                    JsonLog.writeLog($"Logging level updated to '{level}'.", "INFO", "settings_loggingLevel", currentSession, remoteIp);
+                    SettingsDB.updateLoggingLevel(level);
+                    return Results.Ok();
+                } else {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_paramter, "settings_loggingLevel", null, remoteIp);
+                    
+                    return Results.BadRequest(errorMessage);
+                }
+                
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<string>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .WithTags("Settings")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Updates the logging level.",
+                Description = "Parameter 'level' can be either 'all', 'error_only', or 'error_and_warning'."
+            });
+
+            app.MapGet("/api/settings/loggingLevel", (String sessionKey, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "settings_loggingLevel", null, remoteIp); 
+                    return Results.BadRequest(errorMessage);
+                }
+                string loggingLevel = SettingsDB.getLoggingLevel();
+                return Results.Ok(loggingLevel);
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<string>(StatusCodes.Status200OK)
+            .WithTags("Settings")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Gets the current logging level.",
+            });
+
         }
 
     }

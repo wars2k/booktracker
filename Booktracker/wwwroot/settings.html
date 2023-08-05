@@ -76,7 +76,25 @@
                     </div>
                   </div>
                 </div>
-              
+                
+                <div class="col-sm-12" style="width:100%; height: 100%">
+                  <div class="card" style="overflow-y: auto">
+                    <div class="card-status-start bg-blue"></div>
+                    <div class="card-body" style="height: 100%">
+                        <h3 class="card-title">Settings</h3>
+                        <div class="mb-3">
+                          <label class="form-label">Logging Level</label>
+                          <select class="form-select" style="max-width:200px" id="loggingLevel">
+                              <option value="all">Detailed</option>
+                              <option value="error_and_warning">Errors and Warnings</option>
+                              <option value="error_only">Errors Only</option> 
+                          </select>
+                          
+                        </div>
+                        <button class="btn" onclick="updateLoggingLevel()">Submit</button>
+                    </div>
+                  </div>
+                </div>
                 
               
                 <div class="col-sm-12" style="width:100%; height: 100%">

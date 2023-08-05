@@ -1,9 +1,18 @@
 namespace bookTrackerApi {
 
     public static class JsonLog {
-        private static string logFilePath = "external/log/jsonLog.txt";
+        private static string logFilePath = "external/log/log.txt";
 
         public static void writeLog(string message, string urgency, string eventType, SessionInfo? sessionInfo, string? remoteIP) {
+            if (Program.loggingLevel == LoggingLevels.error_only) {
+                if (urgency == "INFO" || urgency == "WARNING") {
+                    return;
+                }
+            } else if (Program.loggingLevel == LoggingLevels.error_and_warning) {
+                if (urgency == "INFO") {
+                    return;
+                }
+            }
             if (remoteIP == null) {
                 remoteIP = "null";
             }
