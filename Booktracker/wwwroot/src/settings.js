@@ -55,3 +55,50 @@ function submitDataImport() {
           console.error('Error uploading file:', error);
         });
 }
+getMostRecentVersion();
+function getMostRecentVersion() {
+  fetch(`https://api.github.com/repos/wars2k/booktracker/releases`, {
+    method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => displayMostRecentVersion(data))
+    .catch(error => console.error(error));
+}
+
+function displayMostRecentVersion(data) {
+  let version = document.getElementById("mostRecentVersion");
+  version.innerText = data[0].tag_name;
+}
+
+function displayErrorGettingVersion(error) {
+  let version = document.getElementById("mostRecentVersion");
+  version.innerText = "Error getting latest version from Github.";
+  console.error(error);
+}
+
+function getCurrentLoggingLevel() {
+  let sessionKey = localStorage.getItem("sessionKey");
+  fetch(`/api/settings/loggingLevel?sessionKey=${sessionKey}`, {
+    method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => displayLoggingLevel(data))
+    .catch(error => console.error(error));
+}
+
+function displayLoggingLevel(data) {
+  document.getElementById("loggingLevel").value = data;
+}
+
+getCurrentLoggingLevel();
+
+function updateLoggingLevel() {
+  let sessionKey = localStorage.getItem("sessionKey");
+  let level = document.getElementById("loggingLevel").value;
+  fetch(`/api/settings/loggingLevel?level=${level}&sessionKey=${sessionKey}`, {
+    method: 'PUT',
+  })
+  .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+}

@@ -6,7 +6,8 @@ if (localStorage.getItem("sessionKey") == "undefined" || localStorage.getItem("s
 console.log(localStorage.getItem("sessionKey"))
 
 function logOut() {
-    fetch('/api/logout', {
+    let sessionKey = localStorage.getItem("sessionKey");
+    fetch(`/api/logout?sessionKey=${sessionKey}`, {
         method: 'POST',
     })
     .then(response => {
@@ -21,4 +22,22 @@ function logOut() {
     .catch(error => console.error(error));
     localStorage.removeItem("sessionKey");
     window.location.href = "login.html";
+}
+
+checkIfSessionIsValid();
+function checkIfSessionIsValid() {
+    let sessionKey = localStorage.getItem("sessionKey");
+    fetch(`/api/checkSession?sessionKey=${sessionKey}`, {
+        method: 'GET',
+    })
+    .then(response => {
+        if (response.status === 200) {
+            console.log("valid session");
+            return;
+        } else {
+            localStorage.removeItem("sessionKey");
+            window.location.href = "login.html";
+            return;
+        }
+    })
 }

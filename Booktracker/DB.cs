@@ -504,7 +504,7 @@ namespace bookTrackerApi {
             string? Description = "";
             string? Categories = "";
             if (book.Title != null) {
-                List<object> content = await ApiClient.CallApiAsync(book.Title + " " + book.Author);
+                List<object> content = await ApiClient.CallApiAsync(book.Title + " " + book.Author, "12");
                 List<VolumeInfoSimple> bookList = content.Cast<bookTrackerApi.VolumeInfoSimple>().ToList();
                 
                 if (bookList[0].ImageLink != null) {

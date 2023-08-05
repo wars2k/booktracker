@@ -70,15 +70,24 @@
                                 <label class="form-label">Search</label>
                                 <div style="display: flex; gap: 15px;">
                                 <input style="width:400px;" type="text" class="form-control" name="example-text-input" placeholder="Search for a book or author." id="bookSearchID"/>
-                                <button class="btn searchBookButton" onclick="searchForBook(event)" type="button">Search</button> <button class="btn searchBookButton" onclick="manualEntry()">Manual Entry</button>
+                                <select class="form-select" id="resultsToSearch" style="width: 70px">
+                                  <option value="12">12</option>
+                                  <option value="24">24</option>
+                                  <option value="36">36</option>
+                                </select>
+                                <button class="btn searchBookButton" onclick="searchForBook(event)" type="button">Search</button> 
+                                
+                                <button class="btn searchBookButton" onclick="manualEntry()">Manual Entry</button>
                                 </div>
                             </div>
                         </div>
                       </div>
                     </div>
-
                     
 
+      
+                </div>
+                <div id="cardContainer" class="row row-deck row-cards">
 
                 </div>
 

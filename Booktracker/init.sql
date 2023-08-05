@@ -20,6 +20,14 @@ CREATE TABLE IF NOT EXISTS `books` (
   `category` TEXT
 );
 
+CREATE TABLE IF NOT EXISTS `settings` (
+  `name` TEXT PRIMARY KEY,
+  `value` TEXT NOT NULL
+);
+
+INSERT OR IGNORE INTO `settings` ('name', 'value')
+VALUES ('logging_level', 'all');
+
 -- Table structure for table `users`
 CREATE TABLE IF NOT EXISTS `users` (
   `idusers` INTEGER PRIMARY KEY AUTOINCREMENT,

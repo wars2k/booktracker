@@ -131,6 +131,7 @@ function searchForBook() {
     deleteClone.addEventListener("click", function() {
       deleteBook(id);
       hideEditBox();
+      location.reload();
     })
 
     
@@ -192,6 +193,7 @@ function searchForBook() {
     editData.id = id;
     console.log(editData);
     submitEdits(editData);
+    location.reload();
   }
 
   //submits edits to the back end. ID goes after the first slash, then the edits are entered as key/value pairs. 

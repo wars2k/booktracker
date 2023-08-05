@@ -2,7 +2,10 @@ function searchForBook(event) {
     //event.preventDefault();
     sessionKey = localStorage.getItem("sessionKey");
     let searchBar = document.getElementById("bookSearchID");
-    fetch(`/api/books/new?name=${searchBar.value}&sessionKey=${sessionKey}`, {
+    let results = document.getElementById("resultsToSearch")
+    resultsValue = results.value;
+    console.log(resultsValue);
+    fetch(`/api/books/new?name=${searchBar.value}&results=${resultsValue}&sessionKey=${sessionKey}`, {
     method: 'GET'
     })
     .then(response => response.json())
@@ -14,27 +17,10 @@ function searchForBook(event) {
     console.log(data);
     let cards = document.getElementsByClassName("bookResponse");
     let cardsArray = Array.from(cards);
-    for (let i = 0; i < cardsArray.length; i++) {
-      cardsArray[i].style.display = "none"; 
-    }
+    document.getElementById("cardContainer").innerHTML = "";
     for (let i = 0; i < data.length; i++) {
         createBookResponse(data[i], i);
-        // let card = document.getElementById("searchCard" + i);
-        // let image = document.getElementById("searchCardImage" + i);
-        // let title = document.getElementById("searchCardTitle" + i);
-        // let author = document.getElementById("searchCardText" + i);
-        // let id = document.createElement("div");
-        // id.style.display = "none";
-        // id.innerText = data[i].id;
-        // card.append(id);
-        searchData = data;
-        // title.innerText = data[i].title;
-        // author.innerHTML = data[i].author + "<br>" + data[i].publishedDate
-        // image.style.backgroundSize = "contain"
-        // image.style.backgroundImage = "url('" + data[i].imageLink + "')";
-        // card.style.display="block";
-        
-        
+        searchData = data;    
     }
   }
 
@@ -98,7 +84,7 @@ function searchForBook(event) {
     card.innerHTML = `<div class="card"> \
                         <div class="card-body bookContainer"> \
                           <div class="imageContainer" id="imageContainer${index}"> \
-                            <img src=${data.imageLink}> \
+                            <img src=${data.imageLink} id="image${index}"> \
                           </div> \
                           <div class="bookInfo"> \
                             <h3>${data.title}</h3> \
@@ -107,9 +93,9 @@ function searchForBook(event) {
                           </div>\
                         </div>\
                       </div>`
-    document.getElementById("row").append(card);
-    if (data.imageLink == null) {
-      document.getElementById(`imageContainer${index}`).style.display = "none";
+    document.getElementById("cardContainer").append(card);
+    if (data.imageLink == null) {  
+      document.getElementById(`image${index}`).src = "styles/placeholder-image.png";
     }
   }
 

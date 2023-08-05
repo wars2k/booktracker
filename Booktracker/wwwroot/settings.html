@@ -69,13 +69,32 @@
                     <div class="card-status-start bg-blue"></div>
                     <div class="card-body" style="height: 100%">
                         <h3 class="card-title">Info</h3>
-                        <p><b>Version:</b> <code>v0.2.1-beta</code></p>
+                        <p><b>Installed Version:</b> <code>v0.3-beta</code></p>
+                        <p><b>Most Recent Version:</b> <code id="mostRecentVersion"></code></p>
                         <p><b>Source Code: </b> <a href="https://github.com/wars2k/booktracker">Github</a></p>
                         <p><b>API Docs: </b> <a href="/api/docs/index.html">Swagger</a></p>
                     </div>
                   </div>
                 </div>
-              
+                
+                <div class="col-sm-12" style="width:100%; height: 100%">
+                  <div class="card" style="overflow-y: auto">
+                    <div class="card-status-start bg-blue"></div>
+                    <div class="card-body" style="height: 100%">
+                        <h3 class="card-title">Settings</h3>
+                        <div class="mb-3">
+                          <label class="form-label">Logging Level</label>
+                          <select class="form-select" style="max-width:200px" id="loggingLevel">
+                              <option value="all">Detailed</option>
+                              <option value="error_and_warning">Errors and Warnings</option>
+                              <option value="error_only">Errors Only</option> 
+                          </select>
+                          
+                        </div>
+                        <button class="btn" onclick="updateLoggingLevel()">Submit</button>
+                    </div>
+                  </div>
+                </div>
                 
               
                 <div class="col-sm-12" style="width:100%; height: 100%">
@@ -94,7 +113,7 @@
                     <div class="card-status-start bg-blue"></div>
                     <div class="card-body" style="height: 100%">
                         <h3 class="card-title">Data Import</h3>
-                        <p class="text-muted">Goodreads import includes books, ratings, and bookshelfs.</p>
+                        <p class="text-muted">Goodreads import includes books, ratings, and bookshelves.</p>
                         <p class="text-muted">This may take a while, especially for large libraries. <b>Please stay on this page until upload status alert appears.</b></p>
                         <div class="mb-3">
                             <label class="form-label">Import From</label>

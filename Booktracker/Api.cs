@@ -19,27 +19,25 @@ namespace bookTrackerApi {
 
             //receives a title from the front-end as "name", then searches for that title in the Google Books API. 
             //the Google Books API returns the top 5 results, which are then returned to the front-end to be displayed.
-            app.MapGet("/api/books/new", async (string name, string sessionKey) => {
+            app.MapGet("/api/books/new", async (string name, string sessionKey, string results, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 if (name == null || sessionKey == null) {
-                    Log.failedAPIquery("null", "missingParameter");
-                    return Results.BadRequest("Parameters missing. Required Parameters: string Name & string sessionKey.");
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.missing_parameter, "book_search", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
-                    return Results.BadRequest();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_search", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
-                if (sessionKey != currentSession.Session) {
-                    Log.failedAPIquery(name, "incorrectSessionKey");
-                    return Results.Unauthorized();
-                }
-                var content = await ApiClient.CallApiAsync(name);
-                Log.externalAPIquery(name, currentSession);
+                var content = await ApiClient.CallApiAsync(name, results);
+                JsonLog.writeLog($"Google Books API queried for '{name}'.", "INFO", "book_search", currentSession, remoteIp);
                 return Results.Ok(content);
                 
             })
             .Produces<List<object>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
-            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
@@ -47,31 +45,33 @@ namespace bookTrackerApi {
             });
 
             app.MapPost("/api/books/new/manual", async (HttpContext context, string sessionKey) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 using var reader = new StreamReader(context.Request.Body);
                 var requestBody = await reader.ReadToEndAsync();
                 var payload = JsonConvert.DeserializeObject<ManualEntry>(requestBody);
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
-                    Log.failedManualEntry("incorrectSessionKey", null);
-                    return TypedResults.Unauthorized();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_manualEntry", null, remoteIp);
+                    return TypedResults.BadRequest(errorMessage);
                     
                 }
                 if (requestBody == null) {
-                    Log.failedManualEntry("noRequestBody", currentSession);
-                    return TypedResults.BadRequest("no request body");
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.missing_request_body, "book_manualEntry", null, remoteIp);
+                    return TypedResults.BadRequest(errorMessage);
                 }
                 if (payload != null && payload.Title != null) {
-                    Log.logManualEntry(payload.Title, currentSession);
+                    JsonLog.writeLog("Manual Entry added to bookdatabase and user booklist.", "INFO", "book_manualEntry", currentSession, remoteIp);
                     int id = DB.addManualEntry(payload);
                     DB.addToBookList(id, currentSession.AssociatedID);
                     return TypedResults.Ok(payload);
                 }
-                return Results.BadRequest();
+                ErrorMessage errorMessageTwo = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_request_body, "book_manualEntry", null, remoteIp);
+                return Results.BadRequest(errorMessageTwo);
             })
             .Accepts<ManualEntry>("application/json")
             .Produces<ManualEntry>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
-            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
@@ -79,14 +79,19 @@ namespace bookTrackerApi {
             });
 
             //retrieves an array of all Books from the DB to display on the front-end. 
-            app.MapGet("/api/books", (string sessionKey) => {
+            app.MapGet("/api/books", (string sessionKey, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                if (sessionKey == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.missing_parameter, "book_database", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
+                }
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
-                    //log failed attempt to access user list
-                    return Results.BadRequest();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_database", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
                 if (currentSession.IsAdmin == 0) {
-                    //log unauthorized user attempted to access user list
+                    JsonLog.writeLog("A non-admin user has attempted to access the main book database.", "WARNING", "book_database", currentSession, remoteIp);
                     return Results.Unauthorized();
                 }
                 var content = DB.getAllBooks();
@@ -94,7 +99,7 @@ namespace bookTrackerApi {
             })
             .Produces<DB.BookInfo>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
-            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
@@ -102,26 +107,26 @@ namespace bookTrackerApi {
             });
 
             //receives an ID from the front end. This ID is searched on Google Books API, and the result is added to the Database. 
-            app.MapPost("/api/books/save", async (string id, string sessionKey) => {
+            app.MapPost("/api/books/save", async (string id, string sessionKey, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
-                    string message = $"Attempt to save Google Books ID {id} failed due to incorrect session key.";
-                    Log.writeLog(message, "ERROR");
-                    return Results.Unauthorized();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_save", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
                 VolumeInfo book = await ApiClient.GetBookFromID(id);
                 if (book == null) {
                     return Results.BadRequest("book not found");
                 }
                 int bookId = DB.addNewEntry(book);
-                Log.writeLog($"'{book.Title}' added by user '{currentSession.Username}'", "INFO");
+                JsonLog.writeLog($"'{book.Title}' added.", "INFO", "book_save", currentSession, remoteIp);
                 DB.addToBookList(bookId, currentSession.AssociatedID);
                 return Results.Ok(book);
                 
             })
             .Produces<VolumeInfo>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
-            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
@@ -130,17 +135,16 @@ namespace bookTrackerApi {
 
             //receives an ID along with the desired updates to an entry. The updates are compiled into an EditBookData instance,
             //and then the updates are sent to the database. 
-            app.MapPut("/api/books/{id}", async (string id, string title, string author, string publisher, string date, string sessionKey) => {
+            app.MapPut("/api/books/{id}", async (string id, string title, string author, string publisher, string date, string sessionKey, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
-                    string message = $"Attempt to update book ID {id} failed due to incorrect session key.";
-                    Log.writeLog(message, "ERROR");
-                    return Results.Unauthorized();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_update", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
                 if (currentSession.IsAdmin == 0) {
-                    string message = $"Attempt to update book ID {id} failed due to no admin privileges.";
-                    Log.writeLog(message, "ERROR");
-                    return Results.Unauthorized();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_privileges, "book_update", currentSession, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
                 EditBookData editInfo = new EditBookData();
                 editInfo.Id = id;
@@ -149,11 +153,12 @@ namespace bookTrackerApi {
                 editInfo.Publisher = publisher;
                 editInfo.Date = date;
                 DB.editEntry(editInfo);
+                JsonLog.writeLog("Book metadata updated from main book database by admin user.", "INFO", "book_update", currentSession, remoteIp);
                 return Results.Ok(editInfo);
             })
             .Produces<EditBookData>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
-            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
@@ -161,23 +166,26 @@ namespace bookTrackerApi {
             });
 
             //receives an ID for a given book. The ID is passed along to a function that deletes it from the database.
-            app.MapDelete("/api/books/{id}/delete", (string id, string sessionKey) => {
+            app.MapDelete("/api/books/{id}/delete", (string id, string sessionKey, HttpContext context) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
-                    return Results.BadRequest();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_delete", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
                 if (currentSession.IsAdmin == 1) {
-                    Log.logDeletedBook(id, currentSession);
+                    JsonLog.writeLog($"Book ID '{id}' deleted.", "INFO", "book_delete", currentSession, remoteIp);
                     DB.deleteEntry(id);
                     return Results.Ok("Book succesfully deleted.");
                 } else {
-                    return Results.Unauthorized();
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_privileges, "book_delete", currentSession, remoteIp);
+                    return Results.BadRequest(errorMessage);
                 }
                 
             })
             .Produces<string>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
-            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
