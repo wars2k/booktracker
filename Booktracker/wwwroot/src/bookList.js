@@ -235,6 +235,10 @@ function createBookTable(bookList) {
     editStatusBox.classList.add("status");
     editStatusBox.classList.add(classes);
     editStatusBox.innerText = status;
+    if (status == "FINISHED") {
+      let finishedDate = document.getElementById("finishedDateEdit");
+      finishedDate.value = new Date().toLocaleDateString('sv');
+    }
   }
 
   function updateRatingView(content, classes) {

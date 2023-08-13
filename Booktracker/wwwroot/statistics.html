@@ -1,0 +1,128 @@
+<html>
+    <body>
+        <link rel="stylesheet" href="styles/styles.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone.css" rel="stylesheet" />
+        <link rel="stylesheet" href="styles/statistics.css">
+    </body>
+
+    <div class="page">
+        <!-- Sidebar -->
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl" id="test">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html">
+                Book Tracker
+              </a>
+            </h1>
+      
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="nav-item">
+                  <div>
+                    <a class="btn" href="search.html">Add New Book</a>
+                    <button class="btn" onclick="logOut()">Log Out</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar navbar-expand-sm navbar-light d-print-none" style="max-height: 56px">
+          <div class="container-xl">
+            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest" style="flex-wrap: nowrap;">
+              <a class="nav-itemMenu" href="index.html">Home</a>
+              <a class="nav-itemMenu" href="booklist.html">My Books</a>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="collections.html">Collections Home</a>
+                  <a class="dropdown-item" href="addNewCollection.html">Add New Collection</a>
+                </div>
+              </div>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Settings</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                  <a class="dropdown-item" href="books.html">Main Book Database</a>
+                  <a class="dropdown-item" href="users.html">User Management</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="page-wrapper">
+          <div class="page-header d-print-none">
+            <div class="container-xl">
+              <div class="row g-2 align-items-center">
+                <div class="col" id="titleColumn">
+                  <h2 class="page-title">
+                    Statistics
+                  </h2>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page-body" style="height: 77vh">
+            <div class="container-xl">
+                <div class="row row-deck row-cards">
+                    <div class="col-sm-12">
+                      <div class="card" style="overflow: hidden">
+                        <div class="card-header">
+                            <h3 class="card-title">Books Finished Each Month This Year</h3>
+                        </div>
+                        <div class="card-body" id="chart-demo-line">
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Ratings Breakdown</h3>
+                            </div>
+                          <div class="card-body" id="ratings-chart">
+                          
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Status Breakdown</h3>
+                            </div>
+                          <div class="card-body" id="status-chart">
+                          
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <div class="card">
+                          <div class="card-header">
+                              <h3 class="card-title">Favorite Authors</h3>
+                          </div>
+                        <div class="card-body" id="author-chart">
+                        
+                        </div>
+                      </div>
+                  </div>
+
+                </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>
+    
+    <script src="src/checkAuth.js"></script>
+    <script src="src/statistics.js"></script>
+
+    
+</html>
