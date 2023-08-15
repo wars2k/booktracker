@@ -165,7 +165,7 @@ async function getAllBooks() {
   }
 
   function createAuthorGraphData(authorArray) {
-    let maximumAuthorsToDisplay = 10;
+    let maximumAuthorsToDisplay = 20;
     let AuthorsToDisplay;
     if (authorArray.length < maximumAuthorsToDisplay) {
       AuthorsToDisplay = authorArray.length
