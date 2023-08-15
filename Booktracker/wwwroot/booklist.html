@@ -67,16 +67,17 @@
                       </div>
                     </div>
                     <div class="dropdown">
-                      <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Filter</a>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#" onclick="removeFilter()"><span class="status">SHOW ALL</span></a>
-                        <a class="dropdown-item" href="#" onclick="filterByStatus('UNASSIGNED')"><span class="status status-yellow">UNASSIGNED</span></a>
-                        <a class="dropdown-item" href="#" onclick="filterByStatus('READING')"><span class="status status-green">READING</span></a>
-                        <a class="dropdown-item" href="#" onclick="filterByStatus('UP NEXT')"><span class="status status-teal">UP NEXT</span></a>
-                        <a class="dropdown-item" href="#" onclick="filterByStatus('TO READ')"><span class="status status-azure">TO READ</span></a>
-                        <a class="dropdown-item" href="#" onclick="filterByStatus('WISHLIST')"><span class="status status-blue">WISHLIST</span></a>
-                        <a class="dropdown-item" href="#" onclick="filterByStatus('FINISHED')"><span class="status status-purple">FINISHED</span></a>
-                        <a class="dropdown-item" href="#" onclick="filterByStatus('DNF')"><span class="status status-red">DNF</span></a>
+                      <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Status</a>
+                      <div class="dropdown-menu" id="statusFilter">
+                        
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value ="UNASSIGNED"/><span class="status status-yellow">UNASSIGNED</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="READING"/><span class="status status-green">READING</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="UP NEXT"/><span class="status status-teal">UP NEXT</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="TO READ"/><span class="status status-azure">TO READ</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="WISHLIST"/><span class="status status-blue">WISHLIST</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="FINISHED"/><span class="status status-purple">FINISHED</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="DNF"/><span class="status status-red">DNF</span></label>
+                        
                       </div>
                     </div>
                     <input type="text" class="form-control" id="bookListSearch" placeholder="Search for a book." onkeyup="searchTable()"/>

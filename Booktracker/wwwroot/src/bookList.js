@@ -316,14 +316,29 @@ function createBookTable(bookList) {
 
   function filterByStatus(status) {
     removeFilter();
+    let filterArray = getFilterArray();
+    if (filterArray.length == 0) {
+      return;
+    }
+    //console.log(filterArray);
     localStorage.setItem("filter", status);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
       //console.log(child.children[4].innerText);
-      if (child.children[4].innerText != status) {
+      if (!filterArray.includes(child.children[4].innerText)) {
         child.style.display = "none";
       }
     }
+  }
+
+  function getFilterArray() {
+    let filterArray = [];
+    for (const child of document.getElementById("statusFilter").children) {
+      if (child.children[0].checked == 1) {
+        filterArray.push(child.children[0].value);
+      }
+    }
+    return filterArray;
   }
 
   function removeFilter() {
