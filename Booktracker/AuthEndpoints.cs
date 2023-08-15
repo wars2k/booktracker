@@ -59,7 +59,6 @@ namespace bookTrackerApi {
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession != null) {
                     JsonLog.writeLog("Successful logout", "INFO", "logout", currentSession, remoteIp);
-                    Log.logSuccessfulLogout(currentSession);
                     Program.Sessions.Remove(currentSession);
                 }
                 return Results.Ok();
