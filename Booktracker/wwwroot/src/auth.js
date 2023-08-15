@@ -119,3 +119,14 @@ function informPasswordsDontMatch() {
 function redirectToLogin(data) {
     window.location.href = "login.html";
 }
+
+function watchForEnter() {
+    let input = document.getElementById("passwordLoginInput");
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        submitLoginRequest();
+      }
+    })
+  }
+
+  watchForEnter();
