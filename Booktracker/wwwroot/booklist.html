@@ -67,7 +67,7 @@
                       </div>
                     </div>
                     <div class="dropdown">
-                      <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown">Status</a>
+                      <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" id="statusFilterButton">Status</a>
                       <div class="dropdown-menu" id="statusFilter">
                         
                         <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value ="UNASSIGNED"/><span class="status status-yellow">UNASSIGNED</span></label>
@@ -80,6 +80,21 @@
                         
                       </div>
                     </div>
+
+                    <div class="dropdown">
+                      <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" id="ratingFilterButton">Rating</a>
+                      <div class="dropdown-menu" id="ratingFilter">
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="&#9734&#9734&#9734&#9734&#9734"/><span class="status status-green">&#9734&#9734&#9734&#9734&#9734</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="&#9734&#9734&#9734&#9734"/><span class="status status-blue">&#9734&#9734&#9734&#9734</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="&#9734&#9734&#9734"/><span class="status status-yellow">&#9734&#9734&#9734</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="&#9734&#9734"/><span class="status status-orange">&#9734&#9734</span></label>
+                        <label class="dropdown-item" onclick="filterByStatus()"><input class="form-check-input m-0 me-2" type="checkbox" value="&#9734"/><span class="status status-red">&#9734</span></label>
+                        
+                      </div>
+                    </div>
+
+                    <button class="btn dropdown-toggle" id="dateFilterButton" onclick="openDateFilter()">Date</button>
+
                     <input type="text" class="form-control" id="bookListSearch" placeholder="Search for a book." onkeyup="searchTable()"/>
                   </div>
                 </div>
@@ -116,6 +131,7 @@
                         </div>
                     </div>
                   </div>
+
                 </div>
                 
                       <fieldset class="form-fieldset" id="editBox">
@@ -161,11 +177,46 @@
                         </div>
                         <button class="btn btn-success" id="submitEditButton">Submit</button> <button class="btn" id="cancelEditButton" onclick="hideEditBox()">Cancel</button> <button class="btn btn-danger" id="deleteBookButton">Delete</button>
                       </fieldset>
+
+                      <div class="card hidden" id="dateFilterContent">
+                        <div class="card-body" id="dateFilterContentBody">
+                          <h3 class="card-title">Filter by Date</h3>
+                          <div class="dropdown">
+                            <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" id="dateFilter1">Started</a>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" onclick="updateDateFilter1('Started')" href="#">Started</a>
+                              <a class="dropdown-item" onclick="updateDateFilter1('Finished')" href="#">Finished</a>
+                            </div>
+                          </div>
+                          <div class="dropdown">
+                            <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" id="dateFilter2">After</a>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" onclick="updateDateFilter2('After')" href="#">After</a>
+                              <a class="dropdown-item" onclick="updateDateFilter2('Before')" href="#">Before</a>
+                              <a class="dropdown-item" onclick="updateDateFilter2('Between')" href="#">Between</a>
+                              <a class="dropdown-item" onclick="updateDateFilter2('On')" href="#">On</a>
+                            </div>
+                          </div>
+                          <input type="date" class="form-control" id="firstDate">
+                          <div id="extraDateFilters" class="hidden">
+                            <div style="padding-top: 10px; padding-left: 10px"><b>AND</b></div>
+                            <input type="date" class="form-control" id="secondDate">
+                          </div>
+                          <div style="padding-top: 10px">
+                            <button class="btn btn-green" onclick="filterByDate()">Submit</button>
+                          </div>
+                        </div>
+                      </div>
                
               </div>
             </div>
+            
           </div>
+          
         </div>
+
+        
+
       </div>
       
       
