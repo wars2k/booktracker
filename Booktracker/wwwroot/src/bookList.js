@@ -317,6 +317,7 @@ function createBookTable(bookList) {
   function filterByStatus(justLoaded) {
     let statusFilterArray;
     let ratingFilterArray;
+    document.getElementById("dateFilterButton").classList.add("disabled");
 
     if (justLoaded) {
       let filters = JSON.parse(localStorage.getItem("filter"));
@@ -398,6 +399,7 @@ function createBookTable(bookList) {
   function removeFilter() {
     document.getElementById("statusFilterButton").innerText = `Status`;
     document.getElementById("ratingFilterButton").innerText = `Rating`;
+    document.getElementById("dateFilterButton").classList.remove("disabled");
     localStorage.setItem("filter", null);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
@@ -514,6 +516,13 @@ function createBookTable(bookList) {
   }
 
   function filterByDate() {
+    let isInputValid = validateFilterByDateInputs();
+    if (!isInputValid) {
+      return;
+    }
+
+    disableOtherFilters();
+
     let dateToUse = document.getElementById("dateFilter1").innerText;
     let columnIndex;
 
@@ -540,6 +549,47 @@ function createBookTable(bookList) {
     }
     openDateFilter();
   }
+
+function disableOtherFilters() {
+  document.getElementById("statusFilterButton").classList.add("disabled");
+  document.getElementById("ratingFilterButton").classList.add("disabled");
+}
+
+function validateFilterByDateInputs() {
+
+  let dateOne = document.getElementById("firstDate");
+  let typeOfFilter = document.getElementById("dateFilter2");
+  let dateTwo = document.getElementById("secondDate");
+
+  dateOne.classList.remove("is-invalid");
+  dateTwo.classList.remove("is-invalid");
+
+  if (dateOne.value == "") {
+    dateOne.classList.add("is-invalid");
+    return false;
+  }
+
+  if (typeOfFilter.innerText == "Between") {
+
+    if (dateTwo.value == "") {
+      dateTwo.classList.add("is-invalid");
+      return false;
+    }
+
+    let dateOneRealDate = new Date(dateOne.value);
+    let dateTwoRealDate = new Date(dateTwo.value);
+
+    if (dateOneRealDate > dateTwoRealDate) {
+      dateOne.classList.add("is-invalid");
+      dateTwo.classList.add("is-invalid");
+      return false;
+    } 
+
+  }
+
+  return true;
+
+}
 
 function filterAfterDate(dateString, columnIndex) {
 
@@ -629,6 +679,12 @@ function filterBetweenTwoDates(firstDate, secondDate, columnIndex) {
 
   }
 
+}
+
+function clearDateFilter() {
+  removeFilter();
+  document.getElementById("statusFilterButton").classList.remove("disabled");
+  document.getElementById("ratingFilterButton").classList.remove("disabled");
 }
 
   
