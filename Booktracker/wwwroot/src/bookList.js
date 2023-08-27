@@ -683,6 +683,7 @@ function filterBetweenTwoDates(firstDate, secondDate, columnIndex) {
 
 function clearDateFilter() {
   removeFilter();
+  openDateFilter();
   document.getElementById("statusFilterButton").classList.remove("disabled");
   document.getElementById("ratingFilterButton").classList.remove("disabled");
 }

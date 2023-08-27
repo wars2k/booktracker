@@ -25,6 +25,8 @@ function getBooklist() {
   function bookListHandler(data) {
     let currentlyReading = parseCurrentlyReading(data);
     let upNext = parseUpNext(data);
+    let booksReadThisMonth = parseThisMonth(data);
+    displayThisMonth(booksReadThisMonth);
     displayCurrentlyReading(currentlyReading);
     displayUpNext(upNext);
   }
@@ -55,6 +57,29 @@ function getBooklist() {
     return upNext;
   }
 
+  function parseThisMonth(data) {
+    let thisMonth = [];
+    let today = new Date();
+    let todayMonth = today.getUTCMonth();
+    let todayYear = today.getUTCFullYear();
+
+    for (let i = 0; i < data.length; i++) {
+        const book = data[i];
+        if (book.dateFinished == "") {
+            continue;
+        }
+        let dateFinished = new Date(book.dateFinished);
+        let dateFinishedMonth = dateFinished.getUTCMonth();
+        let dateFinishedYear = dateFinished.getUTCFullYear();
+
+        if (todayYear == dateFinishedYear && todayMonth == dateFinishedMonth) {
+            thisMonth.push(book);
+        }
+    }
+
+    return thisMonth;
+  }
+
   function displayCurrentlyReading(books) {
     let currentlyReadingCard = document.getElementById("currentlyReading");
     if (books.length == 0) {
@@ -83,6 +108,23 @@ function getBooklist() {
         let link = document.createElement("a");
         link.href = `bookPage.html?bookListId=${books[i].id}`
         image.src = books[i].imageLink;
+        link.append(image);
+        image.classList.add("cardImage");
+        upNextCard.append(link);
+    }
+  }
+
+  function displayThisMonth(booksFinishedThisMonth) {
+    let upNextCard = document.getElementById("thisMonth");
+    if (booksFinishedThisMonth.length == 0) {
+        upNextCard.innerHTML = "<code>No books finished this month.</code>"
+        return;
+    }
+    for (let i = 0; i < booksFinishedThisMonth.length; i++) {
+        let image = document.createElement("img");
+        let link = document.createElement("a");
+        link.href = `bookPage.html?bookListId=${booksFinishedThisMonth[i].id}`
+        image.src = booksFinishedThisMonth[i].imageLink;
         link.append(image);
         image.classList.add("cardImage");
         upNextCard.append(link);
