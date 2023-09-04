@@ -1,3 +1,5 @@
+<!DOCTYPE HTML>
+
 <html>
     <body>
         <link rel="stylesheet" href="styles/styles.css">
@@ -57,6 +59,11 @@
                   <h2 class="page-title">
                     Book Page
                   </h2>
+                  <div id="bottomButtonContainer">
+                    <button onclick="saveJournalEdit()" class="btn btn-green" id="saveEntryButton" style="display: none">Save</button>
+                    <button onclick="deleteEntry()" class="btn btn-red" id="deleteEntryButton" style="display: none">Delete</button>
+                    <button class="btn" data-bs-toggle="modal" id="addEntryButton" style="display: none" data-bs-target="#addEntryModal">New Entry</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -69,10 +76,10 @@
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                           <li class="nav-item">
-                            <a href="#tabs-home-ex1" class="nav-link active" data-bs-toggle="tab">Info</a>
+                            <a href="#tabs-home-ex1" class="nav-link active" data-bs-toggle="tab" onclick="hideJournalPane()">Info</a>
                           </li>
                           <li class="nav-item">
-                            <a href="#tabs-profile-ex1" class="nav-link" data-bs-toggle="tab">Journal</a>
+                            <a href="#tabs-profile-ex1" class="nav-link" data-bs-toggle="tab" onclick="journalInitHandler()">Journal</a>
                           </li>
                         </ul>
                     </div>
@@ -140,16 +147,57 @@
                               
                             </div>
                             <div class="tab-pane" id="tabs-profile-ex1">
-                              <h4>Coming Soon!</h4>
-                              
+                              <div class="table-responsive" style="height: 500px">
+                                <table class="table table-vcenter" id="journalEntryTable">
+                                  <tbody id="journalEntryTableBody">
+                                    <!-- <tr class="journalEntryRow">
+                                      <td class="journalRowDateTime">08/31 12:51</td>
+                                      <td class="journalRowTitle">What if the title was long?</td>
+                                      <td class="journalRowContent">Test Sample Journal entry</td>
+                                    </tr> -->
+                                  </tbody>
+                                </table>
+                              </div>
+
                             </div>
                           </div>
 
                     </div>
                   </div>
                 </div>
+
+                <div class="col-sm-6 hide" id="journalEditorPane">
+                  <div class="card" style="overflow-y: auto">
+                    <form method="post">
+                      <textarea id="tinymce-default"></textarea>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
+
+            <div class="modal" id="addEntryModal" tabindex="-1">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">New Journal Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label class="form-label required">Journal Title</label>
+                      <input type="text" class="form-control" id="newEntryTitle">
+                    </div>
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="newEntryHandler()">Create</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
     </div>
@@ -157,6 +205,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
     <script src="src/checkAuth.js"></script>
     <script src="src/bookPage.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/tinymce/tinymce.min.js" defer></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    let options = {
+      selector: '#tinymce-default',
+      menubar: true,
+      height: "600px",
+      statusbar: true,
+      branding: false,
+      plugins: 'save',
+      resize: false,
+      toolbar: ' undo redo | formatselect | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat'
+      //content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; -webkit-font-smoothing: antialiased; }'
+    }
+    tinyMCE.init(options);
+  })
+</script>
     
 </html>
 
