@@ -37,7 +37,7 @@ Using metadata grabbed from Google Books, easily add books and organize them int
     
 2. Create the `data` directory with the following three subdirectories: 
     - `db`
-    - `logs`
+    - `log`
     - `export`
 
    Before starting the container, make sure that the directory strucutre looks like this: 
