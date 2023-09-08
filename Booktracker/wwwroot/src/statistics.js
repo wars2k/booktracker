@@ -33,8 +33,8 @@ async function getAllBooks() {
     let ratingArray = handleRatingData(data);
     let statusData = getStatusData(data);
     let authorData = getAuthorData(data);
-    console.log(authorData);
-    console.log(statusData);
+    //console.log(authorData);
+    //console.log(statusData);
     buildRatingChart(ratingArray);
     buildFinishedChart(monthArray);
     buildStatusChart(statusData);
@@ -236,11 +236,11 @@ async function getAllBooks() {
         totalRates += item;
     }));
     //let totalRates = ratings[0] + ratings[1] + ratings[2] + ratings[3] + ratings[4] + ratings[5];
-    console.log(ratings);
+    //(ratings);
     let averageRating = ((ratings[0] * 1) + (ratings[1] * 2) + (ratings[2] * 3) + (ratings[3] * 4) + (ratings[4] * 5) )/ totalRates;
     averageRating = averageRating.toFixed(2);
-    console.log(totalRates);
-    console.log(averageRating);
+    //console.log(totalRates);
+    //console.log(averageRating);
     
     var options = {
         chart: {
