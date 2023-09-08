@@ -91,6 +91,14 @@ namespace bookTrackerApi {
                 }
                 JournalDB.updateEntry(payload, journalID);
                 return Results.Ok();
+            })
+            .Accepts<JournalTypes.NewEntry>("application/json")
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status200OK)
+            .WithTags("Journal")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Updates a journal entry by ID for a given bookList ID."
             });
 
             app.MapDelete("/api/journal/{bookID}/entries/{journalID}", async (HttpContext context, string sessionKey, string bookID, string journalID) => {
@@ -107,6 +115,13 @@ namespace bookTrackerApi {
                 }
                 JournalDB.deleteEntry(journalID);
                 return Results.Ok();
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status200OK)
+            .WithTags("Journal")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Deletes a journal entry by ID for a given bookList ID."
             });
 
         }

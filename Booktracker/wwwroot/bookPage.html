@@ -60,7 +60,7 @@
                     Book Page
                   </h2>
                   <div id="bottomButtonContainer">
-                    <button onclick="saveJournalEdit()" class="btn btn-green" id="saveEntryButton" style="display: none">Save</button>
+                    <button onclick="saveJournalEdit()" class="btn btn-green disabled" id="saveEntryButton" style="display: none">Save</button>
                     <button onclick="deleteEntry()" class="btn btn-red" id="deleteEntryButton" style="display: none">Delete</button>
                     <button class="btn" data-bs-toggle="modal" id="addEntryButton" style="display: none" data-bs-target="#addEntryModal">New Entry</button>
                   </div>
@@ -205,12 +205,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
     <script src="src/checkAuth.js"></script>
     <script src="src/bookPage.js"></script>
+    <script src="src/journal.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/tinymce/tinymce.min.js" defer></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     let options = {
       selector: '#tinymce-default',
+      setup: function (editor) {
+        editor.on('input', function () {
+            checkForSave();
+        });
+      },
       menubar: true,
       height: "600px",
       statusbar: true,
