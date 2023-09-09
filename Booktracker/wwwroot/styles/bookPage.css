@@ -52,3 +52,26 @@
 #buttonContainer {
     margin-top: 25px;
 }
+
+#journalEditorPane {
+    display: none;
+}
+
+td {
+    font-size: 10pt;
+}
+
+.journalEntryRow {
+    cursor: pointer;
+}
+
+.journalRowContent {
+    overflow-x: hidden;
+    
+}
+
+.journalRowTitle {
+    font-weight: 600;
+    width: 80%
+}
+

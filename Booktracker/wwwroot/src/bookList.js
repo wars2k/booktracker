@@ -167,7 +167,7 @@ function createBookTable(bookList) {
       table.append(row); 
     }
     if (localStorage.getItem("filter") != "null") {
-      filterByStatus(localStorage.getItem("filter"));
+      filterByStatus(true);
     }
   }
   //queries the database for a list of all books, then calls createBookTable() to display the queried data.
@@ -235,6 +235,10 @@ function createBookTable(bookList) {
     editStatusBox.classList.add("status");
     editStatusBox.classList.add(classes);
     editStatusBox.innerText = status;
+    if (status == "FINISHED") {
+      let finishedDate = document.getElementById("finishedDateEdit");
+      finishedDate.value = new Date().toLocaleDateString('sv');
+    }
   }
 
   function updateRatingView(content, classes) {
@@ -310,24 +314,110 @@ function createBookTable(bookList) {
     .catch(error => console.error(error));
   }
 
-  function filterByStatus(status) {
-    removeFilter();
-    localStorage.setItem("filter", status);
+  function filterByStatus(justLoaded) {
+    let statusFilterArray;
+    let ratingFilterArray;
+    document.getElementById("dateFilterButton").classList.add("disabled");
+
+    if (justLoaded) {
+      let filters = JSON.parse(localStorage.getItem("filter"));
+      statusFilterArray = filters.status;
+      ratingFilterArray = filters.rating;
+      checkActiveFilters(statusFilterArray, ratingFilterArray);
+    } else {
+      statusFilterArray = getStatusFilterArray();
+      ratingFilterArray = getRatingFilterArray();
+
+      let filters = {status: statusFilterArray, rating: ratingFilterArray}
+      localStorage.setItem("filter", JSON.stringify(filters));
+    }
+
+    let statusFilterLength = statusFilterArray.length;
+    let ratingFilterLength = ratingFilterArray.length;
+
+    if (statusFilterArray.length == 0 && ratingFilterArray.length == 0) {
+      removeFilter();
+      return;
+    }
+
+    document.getElementById("statusFilterButton").innerText = `Status (${statusFilterArray.length})`;
+    document.getElementById("ratingFilterButton").innerText = `Rating (${ratingFilterArray.length})`;
+
     let tableBody = document.getElementById("bookListTableBody");
+
     for (const child of tableBody.children) {
-      //console.log(child.children[4].innerText);
-      if (child.children[4].innerText != status) {
+
+      //just filter based on status
+      if (ratingFilterLength == 0) {
+        if (!statusFilterArray.includes(child.children[4].innerText)) {
+          child.style.display = "none"
+        } else {
+          child.style.display = "";
+        }
+        continue;
+
+      //or, just filter based on rating
+      } else if (statusFilterLength == 0) {
+        if (!ratingFilterArray.includes(child.children[5].innerText)) {
+          child.style.display = "none"
+        } else {
+          child.style.display = "";
+        }
+        continue;
+      }
+
+      //or, filter based on both
+      if (statusFilterArray.includes(child.children[4].innerText) && ratingFilterArray.includes(child.children[5].innerText)) {
+        child.style.display = "";
+      } else {
         child.style.display = "none";
       }
+
     }
   }
 
+  function getStatusFilterArray() {
+    let filterArray = [];
+    for (const child of document.getElementById("statusFilter").children) {
+      if (child.children[0].checked == 1) {
+        filterArray.push(child.children[0].value);
+      }
+    }
+    return filterArray;
+  }
+
+  function getRatingFilterArray() {
+    let filterArray = [];
+    for (const child of document.getElementById("ratingFilter").children) {
+      if (child.children[0].checked == 1) {
+        filterArray.push(child.children[0].value);
+      }
+    }
+    return filterArray;
+  }
+
   function removeFilter() {
+    document.getElementById("statusFilterButton").innerText = `Status`;
+    document.getElementById("ratingFilterButton").innerText = `Rating`;
+    document.getElementById("dateFilterButton").classList.remove("disabled");
     localStorage.setItem("filter", null);
     let tableBody = document.getElementById("bookListTableBody");
     for (const child of tableBody.children) {
       child.style.display = "";
     }
+  }
+
+  function checkActiveFilters(statusFilterArray, ratingFilterArray) {
+
+    //works for now, but probably not as efficient as it could be if there are more checkboxes eventually
+    const checkboxElements = document.querySelectorAll("input[type='checkbox']");
+    
+    for (const checkbox of checkboxElements) {
+      if (statusFilterArray.includes(checkbox.value) || ratingFilterArray.includes(checkbox.value)) {
+        checkbox.checked = 1;
+      }
+    }
+    
   }
 
   function searchTable() {
@@ -387,4 +477,215 @@ function createBookTable(bookList) {
     let url = "bookPage.html?bookListId=" + id;
     window.location.href = url;
   }
+
+  function openDateFilter() {
+    let button = document.getElementById("dateFilterButton");
+    let content = document.getElementById("dateFilterContent");
+    let classes = Array.from(content.classList);
+    
+     if (classes.includes("hidden")) {
+       content.classList.remove("hidden");
+     } else {
+       content.classList.add("hidden");
+       return;
+     }
+
+    const buttonRect = button.getBoundingClientRect();
+    const buttonX = buttonRect.left;
+    const buttonY = buttonRect.bottom - 10;
+    
+
+    content.style.left = buttonX + "px";
+    content.style.top = buttonY + "px";
+
+    
+  }
+
+  function updateDateFilter1(filterName) {
+    document.getElementById("dateFilter1").innerText = filterName;
+  }
+
+  function updateDateFilter2(filterName) {
+    document.getElementById("dateFilter2").innerText = filterName;
+    let extraFilters = document.getElementById("extraDateFilters");
+    if (filterName == "Between") {
+      extraFilters.classList.remove("hidden");
+    } else {
+      extraFilters.classList.add("hidden");
+    }
+  }
+
+  function filterByDate() {
+    let isInputValid = validateFilterByDateInputs();
+    if (!isInputValid) {
+      return;
+    }
+
+    disableOtherFilters();
+
+    let dateToUse = document.getElementById("dateFilter1").innerText;
+    let columnIndex;
+
+    if (dateToUse == "Started") {
+      columnIndex = 6;
+    } else {
+      columnIndex = 7;
+    }
+
+    let filterType = document.getElementById("dateFilter2").innerText;
+    let firstDate = document.getElementById("firstDate").value;
+    let secondDate = document.getElementById("secondDate").value;
+
+    if (filterType == "Between") {
+      filterBetweenTwoDates(firstDate, secondDate, columnIndex);
+      return;
+    } else if (filterType == "On") {
+      filterOnDate(firstDate, columnIndex);
+      return;
+    } else if (filterType == "After") {
+      filterAfterDate(firstDate, columnIndex);
+    } else if (filterType == "Before") {
+      filterBeforeDate(firstDate, columnIndex);
+    }
+    openDateFilter();
+  }
+
+function disableOtherFilters() {
+  document.getElementById("statusFilterButton").classList.add("disabled");
+  document.getElementById("ratingFilterButton").classList.add("disabled");
+}
+
+function validateFilterByDateInputs() {
+
+  let dateOne = document.getElementById("firstDate");
+  let typeOfFilter = document.getElementById("dateFilter2");
+  let dateTwo = document.getElementById("secondDate");
+
+  dateOne.classList.remove("is-invalid");
+  dateTwo.classList.remove("is-invalid");
+
+  if (dateOne.value == "") {
+    dateOne.classList.add("is-invalid");
+    return false;
+  }
+
+  if (typeOfFilter.innerText == "Between") {
+
+    if (dateTwo.value == "") {
+      dateTwo.classList.add("is-invalid");
+      return false;
+    }
+
+    let dateOneRealDate = new Date(dateOne.value);
+    let dateTwoRealDate = new Date(dateTwo.value);
+
+    if (dateOneRealDate > dateTwoRealDate) {
+      dateOne.classList.add("is-invalid");
+      dateTwo.classList.add("is-invalid");
+      return false;
+    } 
+
+  }
+
+  return true;
+
+}
+
+function filterAfterDate(dateString, columnIndex) {
+
+  let date = new Date(dateString);
+  let tableBody = document.getElementById("bookListTableBody");
+  removeFilter();
+
+  for (const child of tableBody.children) {
+
+    let dateToCompare = child.children[columnIndex].innerText;
+    if (dateToCompare == "") {
+      child.style.display = "none";
+      continue;
+    }
+    dateToCompare = new Date(dateToCompare);
+
+    if (date >= dateToCompare) {
+      child.style.display = "none";
+    }
+
+  }
+}
+
+function filterBeforeDate(dateString, columnIndex) {
+
+  let date = new Date(dateString);
+  let tableBody = document.getElementById("bookListTableBody");
+  removeFilter();
+
+  for (const child of tableBody.children) {
+
+    let dateToCompare = child.children[columnIndex].innerText;
+    if (dateToCompare == "") {
+      child.style.display = "none";
+      continue;
+    }
+    dateToCompare = new Date(dateToCompare);
+
+    if (date <= dateToCompare) {
+      child.style.display = "none";
+    }
+
+  }
+}
+
+function filterOnDate(dateString, columnIndex) {
+
+  let date = new Date(dateString);
+  let tableBody = document.getElementById("bookListTableBody");
+  removeFilter();
+
+  for (const child of tableBody.children) {
+
+    let dateToCompare = child.children[columnIndex].innerText;
+    if (dateToCompare == "") {
+      child.style.display = "none";
+      continue;
+    }
+    dateToCompare = new Date(dateToCompare);
+
+    if (date.getTime() != dateToCompare.getTime()) {
+      child.style.display = "none";
+    }
+
+  }
+}
+
+function filterBetweenTwoDates(firstDate, secondDate, columnIndex) {
+
+  firstDate = new Date(firstDate);
+  secondDate = new Date(secondDate);
+  let tableBody = document.getElementById("bookListTableBody");
+  removeFilter();
+
+  for (const child of tableBody.children) {
+
+    let dateToCompare = child.children[columnIndex].innerText;
+    if (dateToCompare == "") {
+      child.style.display = "none";
+      continue;
+    }
+    dateToCompare = new Date(dateToCompare);
+
+    if (!(dateToCompare >= firstDate && dateToCompare <= secondDate)) {
+      child.style.display = "none";
+    }
+
+  }
+
+}
+
+function clearDateFilter() {
+  removeFilter();
+  openDateFilter();
+  document.getElementById("statusFilterButton").classList.remove("disabled");
+  document.getElementById("ratingFilterButton").classList.remove("disabled");
+}
+
   

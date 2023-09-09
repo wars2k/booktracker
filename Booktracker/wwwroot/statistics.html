@@ -1,10 +1,12 @@
 <html>
+  <head>
+    <meta charset="UTF-8">
+  </head>
     <body>
         <link rel="stylesheet" href="styles/styles.css">
-        
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
-        <link rel="stylesheet" href="styles/search.css">
-        <link rel="stylesheet" href="styles/collections.css">
+        <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone.css" rel="stylesheet" />
+        <link rel="stylesheet" href="styles/statistics.css">
     </body>
 
     <div class="page">
@@ -57,36 +59,63 @@
               <div class="row g-2 align-items-center">
                 <div class="col" id="titleColumn">
                   <h2 class="page-title">
-                    New Collection
+                    Statistics
                   </h2>
-                  <div id="rightSideContainer">
-                    
-                  </div>
+                  
                 </div>
               </div>
             </div>
           </div>
-          <div class="page-body" style="height: 77vh" id="pageBody">
-            <div class="container-xl" id="page">
-            <div id="newCollectionContainer">
-                <fieldset class="form-fieldset" id="newCollectionForm">
-                    <div class="mb-3">
-                      <label class="form-label required">Collection Name</label>
-                      <input type="text" id="collectionName" class="form-control" autocomplete="off"/>
+          <div class="page-body" style="height: 77vh">
+            <div class="container-xl">
+                <div class="row row-deck row-cards">
+                    <div class="col-sm-12">
+                      <div class="card" style="overflow: hidden">
+                        <div class="card-header">
+                            <h3 class="card-title">Books Finished Each Month This Year</h3>
+                        </div>
+                        <div class="card-body" id="chart-demo-line">
+
+                        </div>
+                      </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" id="collectionDescription" name="example-textarea"></textarea>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Ratings Breakdown</h3>
+                            </div>
+                          <div class="card-body" id="ratings-chart">
+                          
+                          </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Cover Image URL</label>
-                        <input type="text" id="collectionImage" class="form-control" autocomplete="off"/>
+
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Status Breakdown</h3>
+                            </div>
+                          <div class="card-body" id="status-chart">
+                          
+                          </div>
+                        </div>
                     </div>
-                    <button class="btn btn-green" onclick="handleNewCollection()">Submit</button>
-                </fieldset>
+
+                    <div class="col-sm-12">
+                      <div class="card">
+                          <div class="card-header" style="gap: 20px">
+                              <h3 class="card-title">Favorite Authors</h3>
+                              <p style="padding-top: 15px;">Authors from which you've read 2+ books will appear here.</p>
+                          </div>
+                        <div class="card-body" id="author-chart">
+                        
+                        </div>
+                      </div>
+                  </div>
+
+                </div>
+              
             </div>
-            </div>
-            
           </div>
         </div>
       </div>
@@ -94,7 +123,11 @@
       
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>
+    
     <script src="src/checkAuth.js"></script>
-    <script src="src/newCollection.js"></script>
+    <script src="src/statistics.js"></script>
+
     
 </html>

@@ -74,6 +74,17 @@ CREATE TABLE IF NOT EXISTS `collection_entries` (
   FOREIGN KEY (`iduser_book`) REFERENCES `user_books` (`iduser_books`) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS `journal_entries` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `iduser` INTEGER NOT NULL,
+  `idbooklist` INTEGER NOT NULL,
+  `date_created` TEXT,
+  `last_edited` TEXT,
+  `title` TEXT NOT NULL,
+  `html_content`,
+  FOREIGN KEY (`iduser`) REFERENCES `users` (`idusers`) ON DELETE CASCADE,
+  FOREIGN KEY (`idbooklist`) REFERENCES `user_books` (`iduser_books`) ON DELETE CASCADE
+);
 
 CREATE VIEW IF NOT EXISTS book_list2 AS
 SELECT

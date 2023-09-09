@@ -17,6 +17,7 @@
 #bookListTableBody {
     font-size: 10pt !important;
     border-spacing: 0px;
+    max-height: 100%;
 }
 
 td {
@@ -37,4 +38,17 @@ td {
 tr {
     height: 40px !important; 
     padding: 0px;
+}
+
+#dateFilterContent {
+    position: absolute;
+    width: 300px;
+}
+
+.hidden {
+    display: none;
+}
+
+#dateFilterContentBody *{
+    padding-bottom: 10px;
 }

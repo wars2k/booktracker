@@ -130,6 +130,12 @@ function fillBookMetaData(data) {
               case "FINISHED":
                 status.classList.add("status-purple");
                 break;
+              case "DNF":
+                status.classList.add("status-red");
+                break;
+              case "TO READ":
+                status.classList.add("status-azure");
+                break;
             }
         }
 }
