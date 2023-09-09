@@ -40,7 +40,7 @@ async function journalInitHandler() {
 
   //show the journal pane, and make it read only until an entry is selected.
   showJournalPane()
-  tinymce.get("tinymce-default").setContent("Choose an entry to the right to start editing!");
+  tinymce.get("tinymce-default").setContent("Choose an entry to the left (or make a new one) to start editing!");
   tinymce.get('tinymce-default').getBody().setAttribute('contenteditable', false);
 
   //if we don't have any journalData OR there's been a recent save

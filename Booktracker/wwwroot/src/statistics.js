@@ -248,20 +248,21 @@ async function getAllBooks() {
           height: '250px'
         },
         series: [{
+          name: 'Books',
           data: [{
-            x: "1",
+            x: "★",
             y: ratings[0]
           }, {
-            x: '2',
+            x: '★★',
             y: ratings[1]
           }, {
-            x: '3',
+            x: '★★★',
             y: ratings[2]
           }, {
-            x: '4',
+            x: '★★★★',
             y: ratings[3]
           }, {
-            x: '5',
+            x: '★★★★★',
             y: ratings[4]
           },
         ]
