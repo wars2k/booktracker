@@ -12,6 +12,8 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 - Add books with metadata provided by the Google Books API.
 - Add books manually without using an external metadata provider.
 - Organize books into collections.
+- Write private journal entries about a book.
+- View book-related statistics like books read per month, etc. 
 - Multi-user support.
 - Import book data and bookshelves from Goodreads.
 - Export data to JSON or CSV.
@@ -61,8 +63,7 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 **Features**
 
 - **Format**: Choose from options like `ebook`, `paperback`, `hardback`, `missing` to further categorize your books.
-- **Journal/Reviews:** Leave multiple private journal entries about a book, or write a review.
-- **Statistics:** View book-related statistics like books read per month, average time to completion, etc.
+- **Reading Challenges**: Create reading challenges to motivate you to read more often, more broadly, or more careefully.
 - **Social Media:** Enable this optional feature to view all users’ activity (adding books, finishing books, writing reviews, etc.) on a timeline.
 - **Email Summaries:** Receive weekly or monthly recaps with statistics on books read, started, finished, etc.
 
