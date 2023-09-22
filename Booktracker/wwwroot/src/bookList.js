@@ -45,6 +45,7 @@ function createBookTable(bookList) {
 
         let title = document.createElement("td");
         title.innerText = bookList[i].title;
+        //title.innerHTML = `<a href="bookPage.html?bookListId=${bookList[i].id}">${bookList[i].title}</a>`;
         row.append(title);
 
         let author = document.createElement("td");
@@ -53,7 +54,7 @@ function createBookTable(bookList) {
 
         let publisher = document.createElement("td");
         if (bookList[i].publisher != null) {
-          publisher.innerText = bookList[i].publisher;
+          publisher.innerText = bookList[i].publisher.split("-")[0];
         }
         row.append(publisher);
 
@@ -62,6 +63,15 @@ function createBookTable(bookList) {
           publishedDate.innerText = bookList[i].publishedDate;
         }
         row.append(publishedDate);
+
+        //this is all just testing how a format box would look
+        let formatBox = document.createElement("td");
+        let format = document.createElement("div");
+        format.classList.add("status");
+        format.classList.add("status-green");
+        format.innerText = "Kindle";
+        formatBox.append(format);
+        row.append(formatBox);
 
         let statusBox = document.createElement("td");
         let status = document.createElement("div");
