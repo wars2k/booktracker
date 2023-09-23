@@ -43,16 +43,114 @@ function updateSummary() {
 
     if (challengeType == "writing") {
         challengeSummary.innerHTML = "<div class='status status-purple'>Writing</div>";
-        quantity.innerText = document.getElementById("num").innerText;
+        quantity.innerText = document.getElementById("num").innerText + " entries";
     } else if (startFinishType == "1") {
         challengeSummary.innerHTML = "<div class='status status-cyan'>Reading - Start Books</div>";
-        quantity.innerText = document.getElementById("numTwo").innerText;
+        quantity.innerText = document.getElementById("numTwo").innerText + " books";
     } else {
         challengeSummary.innerHTML = "<div class='status status-cyan'>Reading - Finish Books</div>";
-        quantity.innerText = document.getElementById("numTwo").innerText;
+        quantity.innerText = document.getElementById("numTwo").innerText + " books";
     }
 
     startDate.innerText = document.getElementById("startDate").value;
     endDate.innerText = document.getElementById("endDate").value;
 }
 
+function submissionHandler() {
+    let challengeType = document.getElementById("challengeTypeSelector").value
+    let challengeData = getChallengeData(challengeType)
+    let isValid = challengeData.validate()
+    if (!isValid) {
+        return;
+    }
+    
+}
+
+function getChallengeData(challengeType) {
+    let challengeData = new ChallengeData(challengeType)
+    return challengeData;
+}
+
+class ChallengeData {
+    type;
+    subType;
+    quantity;
+    startDate;
+    finishDate;
+
+    constructor(type) {
+        this.type = type;
+
+        if (type == "reading") {
+            this.subType = document.getElementById("startFinishTypeSelector").value
+            this.quantity = document.getElementById("numTwo").value;
+        } else {
+            this.subType = null;
+            this.quantity = document.getElementById("num").value;
+        }
+
+        this.startDate = document.getElementById("startDate").value;
+        this.endDate = document.getElementById("endDate").value;
+
+    }
+
+    validate() {
+        let isError = false;
+        clearErrors();
+        if (this.startDate == "") {
+            showError("startDate");
+            isError = true;
+        }
+        if (this.endDate == "") {
+            showError("endDate");
+            isError = true;
+        }
+        let startDate = new Date(this.startDate);
+        let endDate = new Date(this.endDate);
+
+        if (startDate >= endDate) {
+            showError("date")
+            isError = true;
+        }
+
+        if (this.quantity <= 0) {
+            showError("quantity")
+            isError = true;
+        }
+        if (!isError) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}
+
+function showError(errorType) {
+    if (errorType == "startDate") {
+        let startDate = document.getElementById("startDate");
+        startDate.classList.add("is-invalid");
+    }
+
+    if (errorType == "endDate") {
+        let endDate = document.getElementById("endDate");
+        endDate.classList.add("is-invalid");
+    }
+
+    if (errorType == "date") {
+        let startDate = document.getElementById("startDate");
+        startDate.classList.add("is-invalid");
+        let endDate = document.getElementById("endDate");
+        endDate.classList.add("is-invalid");
+    }
+
+    if (errorType == "quantity") {
+        document.getElementById("num").innerHTML = "<span style='color: red'>Quantity must be greater than one. </span>";
+        document.getElementById("numTwo").innerHTML = "<span style='color: red'>Quantity must be greater than one. </span>";
+    }
+}
+
+function clearErrors() {
+    document.getElementById("startDate").classList.remove("is-invalid");
+    document.getElementById("endDate").classList.remove("is-invalid");
+}
