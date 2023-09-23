@@ -86,6 +86,20 @@ CREATE TABLE IF NOT EXISTS `journal_entries` (
   FOREIGN KEY (`idbooklist`) REFERENCES `user_books` (`iduser_books`) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS 'challenges' (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `description` TEXT,
+  `date_created` TEXT NOT NULL,
+  `status` TEXT,
+  `type` TEXT NOT NULL,
+  `subtype` TEXT NOT NULL,
+  `start_date` TEXT NOT NULL,
+  `end_date` TEXT,
+  `goal` INTEGER NOT NULL,
+  `count` INTEGER NOT NULL,
+  `record` TEXT
+);
+
 CREATE VIEW IF NOT EXISTS book_list2 AS
 SELECT
     t1.iduser_books AS iduser_books, 
