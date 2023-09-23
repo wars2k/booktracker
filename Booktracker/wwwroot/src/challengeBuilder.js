@@ -72,6 +72,8 @@ function getChallengeData(challengeType) {
 }
 
 class ChallengeData {
+    title;
+    description;
     type;
     subType;
     quantity;
@@ -91,12 +93,18 @@ class ChallengeData {
 
         this.startDate = document.getElementById("startDate").value;
         this.endDate = document.getElementById("endDate").value;
+        this.title = document.getElementById("challengeTitle").value;
+        this.description = document.getElementById("challengeDescription").value;
 
     }
 
     validate() {
         let isError = false;
         clearErrors();
+        if (this.title == "") {
+            showError("title");
+            isError = true;
+        }
         if (this.startDate == "") {
             showError("startDate");
             isError = true;
@@ -127,6 +135,9 @@ class ChallengeData {
 }
 
 function showError(errorType) {
+    if (errorType == "title") {
+        document.getElementById("challengeTitle").classList.add("is-invalid");
+    }
     if (errorType == "startDate") {
         let startDate = document.getElementById("startDate");
         startDate.classList.add("is-invalid");
@@ -151,6 +162,7 @@ function showError(errorType) {
 }
 
 function clearErrors() {
+    document.getElementById("challengeTitle").classList.remove("is-invalid");
     document.getElementById("startDate").classList.remove("is-invalid");
     document.getElementById("endDate").classList.remove("is-invalid");
 }
