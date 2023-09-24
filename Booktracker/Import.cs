@@ -15,6 +15,8 @@ namespace bookTrackerApi {
                 var records = csv.GetRecords<GoodreadsImportRow>(); // Replace YourModelClass with your actual model class
                 foreach (var record in records) {
                     int bookListID = await DB.addGoodreadsImportedBook(record, currentSession);
+                    string ID = bookListID.ToString();
+                    Console.WriteLine($"[{ID}] Success.");
                     if (record.Bookshelves != "") {
                         List<int> listOfCollectionIDs = HandleImportedBookshelves(record.Bookshelves, currentSession);
                         AddBookToCollection(bookListID, listOfCollectionIDs);
