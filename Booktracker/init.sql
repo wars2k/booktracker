@@ -88,16 +88,19 @@ CREATE TABLE IF NOT EXISTS `journal_entries` (
 
 CREATE TABLE IF NOT EXISTS 'challenges' (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `iduser` INTEGER NOT NULL,
+  `title` TEXT NOT NULL,
   `description` TEXT,
   `date_created` TEXT NOT NULL,
   `status` TEXT,
   `type` TEXT NOT NULL,
   `subtype` TEXT NOT NULL,
   `start_date` TEXT NOT NULL,
-  `end_date` TEXT,
+  `end_date` TEXT NOT NULL,
   `goal` INTEGER NOT NULL,
-  `count` INTEGER NOT NULL,
-  `record` TEXT
+  `count` INTEGER NOT NULL DEFAULT 0,
+  `record` TEXT,
+  FOREIGN KEY (`iduser`) REFERENCES `users` (`idusers`) ON DELETE CASCADE
 );
 
 CREATE VIEW IF NOT EXISTS book_list2 AS

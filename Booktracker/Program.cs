@@ -43,6 +43,7 @@ namespace bookTrackerApi {
             CollectionEndpoints.configureCollectionEndpoints(app);
             StatsEndpoints.configureEndpoints(app);
             JournalEndpoints.Configure(app);
+            ChallengeEndpoints.configure(app);
 
             app.Run();
         }
