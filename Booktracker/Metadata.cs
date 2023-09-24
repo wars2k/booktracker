@@ -21,30 +21,49 @@ namespace bookTrackerApi {
 
         public static async Task<List<object>> CallApiAsync(string name, string results) {
             var client = new HttpClient();
-            var response = await client.GetAsync($"https://www.googleapis.com/books/v1/volumes?q=" + name + $"&maxResults={results}");
-            response.EnsureSuccessStatusCode();
+            int maxRetryAttempts = 3;
+            int currentRetry = 0;
 
-            var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<GoogleBooksResponse>(json);
+            while (currentRetry < maxRetryAttempts) {
 
-            var books = new List<object>();
-            foreach (var item in result.Items) {
-                var book = new VolumeInfoSimple {
-                    Title = item.VolumeInfo.Title,
-                    Author = item.VolumeInfo.Authors != null ? string.Join(", ", item.VolumeInfo.Authors) : null,
-                    Publisher = item.VolumeInfo.Publisher,
-                    PublishedDate = item.VolumeInfo.PublishedDate,
-                    ImageLink = item.VolumeInfo.ImageLinks?.Thumbnail,
-                    Id = item.Id,
-                    Description = item.VolumeInfo.Description,
-                    Isbn = item.VolumeInfo.IndustryIdentifiers,
-                    PageCount = item.VolumeInfo.PageCount,
-                    Categories = item.VolumeInfo.Categories
-                };
-                books.Add(book);
+                var response = await client.GetAsync($"https://www.googleapis.com/books/v1/volumes?q=" + name + $"&maxResults={results}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK) {
+
+                    response.EnsureSuccessStatusCode();
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<GoogleBooksResponse>(json);
+
+                    var books = new List<object>();
+                    foreach (var item in result.Items) {
+                        var book = new VolumeInfoSimple {
+                            Title = item.VolumeInfo.Title,
+                            Author = item.VolumeInfo.Authors != null ? string.Join(", ", item.VolumeInfo.Authors) : null,
+                            Publisher = item.VolumeInfo.Publisher,
+                            PublishedDate = item.VolumeInfo.PublishedDate,
+                            ImageLink = item.VolumeInfo.ImageLinks?.Thumbnail,
+                            Id = item.Id,
+                            Description = item.VolumeInfo.Description,
+                            Isbn = item.VolumeInfo.IndustryIdentifiers,
+                            PageCount = item.VolumeInfo.PageCount,
+                            Categories = item.VolumeInfo.Categories
+                        };
+                        books.Add(book);
+                    }
+
+                    return books;
+                } else if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                {
+                    // If a 429 response is received, wait for some time and then retry
+                    int retryAfterSeconds = 10; // Adjust the time to wait before retrying
+                    Console.WriteLine("429 Response. Trying again.");
+                    await Task.Delay(TimeSpan.FromSeconds(retryAfterSeconds));
+                    currentRetry++;
+                }
+
             }
-
-            return books;
+            throw new Exception("Exceeded maximum retry attempts for the API request.");
         }
 
         public static async Task<VolumeInfo> GetBookFromID(string id) {
