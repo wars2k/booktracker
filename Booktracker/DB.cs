@@ -518,8 +518,21 @@ namespace bookTrackerApi {
                     Categories = bookList[0].Categories[0];
                 }
             }
+            if (book.PageCount == null) {
+                book.PageCount = 0;
+            }
+            if (book.PublishedDate == null) {
+                book.PublishedDate = 0;
+            }
+            if (book.Publisher == null) {
+                book.Publisher = "";
+            }
+            if (book.Author == null) {
+                book.Author = "";
+            }
             string cleanedISBN = Regex.Replace(book.ISBN13, "[^0-9]", "");
-            
+            //uncomment for debugging import
+            //Console.WriteLine($"title: {book.Title}, author: {book.Author}, pubDate: {book.PublishedDate}, publisher: {book.Publisher}, coverImage: {ImageLink}, description: {Description}, pageCount: {book.PageCount}, isbn: {cleanedISBN}, categories: {Categories}");
             SqliteConnection connection = initiateConnection();
             
             string sql = "INSERT INTO books (title, author, pub_date, publisher, cover_image, description, page_count, isbn, category) VALUES (@title, @authors, @pubDate, @publisher, @cover_image, @description, @page_count, @isbn, @category)";
