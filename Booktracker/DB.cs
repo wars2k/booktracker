@@ -88,7 +88,7 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@authors", string.Join(", ", content.Authors));
             command.Parameters.AddWithValue("@pubDate", content.PublishedDate);
             command.Parameters.AddWithValue("@publisher", content.Publisher);
-            command.Parameters.AddWithValue("@coverImage", content.ImageLinks.Thumbnail != null ? content.ImageLinks?.Thumbnail : "");
+            command.Parameters.AddWithValue("@coverImage", content.ImageLinks.Thumbnail != null ? content.ImageLinks?.Thumbnail : "styles/placeholder-image.png");
             command.Parameters.AddWithValue("@description", content.Description != null? content.Description : "");
             command.Parameters.AddWithValue("@page_count", content.PageCount);
             command.Parameters.AddWithValue("@isbn", content.IndustryIdentifiers != null? content.IndustryIdentifiers[1].Identifier : "");
@@ -113,6 +113,9 @@ namespace bookTrackerApi {
         }
 
         public static int addManualEntry(Api.ManualEntry payload) {
+            if (payload.Image == "") {
+                payload.Image = "styles/placeholder-image.png";
+            }
             SqliteConnection connection = initiateConnection();
             string sql = "INSERT INTO books (title, author, pub_date, publisher, cover_image) VALUES (@title, @authors, @pubDate, @publisher, @coverImage)";
             SqliteCommand command = new SqliteCommand(sql, connection);
@@ -503,10 +506,33 @@ namespace bookTrackerApi {
             string? ImageLink = "";
             string? Description = "";
             string? Categories = "";
-            if (book.Title != null) {
+            string cleanedISBN = Regex.Replace(book.ISBN13, "[^0-9]", "");
+            bool searchByISBN = true;
+            //Console.WriteLine(cleanedISBN);
+            //Console.WriteLine(book.ISBN13);
+            if (cleanedISBN != "" && book.ISBN13 != null) {
+                List<object> content = await ApiClient.CallApiAsync("isbn:" + cleanedISBN, "1");
+                List<VolumeInfoSimple> bookList = content.Cast<bookTrackerApi.VolumeInfoSimple>().ToList();
+                if (content.Count == 0) {
+                    //Console.WriteLine("Setting searchByISBN to false");
+                    searchByISBN = false;
+                }
+                if (searchByISBN && bookList[0].ImageLink != null) {
+                    ImageLink = bookList[0].ImageLink;
+                }
+                if (searchByISBN && bookList[0].Description != null) {
+                    Description = bookList[0].Description;
+                }
+                
+                if (searchByISBN && bookList[0].Categories != null) {
+                    Categories = bookList[0].Categories[0];
+                }
+
+            } 
+            if (searchByISBN == false || cleanedISBN == "") {
                 List<object> content = await ApiClient.CallApiAsync(book.Title + " " + book.Author, "12");
                 List<VolumeInfoSimple> bookList = content.Cast<bookTrackerApi.VolumeInfoSimple>().ToList();
-                
+                //Console.WriteLine("Searching by TITLE & AUTHOR");
                 if (bookList[0].ImageLink != null) {
                     ImageLink = bookList[0].ImageLink;
                 }
@@ -530,7 +556,10 @@ namespace bookTrackerApi {
             if (book.Author == null) {
                 book.Author = "";
             }
-            string cleanedISBN = Regex.Replace(book.ISBN13, "[^0-9]", "");
+            if (ImageLink == "") {
+                ImageLink = "styles/placeholder-image.png";
+            }
+            
             //uncomment for debugging import
             //Console.WriteLine($"title: {book.Title}, author: {book.Author}, pubDate: {book.PublishedDate}, publisher: {book.Publisher}, coverImage: {ImageLink}, description: {Description}, pageCount: {book.PageCount}, isbn: {cleanedISBN}, categories: {Categories}");
             SqliteConnection connection = initiateConnection();

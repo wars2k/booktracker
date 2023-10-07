@@ -44,7 +44,11 @@ async function displayCollectionData(data) {
                 
                 let cardBody = document.getElementById(`collection${collection.collectionID}`);
                 
-                body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}"><img src="${imageURLs[j]}" class="coverCard"></a>`;
+                if (imageURLs[j] == "styles/placeholder-image.png") {
+                    body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}" style="border: 1px solid #e2e8f0"><img src="${imageURLs[j]}" class="coverCard"></a>`;
+                } else {
+                    body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}"><img src="${imageURLs[j]}" class="coverCard"></a>`;
+                }
             }
         } else {
             body.innerHTML = "This collection doesn't have any books yet.";

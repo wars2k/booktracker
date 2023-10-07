@@ -95,6 +95,9 @@ function displayImageLinks(imageLinks, imageIDs) {
     for (let j = 0; j < imageLinks.length; j++) {
         //body.innerHTML += `<a href="bookPage.html?bookListId=${imageIDs[j]}"><img src="${imageLinks[j]}" class="coverCard"></a>`;
         body.innerHTML += `<a onclick="handleClick(${imageIDs[j]})" style="cursor: pointer" id="coverCard${imageIDs[j]}"><img src="${imageLinks[j]}" class="coverCard"></a>`;
+        if (imageLinks[j] == "styles/placeholder-image.png") {
+            document.getElementById(`coverCard${imageIDs[j]}`).style.border = "1px solid #e2e8f0";
+        }
     }
 }
 
