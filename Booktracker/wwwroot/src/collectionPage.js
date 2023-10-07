@@ -48,18 +48,19 @@ function handleCollectionError(error) {
 
 //calls a function that gets each book's image link from the list of book IDs. Then calls functions to display that data.
 async function handleCollectionData(data) {
-    let imageLinks = await getBookDataFromBookListArray(data.listOfBookID);
+    let imageLinksAndTitles = await getBookDataFromBookListArray(data.listOfBookID);
     displayCollectionData(data);
-    if (imageLinks.length == 0) {
+    if (imageLinksAndTitles.imageLinks.length == 0) {
         displayNoBooksAlert();
     } else {
-        displayImageLinks(imageLinks, data.listOfBookID);
+        displayImageLinks(imageLinksAndTitles, data.listOfBookID);
     }
     getBookListData(data.listOfBookID);
 }
 
 async function getBookDataFromBookListArray(listOfBookID) {
     let imageLinks = [];
+    let titles = [];
     for (let i = 0; i < listOfBookID.length; i++) {
         const id = listOfBookID[i];
         try {
@@ -73,13 +74,17 @@ async function getBookDataFromBookListArray(listOfBookID) {
             });
             const data = await response.json();
             imageLinks.push(data.imageLink);
+            titles.push(data.title);
           } catch (error) {
             console.error(error);
             throw error;
           } 
     }
     
-    return imageLinks;
+    return {
+        "imageLinks": imageLinks,
+        "titles": titles
+    }
 }
 
 function displayCollectionData(data) {
@@ -88,13 +93,15 @@ function displayCollectionData(data) {
     document.getElementById("description").innerHTML = data.description;
 }
 
-function displayImageLinks(imageLinks, imageIDs) {
+function displayImageLinks(imageLinksAndTitles, imageIDs) {
+    let imageLinks = imageLinksAndTitles.imageLinks;
+    let titles = imageLinksAndTitles.titles;
     console.log(imageIDs);
     globalImageIDs = imageIDs;
     let body = document.getElementById("collectionBookContainer");
     for (let j = 0; j < imageLinks.length; j++) {
         //body.innerHTML += `<a href="bookPage.html?bookListId=${imageIDs[j]}"><img src="${imageLinks[j]}" class="coverCard"></a>`;
-        body.innerHTML += `<a onclick="handleClick(${imageIDs[j]})" style="cursor: pointer" id="coverCard${imageIDs[j]}"><img src="${imageLinks[j]}" class="coverCard"></a>`;
+        body.innerHTML += `<a onclick="handleClick(${imageIDs[j]})" style="cursor: pointer" title="${titles[j]}" id="coverCard${imageIDs[j]}"><img src="${imageLinks[j]}" class="coverCard"></a>`;
         if (imageLinks[j] == "styles/placeholder-image.png") {
             document.getElementById(`coverCard${imageIDs[j]}`).style.border = "1px solid #e2e8f0";
         }
