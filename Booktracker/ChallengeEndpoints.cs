@@ -33,6 +33,7 @@ namespace bookTrackerApi {
                     return Results.BadRequest(errorMessage);
                 }
                 ChallengeDB.create(payload, currentSession);
+                ChallengeDB.storeChallenges();
                 return Results.Ok();
             });
 

@@ -53,7 +53,8 @@ namespace bookTrackerApi {
                     JsonLog.writeLog("Unauthorized attempt to create an entry for another user's book.","WARNING", "journal_createEntry",currentSession,remoteIp);
                     return Results.Unauthorized();
                 }
-                JournalDB.createEntry(payload, currentSession, bookID);
+                int lastInserted = JournalDB.createEntry(payload, currentSession, bookID);
+                ChallengeDB.handleChallenges("writing", "", lastInserted);
                 return Results.Ok();
 
             })

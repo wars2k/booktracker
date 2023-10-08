@@ -31,7 +31,7 @@ namespace bookTrackerApi {
             
         }
 
-        public static void createEntry(JournalTypes.NewEntry entry, SessionInfo sessionInfo, string bookID) {
+        public static int createEntry(JournalTypes.NewEntry entry, SessionInfo sessionInfo, string bookID) {
             SqliteConnection connection = DB.initiateConnection();
             string sql = "INSERT INTO journal_entries (iduser, idbooklist, date_created, last_edited, title, html_content) VALUES (@iduser, @idbooklist, @date_created, @last_edited, @title, @html_content)";
             SqliteCommand command = new SqliteCommand(sql, connection);
@@ -43,7 +43,13 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@title", entry.title);
             command.Parameters.AddWithValue("@html_content", entry.htmlContent);
             command.ExecuteNonQuery();
+
+            command.CommandText = "SELECT last_insert_rowid()";
+            int lastInsertedID = Convert.ToInt32(command.ExecuteScalar());
+
             DB.closeConnection(connection);
+
+            return lastInsertedID;
         }
 
         public static void updateEntry(JournalTypes.NewEntry updatedInfo, string journalID) {

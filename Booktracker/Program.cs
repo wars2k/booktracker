@@ -6,6 +6,8 @@ namespace bookTrackerApi {
 
         public static List<SessionInfo> Sessions = new List<SessionInfo>();
 
+        public static List<ChallengeTypes.LocalChallenge> ActiveChallenges = new List<ChallengeTypes.LocalChallenge>();
+
         
         public static void Main(string[] args) {
             DB.InitiateDatabase();
@@ -44,6 +46,8 @@ namespace bookTrackerApi {
             StatsEndpoints.configureEndpoints(app);
             JournalEndpoints.Configure(app);
             ChallengeEndpoints.configure(app);
+
+            ChallengeDB.storeChallenges();
 
             app.Run();
         }
