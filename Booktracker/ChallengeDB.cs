@@ -61,6 +61,18 @@ namespace bookTrackerApi {
             DB.closeConnection(connection);
         }
 
+        public static void update(string challengeID, ChallengeTypes.Challenge challenge, int newEntry) {
+            string record;
+            int? count;
+            if (challenge.Record == null) {
+                record = $"[{newEntry}]";
+            } else {
+                int closingBracket = challenge.Record.LastIndexOf("]");
+                record = challenge.Record.Insert(closingBracket,$",{newEntry}");
+            }
+            count = challenge.Count + 1;
+        }
+
     }
 
 }

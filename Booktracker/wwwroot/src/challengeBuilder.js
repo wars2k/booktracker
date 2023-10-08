@@ -63,12 +63,47 @@ function submissionHandler() {
     if (!isValid) {
         return;
     }
+    let jsonChallengeData = getJsonChallengeData(challengeData);
+    console.log(jsonChallengeData);
+    submitChallengeData(jsonChallengeData)
     
 }
 
 function getChallengeData(challengeType) {
     let challengeData = new ChallengeData(challengeType)
     return challengeData;
+}
+
+function getJsonChallengeData(challengeData) {
+    let json = {};
+    console.log(challengeData)
+    json.Title = challengeData.title;
+    json.Description = challengeData.description;
+    json.Type = challengeData.type;
+    json.SubType = challengeData.subType;
+    json.Start_date = challengeData.startDate;
+    json.End_date = challengeData.endDate;
+    json.Goal = challengeData.quantity;
+    json = JSON.stringify(json);
+    return json;
+}
+
+async function submitChallengeData(json) {
+    try {
+        const sessionKey = localStorage.getItem("sessionKey");
+        const response = await fetch(`/api/challenges?sessionKey=${sessionKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: json
+        });
+        const statusCode = response.status;
+        return statusCode;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
 }
 
 class ChallengeData {
