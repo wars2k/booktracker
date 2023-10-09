@@ -21,6 +21,7 @@ namespace bookTrackerApi {
         public class LocalChallenge {
             
             public int? Id { get; set; }
+            public int? IdUser { get; set; }
             public string? Title { get; set; }
             public string? Description { get; set; }
             public string? Date_created { get; set ;}

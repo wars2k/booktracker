@@ -54,7 +54,7 @@ namespace bookTrackerApi {
                     return Results.Unauthorized();
                 }
                 int lastInserted = JournalDB.createEntry(payload, currentSession, bookID);
-                ChallengeDB.handleChallenges("writing", "", lastInserted);
+                ChallengeDB.handleChallenges(currentSession.AssociatedID, "writing", "", lastInserted);
                 return Results.Ok();
 
             })

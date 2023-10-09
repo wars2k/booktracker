@@ -94,6 +94,7 @@ namespace bookTrackerApi {
                     while (reader.Read()) {
                         ChallengeTypes.LocalChallenge challenge = new ChallengeTypes.LocalChallenge();
                         challenge.Id = reader.GetInt32(0);
+                        challenge.IdUser = reader.GetInt32(1);
                         challenge.Title = reader.GetString(2);
                         challenge.Description = reader.IsDBNull(3) ? null: reader.GetString(3);
                         challenge.Date_created = reader.GetString(4);
@@ -120,8 +121,8 @@ namespace bookTrackerApi {
 
         }
 
-        public static void handleChallenges(string type, string subType, int newEntry) {
-            List<ChallengeTypes.LocalChallenge> matchingChallenges = findMatchingChallenges(type, subType);
+        public static void handleChallenges(string userID, string type, string subType, int newEntry) {
+            List<ChallengeTypes.LocalChallenge> matchingChallenges = findMatchingChallenges(Int32.Parse(userID), type, subType);
             foreach (ChallengeTypes.LocalChallenge challenge in matchingChallenges) {
                 bool isValidProgress = IsValidProgress(challenge, newEntry);
                 if (isValidProgress) {
@@ -132,10 +133,15 @@ namespace bookTrackerApi {
         }
 
         //for a given challenge type and subtype, returns a list of matching challenges.
-        public static List<ChallengeTypes.LocalChallenge> findMatchingChallenges(string type, string subType) {
+        public static List<ChallengeTypes.LocalChallenge> findMatchingChallenges(int userID, string type, string subType) {
             List<ChallengeTypes.LocalChallenge> matchingChallenges = new List<ChallengeTypes.LocalChallenge>();
             DateTime today = DateTime.Today;
             foreach (ChallengeTypes.LocalChallenge challenge in Program.ActiveChallenges) {
+                
+                //if the challenge doesn't belong to this user, skip to the next one;
+                if (userID != challenge.IdUser) {
+                    continue;
+                }
 
                 //if the challenge isn't actually active, skip to the next one;
                 if (today > challenge.End_date) {
@@ -161,7 +167,7 @@ namespace bookTrackerApi {
 
         //returns true if a given bookList ID or journal ID should count as progress. Returns false otherwise. 
         public static bool IsValidProgress(ChallengeTypes.LocalChallenge challenge, int newEntry) {
-            
+
             if (challenge.Record == null) {
                 return true;
             }
