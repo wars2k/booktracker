@@ -27,5 +27,16 @@
     justify-content: space-between;
 }
 
+#bookListTableContainer {
+    max-height: 350px !important;
+}
+
+.bookListRow td {
+    font-size: 10pt;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+
 
 
