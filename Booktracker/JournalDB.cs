@@ -31,6 +31,29 @@ namespace bookTrackerApi {
             
         }
 
+        public static JournalTypes.JournalEntryList getEntry(string journalID) {
+            int id = Int32.Parse(journalID);
+            SqliteConnection connection = DB.initiateConnection();
+            string sql = "SELECT * FROM journal_entries WHERE id = @id";
+            using (SqliteCommand command = new SqliteCommand(sql, connection)) {
+                command.Parameters.AddWithValue("@id", id);
+                using (SqliteDataReader reader = command.ExecuteReader()) {
+                    JournalTypes.JournalEntryList entry = new JournalTypes.JournalEntryList();
+                    while (reader.Read()) {
+                        entry.id = reader.GetInt32(0);
+                        entry.idUser = reader.GetInt32(1);
+                        entry.idBookList = reader.GetInt32(2);
+                        entry.dateCreated = reader.IsDBNull(3) ? null: reader.GetString(3);
+                        entry.lastEdited = reader.IsDBNull(4) ? null: reader.GetString(4);
+                        entry.title = reader.GetString(5);
+                        entry.htmlContent = reader.GetString(6);
+                    }
+                    DB.closeConnection(connection);
+                    return entry;
+                }
+            }
+        }
+
         public static int createEntry(JournalTypes.NewEntry entry, SessionInfo sessionInfo, string bookID) {
             SqliteConnection connection = DB.initiateConnection();
             string sql = "INSERT INTO journal_entries (iduser, idbooklist, date_created, last_edited, title, html_content) VALUES (@iduser, @idbooklist, @date_created, @last_edited, @title, @html_content)";

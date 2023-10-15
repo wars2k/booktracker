@@ -66,6 +66,7 @@ function submissionHandler() {
     let jsonChallengeData = getJsonChallengeData(challengeData);
     console.log(jsonChallengeData);
     submitChallengeData(jsonChallengeData)
+    window.location.href = "challenges.html";
     
 }
 
@@ -99,6 +100,7 @@ async function submitChallengeData(json) {
           body: json
         });
         const statusCode = response.status;
+        window.location.href = "challenges.html";
         return statusCode;
       } catch (error) {
         console.error(error);

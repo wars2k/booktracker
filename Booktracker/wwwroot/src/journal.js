@@ -289,3 +289,32 @@ function checkForSave() {
     return;
   }
 }
+
+/**
+ * Gets the JournalID from the url if there is one. 
+ * @returns 
+ */
+function getJournalIDfromURL() {
+  let urlParams = new URLSearchParams(window.location.search);
+  let journalID = urlParams.get('journalID');
+  return journalID
+}
+
+/**
+ * Called every time the page is opened. If there is a journalID parameter in the URL, 
+ * then that ID will be opened.
+ * @returns null
+ */
+async function checkForChallengeRedirect() {
+  let journalID = getJournalIDfromURL();
+  if (journalID == null) {
+    return;
+  }
+  let journalButton = document.getElementById("journalTabButton");
+  journalButton.click();
+  await journalInitHandler();
+  openJournalEntry(journalID);
+}
+
+setTimeout(checkForChallengeRedirect, 500);
+
