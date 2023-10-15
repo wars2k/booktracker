@@ -406,7 +406,7 @@ class WritingChallenge extends Challenge {
                 <path d="M9.5 15.25a3.5 3.5 0 0 1 5 0" /> \
               </svg> \
             </div> \
-            <p class="empty-subtitle text-secondary">You haven't made any challenge progress yet. Start reading!</p> \
+            <p class="empty-subtitle text-secondary">You haven't made any challenge progress yet. Start writing!</p> \
         </div>`
             return challengeContent;
         }
