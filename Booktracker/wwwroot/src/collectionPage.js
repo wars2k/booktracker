@@ -137,6 +137,7 @@ function createBookListTable(data, alreadyAddedIDs) {
             continue;
         }
         let row = document.createElement("tr");
+        row.classList.add("bookListRow");
         let title = document.createElement("td");
         let author = document.createElement("td");
         let addButton = document.createElement("td");

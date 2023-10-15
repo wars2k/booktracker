@@ -57,6 +57,12 @@ namespace bookTrackerApi {
                 }
                 if (payload.SessionKey == currentSession.Session && payload.Data != null) {
                     DB.updateBookList(payload.Data);
+                    if (payload.Data.Status == "READING") {
+                        ChallengeDB.handleChallenges(currentSession.AssociatedID, "reading", "1", Int32.Parse(payload.Data.Id));
+                    }
+                    if (payload.Data.Status == "FINISHED") {
+                        ChallengeDB.handleChallenges(currentSession.AssociatedID, "reading", "2", Int32.Parse(payload.Data.Id));
+                    }
                     JsonLog.writeLog("Booklist Entry has been succesfully updated", "INFO", "booklist_update", currentSession, remoteIp);
                     return Results.Ok();
                 }

@@ -1,12 +1,10 @@
 <html>
-  <head>
-    <meta charset="UTF-8">
-  </head>
     <body>
         <link rel="stylesheet" href="styles/styles.css">
+        
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone.css" rel="stylesheet" />
-        <link rel="stylesheet" href="styles/statistics.css">
+        <link rel="stylesheet" href="styles/search.css">
+        <link rel="stylesheet" href="styles/challenges.css">
     </body>
 
     <div class="page">
@@ -66,63 +64,25 @@
               <div class="row g-2 align-items-center">
                 <div class="col" id="titleColumn">
                   <h2 class="page-title">
-                    Statistics
+                    Challenges
                   </h2>
-                  
+                  <div id="rightSideContainer">
+                    <a href="challengeBuilder.html" class="btn">Add New Challenge</a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="page-body" style="height: 77vh">
-            <div class="container-xl">
-                <div class="row row-deck row-cards">
-                    <div class="col-sm-12">
-                      <div class="card" style="overflow: hidden">
-                        <div class="card-header">
-                            <h3 class="card-title">Books Finished Each Month This Year</h3>
-                        </div>
-                        <div class="card-body" id="chart-demo-line">
+            <div class="container-xl" id="container">
+              <code style="font-size: 14pt; background-color: white;">No challenges found.</code>
 
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Ratings Breakdown</h3>
-                            </div>
-                          <div class="card-body" id="ratings-chart">
-                          
-                          </div>
-                        </div>
-                    </div>
+                
 
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Status Breakdown</h3>
-                            </div>
-                          <div class="card-body" id="status-chart">
-                          
-                          </div>
-                        </div>
-                    </div>
+                
 
-                    <div class="col-sm-12">
-                      <div class="card">
-                          <div class="card-header" style="gap: 20px">
-                              <h3 class="card-title">Favorite Authors</h3>
-                              <p style="padding-top: 15px;">Authors from which you've read 2+ books will appear here.</p>
-                          </div>
-                        <div class="card-body" id="author-chart">
-                        
-                        </div>
-                      </div>
-                  </div>
-
-                </div>
-              
             </div>
+            
           </div>
         </div>
       </div>
@@ -130,11 +90,8 @@
       
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/dropzone/dist/dropzone-min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/apexcharts/dist/apexcharts.min.js" defer></script>
-    
     <script src="src/checkAuth.js"></script>
-    <script src="src/statistics.js"></script>
-
+    <script src="src/challengeClasses.js"></script>
+    <script src="src/challenges.js"></script>
     
 </html>

@@ -30,6 +30,29 @@ namespace bookTrackerApi {
                 Summary = "Retrieves all journal entries for a given bookList ID."
             });
 
+            app.MapGet("/api/journal/{journalID}", async (HttpContext context, string sessionKey, string journalID) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "journal_viewOne", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
+                }
+                JournalTypes.JournalEntryList entry = JournalDB.getEntry(journalID);
+                DB.BookPageInfo data = DB.getBookPageData(entry.idBookList.ToString());
+                if (data.IdUser.ToString() != currentSession.AssociatedID) {
+                    JsonLog.writeLog("Unauthorized attempt to access entries for another user's book.","WARNING", "journal_view",currentSession,remoteIp);
+                    return Results.Unauthorized();
+                }
+                return Results.Ok(entry);
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces<JournalTypes.JournalEntryList>(StatusCodes.Status200OK)
+            .WithTags("Journal")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Retrieves a specific journal entry by ID."
+            });
+
             app.MapPost("/api/journal/{bookID}/entries", async (HttpContext context, string sessionKey, string bookID) => {
                 string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
@@ -53,7 +76,8 @@ namespace bookTrackerApi {
                     JsonLog.writeLog("Unauthorized attempt to create an entry for another user's book.","WARNING", "journal_createEntry",currentSession,remoteIp);
                     return Results.Unauthorized();
                 }
-                JournalDB.createEntry(payload, currentSession, bookID);
+                int lastInserted = JournalDB.createEntry(payload, currentSession, bookID);
+                ChallengeDB.handleChallenges(currentSession.AssociatedID, "writing", "", lastInserted);
                 return Results.Ok();
 
             })

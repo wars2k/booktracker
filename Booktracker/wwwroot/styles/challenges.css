@@ -1,0 +1,74 @@
+#container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.challengeCard {
+    width: 700px !important;
+    
+}
+
+.challengeBody {
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.challengeTitleArea {
+    display: flex;
+    justify-content: space-between;
+}
+
+.challengeContent {
+    width: 59%;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+    overflow-y: scroll;
+}
+
+.challengeMetadataContainer {
+    width: 39%;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+}
+
+.challengeFooter {
+    margin-top: 10px;
+}
+
+.readingCardBody {
+    /* background-color: #f8fafc; */
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.metaDataMain {
+    height: 70%;
+}
+
+.progressBar {
+    padding: 10px;
+    height: 30%;
+}
+.progressBar div {
+    padding-top: 5px;
+}
+
+td {
+    font-size: 10pt;
+}
+
+.test td {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.headerRightSide {
+    display: flex;
+    gap: 10px;
+}
+

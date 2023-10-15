@@ -1,0 +1,193 @@
+<html>
+    <body>
+        <link rel="stylesheet" href="styles/styles.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+        <link rel="stylesheet" href="styles/search.css">
+        <link rel="stylesheet" href="styles/challengeBuilder.css">
+    </body>
+
+    <div class="page">
+        <!-- Sidebar -->
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl" id="test">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html">
+                Book Tracker
+              </a>
+            </h1>
+      
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="nav-item">
+                  <div>
+                    <a class="btn" href="search.html">Add New Book</a>
+                    <button class="btn" onclick="logOut()">Log Out</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar navbar-expand-sm navbar-light d-print-none" style="max-height: 56px">
+          <div class="container-xl">
+            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest" style="flex-wrap: nowrap;">
+              <a class="nav-itemMenu" href="index.html">Home</a>
+              <a class="nav-itemMenu" href="booklist.html">My Books</a>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="collections.html">Collections Home</a>
+                  <a class="dropdown-item" href="addNewCollection.html">Add New Collection</a>
+                </div>
+              </div>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Challenges</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="challenges.html">Challenges Home</a>
+                  <a class="dropdown-item" href="challengeBuilder.html">Add New Challenge</a>
+                </div>
+              </div>
+              <a class="nav-itemMenu" href="statistics.html">Statistics</a>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Settings</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                  <a class="dropdown-item" href="books.html">Main Book Database</a>
+                  <a class="dropdown-item" href="users.html">User Management</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="page-wrapper">
+          <div class="page-header d-print-none">
+            <div class="container-xl">
+              <div class="row g-2 align-items-center">
+                <div class="col" id="titleColumn">
+                  <h2 class="page-title">
+                    Challenge Builder
+                  </h2>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="page-body" style="height: 77vh">
+            <div class="container-xl" id="container">
+                <div class="card builderCard" id="cardZero">
+                    <div class="card-header builderCardTitle">
+                      <h3 class="card-title">Name your challenge.</h3>
+                    </div>
+                    <div class="card-body builderCardBody" id="cardOneBody">
+                        <div class="mb-3">
+                            <div class="form-label">Challenge Name</div>
+                            <input type="text" class="form-control" id="challengeTitle">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-label">Challenge Description</div>
+                            <textarea class="form-control" id="challengeDescription"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card builderCard" id="cardOne">
+                    <div class="card-header builderCardTitle">
+                      <h3 class="card-title">Step 1: Choose a challenge type.</h3>
+                    </div>
+                    <div class="card-body builderCardBody" id="cardOneBody">
+                        <div class="mb-3">
+                            <div class="form-label">Challenge Type</div>
+                            <select class="form-select" id="challengeTypeSelector" onchange="updateCardTwo()">
+                              <option value="reading">Reading Challenge</option>
+                              <option value="writing">Writing Challenge</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card builderCard" id="cardOne">
+                    <div class="card-header builderCardTitle">
+                      <h3 class="card-title">Step 2: Define your challenge.</h3>
+                    </div>
+                    <div class="card-body builderCardBody" id="readingChallengeBody">
+                        <div class="mb-3">
+                            <div class="form-label">Reading Challenge Type</div>
+                            <select class="form-select" id="startFinishTypeSelector" onclick="updateCardTwoQuestion()">
+                              <option value="1">Start Books</option>
+                              <option value="2">Finish Books</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-label" id="countQuestion">How many books do you hope to start?</div>
+                            <input type="range" class="form-range mb-2" oninput="numTwo.value = this.value" min="0" max="75" value="0" onchange="updateSummary()">
+                            <output id="numTwo">0</output>
+                        </div>
+                    </div>
+
+                    <div class="card-body builderCardBody" id="writingChallengeBody">
+                
+                        <div class="mb-3">
+                            <div class="form-label">How many journal entries do you hope to write?</div>
+                            <input type="range" class="form-range mb-2" oninput="num.value = this.value" min="0" max="75" value="0" onchange="updateSummary()">
+                            <output id="num">0</output>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card builderCard" id="cardOne">
+                    <div class="card-header builderCardTitle">
+                      <h3 class="card-title">Step 3: Set a timeline.</h3>
+                    </div>
+                    <div class="card-body builderCardBody" id="cardThreeBody">
+
+                        <div class="mb-3">
+                            <div class="form-label">Start Date</div>
+                            <input type="date" class="form-control" id="startDate" oninput="updateSummary()">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-label">End Date</div>
+                            <input type="date" class="form-control" id="endDate" oninput="updateSummary()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card builderCard" id="cardOne">
+                    <div class="card-header builderCardTitle">
+                      <h3 class="card-title" id="step4">Step 4: Start Reading</h3>
+                    </div>
+                    <div class="card-body builderCardBody" id="cardThreeBody">
+                        <div class="datagrid">
+                            <div class="datagrid-item">
+                              <div class="datagrid-title">Challenge Type</div>
+                              <div class="datagrid-content" id="challengeType"><div class="status status-cyan">Reading - Start Books</div></div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Quantity</div>
+                                <div class="datagrid-content" id="challengeQuantity">0 books</div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">Start Date</div>
+                                <div class="datagrid-content" id="challengeStart"></div>
+                            </div>
+                            <div class="datagrid-item">
+                                <div class="datagrid-title">End Date</div>
+                                <div class="datagrid-content" id="challengeEnd"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-green" onclick="submissionHandler()" style="margin-top: 15px">Create Challenge</button>
+                    </div>
+                </div>
+
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script src="src/checkAuth.js"></script>
+    <script src="src/challengeBuilder.js"></script>
+    
+</html>
