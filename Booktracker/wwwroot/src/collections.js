@@ -39,12 +39,17 @@ async function displayCollectionData(data) {
         card.append(body);
         row.append(card);
         if (data[i].listOfBookID.length > 0) {
-            let imageURLs = await getImagesFromBookListID(data[i].listOfBookID);
-            for (let j = 0; j < imageURLs.length; j++) {
+            let imageURLsAndTitles = await getImagesFromBookListID(data[i].listOfBookID);
+            let maxLength = Math.min(imageURLsAndTitles.titles.length, 10);
+            let imageURLs = imageURLsAndTitles.imageLinks;
+            let titles = imageURLsAndTitles.titles;
+            for (let j = 0; j < maxLength; j++) {
                 
-                let cardBody = document.getElementById(`collection${collection.collectionID}`);
-                
-                body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}"><img src="${imageURLs[j]}" class="coverCard"></a>`;
+                if (imageURLs[j] == "styles/placeholder-image.png") {
+                    body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}" title="${titles[j]}" style="border: 1px solid #e2e8f0"><img src="${imageURLs[j]}" class="coverCard"></a>`;
+                } else {
+                    body.innerHTML += `<a href="bookPage.html?bookListId=${data[i].listOfBookID[j]}" title="${titles[j]}" ><img src="${imageURLs[j]}" class="coverCard"></a>`;
+                }
             }
         } else {
             body.innerHTML = "This collection doesn't have any books yet.";
@@ -56,7 +61,9 @@ async function displayCollectionData(data) {
 
 async function getImagesFromBookListID(listOfBookID) {
     let imageLinks = [];
-    for (let i = 0; i < listOfBookID.length; i++) {
+    let titles = [];
+    let maxLength = Math.min(listOfBookID.length, 10);
+    for (let i = 0; i < maxLength; i++) {
         const id = listOfBookID[i];
         try {
             const sessionKey = localStorage.getItem("sessionKey");
@@ -69,13 +76,17 @@ async function getImagesFromBookListID(listOfBookID) {
             });
             const data = await response.json();
             imageLinks.push(data.imageLink);
+            titles.push(data.title);
           } catch (error) {
             console.error(error);
             throw error;
           } 
     }
     
-    return imageLinks;
+    return {
+        "imageLinks": imageLinks,
+        "titles": titles
+    }
 }
 
 getCollections();

@@ -33,9 +33,12 @@ namespace bookTrackerApi {
                     response.EnsureSuccessStatusCode();
 
                     var json = await response.Content.ReadAsStringAsync();
+                    var books = new List<object>();
+                    if (json.Contains("\"totalItems\": 0")) {
+                        return books;
+                    }
                     var result = JsonConvert.DeserializeObject<GoogleBooksResponse>(json);
 
-                    var books = new List<object>();
                     foreach (var item in result.Items) {
                         var book = new VolumeInfoSimple {
                             Title = item.VolumeInfo.Title,

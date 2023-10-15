@@ -1,0 +1,19 @@
+.builderCard {
+    width: 600px;
+    margin-bottom: 20px;
+}
+
+.builderCardBody {
+    overflow: hidden;
+
+}
+
+.collapse {
+    display: none;
+}
+
+
+
+#writingChallengeBody {
+    display: none;
+}

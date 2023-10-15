@@ -232,13 +232,19 @@ async function getAllBooks() {
 
   function buildRatingChart(ratings) {
     let totalRates = 0;
+    let averageRating;
     ratings.forEach((item => {
         totalRates += item;
     }));
     //let totalRates = ratings[0] + ratings[1] + ratings[2] + ratings[3] + ratings[4] + ratings[5];
     //(ratings);
-    let averageRating = ((ratings[0] * 1) + (ratings[1] * 2) + (ratings[2] * 3) + (ratings[3] * 4) + (ratings[4] * 5) )/ totalRates;
-    averageRating = averageRating.toFixed(2);
+    if (totalRates > 0) {
+      averageRating = ((ratings[0] * 1) + (ratings[1] * 2) + (ratings[2] * 3) + (ratings[3] * 4) + (ratings[4] * 5) )/ totalRates;
+      averageRating = averageRating.toFixed(2);
+    } else {
+      averageRating = 0.00;
+    }
+    
     //console.log(totalRates);
     //console.log(averageRating);
     
