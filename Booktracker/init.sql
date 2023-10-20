@@ -103,6 +103,17 @@ CREATE TABLE IF NOT EXISTS 'challenges' (
   FOREIGN KEY (`iduser`) REFERENCES `users` (`idusers`) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS 'book_events' (
+  'id' INTEGER PRIMARY KEY AUTOINCREMENT,
+  'iduser' INTEGER NOT NULL,
+  'idbookList' INTEGER NOT NULL,
+  'dateTime' TEXT NOT NULL,
+  'event' TEXT NOT NULL,
+  'value' TEXT,
+  FOREIGN KEY ('iduser') REFERENCES 'users' ('idusers') ON DELETE CASCADE,
+  FOREIGN KEY ('idbookList') REFERENCES 'user_books' ('iduser_books') ON DELETE CASCADE
+)
+
 CREATE VIEW IF NOT EXISTS book_list2 AS
 SELECT
     t1.iduser_books AS iduser_books, 
