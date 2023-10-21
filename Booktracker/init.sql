@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS 'book_events' (
   'value' TEXT,
   FOREIGN KEY ('iduser') REFERENCES 'users' ('idusers') ON DELETE CASCADE,
   FOREIGN KEY ('idbookList') REFERENCES 'user_books' ('iduser_books') ON DELETE CASCADE
-)
+);
 
 CREATE VIEW IF NOT EXISTS book_list2 AS
 SELECT

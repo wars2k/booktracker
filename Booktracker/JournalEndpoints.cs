@@ -78,6 +78,8 @@ namespace bookTrackerApi {
                 }
                 int lastInserted = JournalDB.createEntry(payload, currentSession, bookID);
                 ChallengeDB.handleChallenges(currentSession.AssociatedID, "writing", "", lastInserted);
+                EventTypes.Internal journalEvent = new EventTypes.Internal(Int32.Parse(currentSession.AssociatedID), Int32.Parse(bookID), EventTypes.EventCategories.journal, lastInserted.ToString());
+                EventDB.Add(journalEvent);
                 return Results.Ok();
 
             })

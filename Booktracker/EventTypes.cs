@@ -18,6 +18,13 @@ namespace bookTrackerApi {
             public int? bookListID { get; set; }
             public EventCategories? eventType { get; set; }
             public string? value { get; set; }
+
+            public Internal(int UserID, int BookListID, EventCategories EventType, string? Value) {
+                userID = UserID;
+                bookListID = BookListID;
+                eventType = EventType;
+                value = Value;
+            }
             
         }
 
