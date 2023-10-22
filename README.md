@@ -12,6 +12,7 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 - Add books with metadata provided by the Google Books API.
 - Add books manually without using an external metadata provider.
 - Organize books into collections.
+- Create customer reading/writing challenges and track your progress.
 - Write private journal entries about a book.
 - View book-related statistics like books read per month, etc. 
 - Multi-user support.
@@ -58,26 +59,15 @@ Using metadata grabbed from Google Books, easily add books and organize them int
     docker compose up -d
     ```
 
-## Coming Soon
-
-**Features**
-
-- **Format**: Choose from options like `ebook`, `paperback`, `hardback`, `missing` to further categorize your books.
-- **Reading Challenges**: Create reading challenges to motivate you to read more often, more broadly, or more careefully.
-- **Social Media:** Enable this optional feature to view all users’ activity (adding books, finishing books, writing reviews, etc.) on a timeline.
-- **Email Summaries:** Receive weekly or monthly recaps with statistics on books read, started, finished, etc.
-
-**Boring Stuff**
-
-- **Improved Logs**
-- **Improved Error Handling**
-
 ## Screenshots
 
 **Home Page**
 
 ![Home Page](/screenshots/home.JPG)
 
+**Challenge Page**
+
+![Challenge Page](/screenshots/challenges.png)
 **Main Book Page**
 
 ![Main Book Page](/screenshots/bookList.JPG)
