@@ -6,6 +6,7 @@
         
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
         <link rel="stylesheet" href="styles/bookPage.css">
+        <link rel="stylesheet" href="styles/eventViewer.css">
     </body>
 
     <div class="page">
@@ -174,8 +175,22 @@
                   </div>
                 </div>
 
-                <div class="col-sm-6 hide" id="journalEditorPane">
-                  <div class="card" style="overflow-y: auto">
+                <div class="col-sm-6" id="test">
+                  <div class="card" style="overflow-y: auto; height: 700px" id="eventCard">
+                    <div class="card-header">
+                      <h3 class="card-title">Event Tracker</h3>
+                    </div>
+                    <div class="card-body" id="eventCardBody">
+                      <table id="eventTable">
+                        
+                      </table>
+                    </div>
+                    
+                  </div>
+                
+
+                
+                  <div class="card hide" style="overflow-y: auto" id="journalEditorPane">
                     <form method="post">
                       <textarea id="tinymce-default"></textarea>
                     </form>
@@ -244,6 +259,8 @@
     <script src="src/checkAuth.js"></script>
     <script src="src/bookPage.js"></script>
     <script src="src/journal.js"></script>
+    <script src="src/eventClasses.js"></script>
+    <script src="src/events.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/tinymce/tinymce.min.js" defer></script>
 <script>

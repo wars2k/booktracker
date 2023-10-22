@@ -17,6 +17,7 @@ function showJournalPane() {
   document.getElementById("addEntryButton").style.display = "inline";
   document.getElementById("deleteEntryButton").style.display="none";
   document.getElementById("saveEntryButton").style.display="none";
+  document.getElementById("eventCard").style.display = "none";
 }
 
 /**
@@ -28,6 +29,7 @@ function hideJournalPane() {
   document.getElementById("saveEntryButton").style.display = "none";
   document.getElementById("deleteEntryButton").style.display = "none";
   document.getElementById("addEntryButton").style.display = "none";
+  document.getElementById("eventCard").style.display = "";
 }
 
 /**

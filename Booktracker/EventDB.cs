@@ -46,24 +46,24 @@ namespace bookTrackerApi {
         }
         
         //called anytime there's a bookListUpdate. Makes events where necessary. 
-        public static void handleBookListEvents(Api.BookListData data, int userID, int bookListID) {
+        public static void HandleBookListEvents(Api.BookListData data, int userID, int bookListID) {
             if (data.Status != null) {
-                EventTypes.Internal statusEvent = new EventTypes.Internal(userID, bookListID, EventTypes.EventCategories.statusUpdate, data.Status);
+                EventTypes.Internal statusEvent = new(userID, bookListID, EventTypes.EventCategories.statusUpdate, data.Status);
                 Add(statusEvent);
             }
 
             if (data.Rating != null) {
-                EventTypes.Internal ratingEvent = new EventTypes.Internal(userID, bookListID, EventTypes.EventCategories.ratingUpdate, data.Rating);
+                EventTypes.Internal ratingEvent = new(userID, bookListID, EventTypes.EventCategories.ratingUpdate, data.Rating);
                 Add(ratingEvent);
             }
 
             if (data.StartDate != null) {
-                EventTypes.Internal startDateEvent = new EventTypes.Internal(userID, bookListID, EventTypes.EventCategories.dateStartedUpdate, data.StartDate);
+                EventTypes.Internal startDateEvent = new(userID, bookListID, EventTypes.EventCategories.dateStartedUpdate, data.StartDate);
                 Add(startDateEvent);
             }
 
             if (data.FinishedDate != null) {
-                EventTypes.Internal finishedDateEvent = new EventTypes.Internal(userID, bookListID, EventTypes.EventCategories.dateFinishedUpdate, data.FinishedDate);
+                EventTypes.Internal finishedDateEvent = new(userID, bookListID, EventTypes.EventCategories.dateFinishedUpdate, data.FinishedDate);
                 Add(finishedDateEvent);
             }
         }

@@ -57,7 +57,7 @@ namespace bookTrackerApi {
                 }
                 if (payload.SessionKey == currentSession.Session && payload.Data != null) {
                     DB.updateBookList(payload.Data);
-                    EventDB.handleBookListEvents(payload.Data, Int32.Parse(currentSession.AssociatedID), Int32.Parse(payload.Data.Id));
+                    EventDB.HandleBookListEvents(payload.Data, Int32.Parse(currentSession.AssociatedID), Int32.Parse(payload.Data.Id));
                     if (payload.Data.Status == "READING") {
                         ChallengeDB.handleChallenges(currentSession.AssociatedID, "reading", "1", Int32.Parse(payload.Data.Id));
                     }
