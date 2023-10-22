@@ -38,6 +38,9 @@ namespace bookTrackerApi {
                     return Results.BadRequest(errorMessage);
                 }
                 JournalTypes.JournalEntryList entry = JournalDB.getEntry(journalID);
+                if (entry.id == null) {
+                    return Results.Ok("deleted entry");
+                }
                 DB.BookPageInfo data = DB.getBookPageData(entry.idBookList.ToString());
                 if (data.IdUser.ToString() != currentSession.AssociatedID) {
                     JsonLog.writeLog("Unauthorized attempt to access entries for another user's book.","WARNING", "journal_view",currentSession,remoteIp);

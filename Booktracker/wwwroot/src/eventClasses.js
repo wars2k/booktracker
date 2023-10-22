@@ -315,12 +315,19 @@ class JournalEvent extends BookEvent {
         let title = document.createElement("p");
         title.classList.add("text-secondary", "event-details");
         let titleContent = await this.getJournalTitle()
-        title.innerHTML = `<a href="bookPage.html?bookListId=${getBookIDfromURL()}&journalID=${this.value}">${titleContent}</a>`
+        if (titleContent.includes("<code>")) {
+            title.innerHTML = titleContent;
+        } else {
+            title.innerHTML = `<a href="bookPage.html?bookListId=${getBookIDfromURL()}&journalID=${this.value}">${titleContent}</a>`
+        }
         return title;
     }
 
     async getJournalTitle() {
         let data = await this.getJournalData();
+        if (data == "deleted entry") {
+            return "<code>This entry has been deleted.</code>"
+        }
         return data.title;
     }
 
@@ -341,7 +348,7 @@ class JournalEvent extends BookEvent {
         
         return data;
       })
-      .catch(error => console.error(error));
+      
     }
 
 

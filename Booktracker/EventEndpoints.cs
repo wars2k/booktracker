@@ -16,6 +16,13 @@ namespace bookTrackerApi {
                 }
                 List<EventTypes.External> events = EventDB.GetEvents(Int32.Parse(id));
                 return Results.Ok(events);
+            })
+            .Produces<List<EventTypes.External>>(StatusCodes.Status200OK)
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .WithTags("Events")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "Retrieves a list of all events for a given bookList ID."
             });
 
         }
