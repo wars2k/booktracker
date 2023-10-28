@@ -120,7 +120,9 @@ namespace bookTrackerApi {
                 }
                 int bookId = DB.addNewEntry(book);
                 JsonLog.writeLog($"'{book.Title}' added.", "INFO", "book_save", currentSession, remoteIp);
-                DB.addToBookList(bookId, currentSession.AssociatedID);
+                int bookListId = DB.addToBookList(bookId, currentSession.AssociatedID);
+                EventTypes.Internal addEvent = new EventTypes.Internal(Int32.Parse(currentSession.AssociatedID), bookListId, EventTypes.EventCategories.added, null);
+                EventDB.Add(addEvent);
                 return Results.Ok(book);
                 
             })

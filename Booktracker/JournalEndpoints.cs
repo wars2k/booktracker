@@ -38,6 +38,9 @@ namespace bookTrackerApi {
                     return Results.BadRequest(errorMessage);
                 }
                 JournalTypes.JournalEntryList entry = JournalDB.getEntry(journalID);
+                if (entry.id == null) {
+                    return Results.Ok("deleted entry");
+                }
                 DB.BookPageInfo data = DB.getBookPageData(entry.idBookList.ToString());
                 if (data.IdUser.ToString() != currentSession.AssociatedID) {
                     JsonLog.writeLog("Unauthorized attempt to access entries for another user's book.","WARNING", "journal_view",currentSession,remoteIp);
@@ -78,6 +81,8 @@ namespace bookTrackerApi {
                 }
                 int lastInserted = JournalDB.createEntry(payload, currentSession, bookID);
                 ChallengeDB.handleChallenges(currentSession.AssociatedID, "writing", "", lastInserted);
+                EventTypes.Internal journalEvent = new EventTypes.Internal(Int32.Parse(currentSession.AssociatedID), Int32.Parse(bookID), EventTypes.EventCategories.journal, lastInserted.ToString());
+                EventDB.Add(journalEvent);
                 return Results.Ok();
 
             })

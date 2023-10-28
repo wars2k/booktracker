@@ -265,7 +265,7 @@ namespace bookTrackerApi {
             
         }
 
-        public static void addToBookList(int bookId, string userId) {
+        public static int addToBookList(int bookId, string userId) {
             int userIdNumber = int.Parse(userId);
             SqliteConnection connection = initiateConnection();
             string sql = "INSERT INTO user_books (iduser, idbook, status) VALUES (@iduser, @idbook, @status)";
@@ -274,7 +274,13 @@ namespace bookTrackerApi {
             command.Parameters.AddWithValue("@idbook", bookId);
             command.Parameters.AddWithValue("@status", "UNASSIGNED");
             command.ExecuteNonQuery();
-            closeConnection(connection);
+
+            command.CommandText = "SELECT last_insert_rowid()";
+            int lastInsertedID = Convert.ToInt32(command.ExecuteScalar());
+
+            DB.closeConnection(connection);
+
+            return lastInsertedID;
         }
 
         public static void updateBookList(Api.BookListData data) {
