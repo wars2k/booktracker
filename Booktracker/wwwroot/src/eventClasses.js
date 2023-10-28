@@ -309,6 +309,7 @@ class JournalEvent extends BookEvent {
 
     /**
      * Creates an html "p" element that contains the journal's title with a link to open it.
+     * If that entry has been deleted, returns a "p" elemenet that indicates so.
      * @returns An html "p" element.
      */
     async getSecondaryInfo() {
