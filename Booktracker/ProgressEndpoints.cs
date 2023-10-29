@@ -23,6 +23,8 @@ namespace bookTrackerApi {
                 }
                 ProgressTypes.Internal progressInfo = new(payload, id, Int32.Parse(currentSession.AssociatedID));
                 int progressID = ProgressDB.Create(progressInfo);
+                EventTypes.Internal progressEvent = new(Int32.Parse(currentSession.AssociatedID), id, EventTypes.EventCategories.progress, progressID.ToString());
+                EventDB.Add(progressEvent);
                 return Results.Ok(progressID);
             });
 

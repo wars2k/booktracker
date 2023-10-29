@@ -84,6 +84,9 @@ async function getEventObject(event) {
         case "dateFinishedUpdate":
             object = new FinishDateEvent(event);
             break;
+        case "progress":
+            object = new ProgressEvent(event);
+            break;
         default:
             break;
     }

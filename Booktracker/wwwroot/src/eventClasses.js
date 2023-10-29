@@ -355,6 +355,80 @@ class JournalEvent extends BookEvent {
 
 }
 
+/**
+ * Class to be used for booktracker events with a status of "progress".
+ * async buildRow() method should be called after initializing object.
+ */
+class ProgressEvent extends BookEvent {
+
+    constructor(eventResponse) {
+        super(eventResponse);
+    }
+
+    getBadge() {
+        let badge = document.createElement("span");
+        badge.classList.add("badge", "bg-lime-lt");
+        badge.innerText = "Progress";
+        return badge;
+    }
+
+    getMainInfo() {
+        let mainInfo = document.createElement("p");
+        mainInfo.innerHTML = "Progress event created.";
+        return mainInfo;
+    }
+
+    /**
+     * Creates a div and fills it with a progress element showing the user's
+     * current progress with the book as well as a "p" element that is only 
+     * added if the user added a comment to this progress event.
+     * @returns A div with a progress element and an optional p element.
+     */
+    async getSecondaryInfo() {
+        let details = document.createElement("div");
+        let progressResponse = await this.getProgressData();
+
+        let progressBar = document.createElement("progress");
+        progressBar.classList.add("progress", "progress-lg");
+        progressBar.max = globalPageCount;
+        progressBar.value = progressResponse.currentPosition;
+        details.append(progressBar);
+
+        if (progressResponse.comment == null) {
+            return details;
+        }
+
+        let comment = document.createElement("div");
+        comment.classList.add("text-secondary", "event-details");
+        comment.innerText = progressResponse.comment;
+        details.append(comment);
+
+        return details;
+        
+    }
+
+    async getProgressData() {
+        let sessionKey = localStorage.getItem("sessionKey");
+      
+        return fetch(`/api/BookList/${getBookIDfromURL()}/progress/${this.value}?sessionKey=${sessionKey}`, {
+          method: 'GET',
+      })
+      .then(response => {
+          if (response.status === 401) {
+              informIncorrectPassword()
+          }
+          
+          return response.json()
+      })
+      .then(data => {
+        
+        return data;
+      })
+      
+    }
+
+}
+
 let test = {
     "id": 10,
     "userID": 1,

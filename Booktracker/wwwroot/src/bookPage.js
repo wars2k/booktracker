@@ -1,4 +1,5 @@
 let globalBookListID = null;
+let globalPageCount;
 setUpBookPage()
 
 document.getElementById('editButton').href = `editBook.html?bookListID=${globalBookListID}`
@@ -14,6 +15,7 @@ function getBookIDfromURL() {
 async function setUpBookPage() {
     let id = getBookIDfromURL();
     let data = await getBookData(id);
+    globalPageCount = data.pageCount;
     fillBookData(data);
     fillBookMetaData(data);
     console.log(data);
