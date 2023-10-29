@@ -38,10 +38,10 @@ namespace bookTrackerApi {
                     ProgressTypes.External update = new();
                     while (reader.Read()) {
                         update.Id = reader.GetInt32(0);
-                        update.DateTime = reader.GetString(1);
-                        update.CurrentPosition = reader.GetInt32(2);
-                        update.Journal = reader.IsDBNull(3) ? null: reader.GetInt32(3);
-                        update.Comment = reader.IsDBNull(4) ? null: reader.GetString(4);
+                        update.DateTime = reader.GetString(3);
+                        update.CurrentPosition = reader.GetInt32(4);
+                        update.Journal = reader.IsDBNull(5) ? null: reader.GetInt32(5);
+                        update.Comment = reader.IsDBNull(6) ? null: reader.GetString(6);
                     }
                     DB.closeConnection(connection);
                     return update;
@@ -50,7 +50,7 @@ namespace bookTrackerApi {
         }
 
 
-        //gets all progress events for a given bookList ID and returns it.
+        //gets all progress events for a given bookList ID and returns them in a list.
         public static List<ProgressTypes.External> GetAll(int bookListID) {
             SqliteConnection connection = DB.initiateConnection();
             string sql = "SELECT * FROM progress_updates WHERE idbookList = @idbookList";
