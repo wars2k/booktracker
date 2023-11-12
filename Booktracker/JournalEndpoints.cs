@@ -83,7 +83,7 @@ namespace bookTrackerApi {
                 ChallengeDB.handleChallenges(currentSession.AssociatedID, "writing", "", lastInserted);
                 EventTypes.Internal journalEvent = new EventTypes.Internal(Int32.Parse(currentSession.AssociatedID), Int32.Parse(bookID), EventTypes.EventCategories.journal, lastInserted.ToString());
                 EventDB.Add(journalEvent);
-                return Results.Ok();
+                return Results.Ok(lastInserted);
 
             })
             .Accepts<JournalTypes.NewEntry>("application/json")
