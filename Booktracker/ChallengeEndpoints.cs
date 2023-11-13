@@ -45,6 +45,7 @@ namespace bookTrackerApi {
                     return Results.BadRequest(errorMessage);
                 }
                 ChallengeDB.delete(challengeID);
+                ChallengeDB.storeChallenges();
                 return Results.Ok();
             });
 

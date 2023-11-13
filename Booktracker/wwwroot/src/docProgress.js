@@ -180,7 +180,7 @@ async function submissionHandler() {
 
     await submitProgress(submissionData);
 
-    //location.reload();
+    location.reload();
 }
 
 /**
