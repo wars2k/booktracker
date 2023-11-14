@@ -33,7 +33,7 @@ namespace bookTrackerApi {
         }
 
         //This is what the response is from the server when the client requests info about a progress event.
-        public class External {
+        public class ExternalProg {
             public int? Id { get; set; }
             public string? DateTime { get; set; }
             public int? CurrentPosition { get; set; }

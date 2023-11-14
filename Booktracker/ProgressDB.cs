@@ -29,13 +29,13 @@ namespace bookTrackerApi {
 
         //gets a single update from the DB by ID and returns it. 
         //Use Case: API endpoint calls this when a user requests a specific update. 
-        public static ProgressTypes.External GetOne(int updateID) {
+        public static ProgressTypes.ExternalProg GetOne(int updateID) {
             SqliteConnection connection = DB.initiateConnection();
             string sql = "SELECT * FROM progress_updates WHERE id = @id";
             using (SqliteCommand command = new SqliteCommand(sql, connection)) {
                 command.Parameters.AddWithValue("@id", updateID);
                 using (SqliteDataReader reader = command.ExecuteReader()) {
-                    ProgressTypes.External update = new();
+                    ProgressTypes.ExternalProg update = new();
                     while (reader.Read()) {
                         update.Id = reader.GetInt32(0);
                         update.DateTime = reader.GetString(3);
@@ -51,15 +51,15 @@ namespace bookTrackerApi {
 
 
         //gets all progress events for a given bookList ID and returns them in a list.
-        public static List<ProgressTypes.External> GetAll(int bookListID) {
+        public static List<ProgressTypes.ExternalProg> GetAll(int bookListID) {
             SqliteConnection connection = DB.initiateConnection();
             string sql = "SELECT * FROM progress_updates WHERE idbookList = @idbookList";
             using (SqliteCommand command = new SqliteCommand(sql, connection)) {
                 command.Parameters.AddWithValue("@idbookList", bookListID);
                 using (SqliteDataReader reader = command.ExecuteReader()) {
-                    List<ProgressTypes.External> updateList = new();
+                    List<ProgressTypes.ExternalProg> updateList = new();
                     while (reader.Read()) {
-                        ProgressTypes.External update = new();
+                        ProgressTypes.ExternalProg update = new();
                         update.Id = reader.GetInt32(0);
                         update.DateTime = reader.GetString(3);
                         update.CurrentPosition = reader.GetInt32(4);

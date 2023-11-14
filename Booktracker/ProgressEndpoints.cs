@@ -35,6 +35,13 @@ namespace bookTrackerApi {
                 EventDB.Add(progressEvent);
 
                 return Results.Ok(progressID);
+            })
+            .Accepts<ProgressTypes.RequestBody>("application/json")
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status200OK)
+            .WithTags("Progress")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Creates a new progress event for a given bookList ID."
             });
 
             app.MapGet("/api/BookList/{id}/progress", (int id, string sessionKey, HttpContext context) => {
@@ -44,8 +51,14 @@ namespace bookTrackerApi {
                     ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "progress_get", null, remoteIp);
                     return Results.BadRequest(errorMessage);
                 }
-                List<ProgressTypes.External> progressList = ProgressDB.GetAll(id);
+                List<ProgressTypes.ExternalProg> progressList = ProgressDB.GetAll(id);
                 return Results.Ok(progressList);
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<List<ProgressTypes.ExternalProg>>(StatusCodes.Status200OK)
+            .WithTags("Progress")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Retrieves all progress events for a given bookList ID."
             });
 
             app.MapGet("/api/BookList/{id}/progress/{progressID}", (int id, int progressID, string sessionKey, HttpContext context) => {
@@ -55,8 +68,14 @@ namespace bookTrackerApi {
                     ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "progress_getOne", null, remoteIp);
                     return Results.BadRequest(errorMessage);
                 }
-                ProgressTypes.External progress = ProgressDB.GetOne(progressID);
+                ProgressTypes.ExternalProg progress = ProgressDB.GetOne(progressID);
                 return Results.Ok(progress);
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<ProgressTypes.ExternalProg>(StatusCodes.Status200OK)
+            .WithTags("Progress")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Retrieves a specific progress event by ID for a given bookList ID."
             });
 
         }
