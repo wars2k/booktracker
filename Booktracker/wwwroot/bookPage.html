@@ -177,8 +177,21 @@
 
                 <div class="col-sm-6" id="test">
                   <div class="card" style="overflow-y: none; height: 700px" id="eventCard">
-                    <div class="card-header">
+                    <div class="card-header" style="display: flex; justify-content: space-between;">
                       <h3 class="card-title">Event Tracker</h3>
+                      <div class="dropdown">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" id="typeFilterButton">Filter</a>
+                        <div class="dropdown-menu" id="typeFilter">
+                          
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Rating"/><span class="badge bg-green-lt">Rating</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Status"/><span class="badge bg-blue-lt">Status</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Journal"/><span class="badge bg-purple-lt">Journal</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Start Date"/><span class="badge bg-cyan-lt">Start Date</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Finish Date"/><span class="badge bg-cyan-lt">Finish Date</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Progress"/><span class="badge bg-lime-lt">Progress</span></label>
+                          
+                        </div>
+                      </div>
                     </div>
                     <div class="card-body" id="eventCardBody" style="overflow-y: auto">
                       <table id="eventTable">

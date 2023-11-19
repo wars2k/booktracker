@@ -113,3 +113,104 @@ function getDivider(dateString) {
 
     return row;
 }
+
+/**
+ * Called when one of the filter buttons is clicked on the event table. 
+ * First it removes all active filters. Then, it loops through all events, hiding
+ * each one that that is not part of the active filter set. Then, it loops through
+ * all rows in the table. For each divider, it determines whether or not that
+ * divider should still appear. 
+ * @returns null
+ */
+function filterByType() {
+    let filterArray = getFilterArray()
+
+    removeFilter()
+
+    if (filterArray.length == 0) {
+        return;
+    }
+    
+    let events = document.getElementsByClassName("event");
+    for (let i = 0; i < events.length; i++) {
+        const event = events[i];
+        
+        if (filterArray.includes(event.children[0].children[1].innerText)) {
+            event.style.display = "";
+        } else {
+            event.style.display = "none";
+        }
+        
+    }
+
+    let table = document.getElementById("eventTable");
+    let rows = table.children;
+
+    for (let i = 0; i < rows.length; i++) {
+        let row = rows[i];
+
+        //if this is a divider row
+        if (row.children[0].colSpan == "2") {
+            let nextDiv = null;
+            let nextEvent = rows.length;
+
+            //look for the next divider row and the next visible event row
+            for (let j = rows.length - 1; j > i; j--) {
+                
+                if (rows[j].children[0].colSpan == "2") {
+                    nextDiv = j;
+                    continue;
+                }
+
+                if (rows[j].style.display != "none") {
+                    nextEvent = j;
+                }
+                
+            }
+
+            //if the next div happens before the next visible event, hide the div.
+            if (nextDiv != null && nextDiv < nextEvent) {
+
+                row.style.display = "none";
+            }
+
+            //if there are no more divs AND no more rows coming up, hide the current div. 
+            if (nextDiv == null && nextEvent == rows.length) {
+                
+                row.style.display = "none";
+            }
+
+            
+            
+        }
+    }
+
+
+}
+
+/**
+ * Creates an array of active filters based on the check list in the filter drop-down
+ * on the event table. 
+ * @returns An array of active filters
+ */
+function getFilterArray() {
+    let filterArray = [];
+    for (const child of document.getElementById("typeFilter").children) {
+      if (child.children[0].checked == 1) {
+        filterArray.push(child.children[0].value);
+      }
+    }
+    return filterArray;
+}
+
+/**
+ * Loops through each row of the event table, making sure each row is set to appear. 
+ */
+function removeFilter() {
+    let events = document.getElementById("eventTable").children;
+    for (let i = 0; i < events.length; i++) {
+        const event = events[i];
+        event.style.display = "";
+        
+    }
+}
