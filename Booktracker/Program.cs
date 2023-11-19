@@ -46,7 +46,9 @@ namespace bookTrackerApi {
             StatsEndpoints.configureEndpoints(app);
             JournalEndpoints.Configure(app);
             ChallengeEndpoints.configure(app);
-
+            EventEndpoints.configure(app);
+            ProgressEndpoints.configure(app);
+            
             ChallengeDB.storeChallenges();
 
             app.Run();

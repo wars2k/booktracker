@@ -1,0 +1,54 @@
+td {
+    
+}
+
+.info {
+    max-width: 600px;
+    margin: 0px;
+    padding: 0px;
+    vertical-align: top;
+    padding-left: 15px;
+    margin-bottom: 30px;
+    
+}
+
+.info p {
+    font-size: 11pt;
+    margin-bottom: 5px;
+}
+
+.timestamp {
+    width: 100px;
+    border-right: 2px solid #e2e8f0;
+    text-align: right;
+    vertical-align: top;
+    padding-bottom: 20px;
+}
+
+.timestamp p {
+    margin-right: 15px;
+    font-size: 11pt;
+    margin-bottom: 5px;
+}
+
+.timestamp .badge {
+    font-size: 9pt;
+    margin-right: 15px;
+}
+
+.event-details {
+    font-size: 10pt !important;
+}
+
+#eventCard {
+    width: 800px;
+}
+
+.dateDivider {
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+
+
+

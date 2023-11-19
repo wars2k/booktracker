@@ -6,6 +6,7 @@
         
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
         <link rel="stylesheet" href="styles/bookPage.css">
+        <link rel="stylesheet" href="styles/eventViewer.css">
     </body>
 
     <div class="page">
@@ -147,7 +148,7 @@
                                         </div>
                                         <div id="buttonContainer">
                                             <a class="btn" id="editButton">Edit Book</a>
-                                            
+                                            <button class="btn" style="margin-top: 15px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Document Progress</button>
                                         </div>
                                     </div>
                                     
@@ -174,8 +175,35 @@
                   </div>
                 </div>
 
-                <div class="col-sm-6 hide" id="journalEditorPane">
-                  <div class="card" style="overflow-y: auto">
+                <div class="col-sm-6" id="test">
+                  <div class="card" style="overflow-y: none; height: 700px" id="eventCard">
+                    <div class="card-header" style="display: flex; justify-content: space-between;">
+                      <h3 class="card-title">Event Tracker</h3>
+                      <div class="dropdown">
+                        <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" id="typeFilterButton">Filter</a>
+                        <div class="dropdown-menu" id="typeFilter">
+                          
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Rating"/><span class="badge bg-green-lt">Rating</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Status"/><span class="badge bg-blue-lt">Status</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Journal"/><span class="badge bg-purple-lt">Journal</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Start Date"/><span class="badge bg-cyan-lt">Start Date</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Finish Date"/><span class="badge bg-cyan-lt">Finish Date</span></label>
+                          <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Progress"/><span class="badge bg-lime-lt">Progress</span></label>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body" id="eventCardBody" style="overflow-y: auto">
+                      <table id="eventTable">
+                        
+                      </table>
+                    </div>
+                    
+                  </div>
+                
+
+                
+                  <div class="card hide" style="overflow-y: auto" id="journalEditorPane">
                     <form method="post">
                       <textarea id="tinymce-default"></textarea>
                     </form>
@@ -236,6 +264,56 @@
               </div>
             </div>
 
+            <div class="modal" id="exampleModal" tabindex="-1">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Document Reading Progress</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="pageContainer">
+                      <div class="mb-3">
+                        <label class="form-label required">Current Page</label>
+                        <div style="display: flex; gap: 15px;">
+                          <input type="number" onchange="validateCurrentPage(false)" id="currentPage" class="form-control" name="example-text-input"/>
+                          <button class="btn" onclick="inputLastPage()">Last Page</button>
+                        </div>
+                      </div>
+                      <div id="extraPageElements">
+
+                      </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label required">Linked Journal Entry</label>
+                      <p>Link an existing journal entry to this progress update, or choose to create a new entry that can be edited later.</p>
+                      <select class="form-select" id="journalSelect" onchange="updateJournalQuestions()">
+                          
+                      </select>
+                    </div>
+                    <div id="journalSection">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Comment</label>
+                      <textarea class="form-control" rows="3" id="progressComment"></textarea>
+                    </div>
+                    
+                  </div>
+                  
+                  <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                      Cancel
+                    </a>
+                    <button class="btn btn-primary ms-auto" onclick="submissionHandler()">
+                      
+                      Save Progress
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
     </div>
@@ -244,6 +322,9 @@
     <script src="src/checkAuth.js"></script>
     <script src="src/bookPage.js"></script>
     <script src="src/journal.js"></script>
+    <script src="src/eventClasses.js"></script>
+    <script src="src/events.js"></script>
+    <script src="src/docProgress.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/tinymce/tinymce.min.js" defer></script>
 <script>

@@ -17,6 +17,7 @@ function showJournalPane() {
   document.getElementById("addEntryButton").style.display = "inline";
   document.getElementById("deleteEntryButton").style.display="none";
   document.getElementById("saveEntryButton").style.display="none";
+  document.getElementById("eventCard").style.display = "none";
 }
 
 /**
@@ -28,6 +29,7 @@ function hideJournalPane() {
   document.getElementById("saveEntryButton").style.display = "none";
   document.getElementById("deleteEntryButton").style.display = "none";
   document.getElementById("addEntryButton").style.display = "none";
+  document.getElementById("eventCard").style.display = "";
 }
 
 /**
@@ -77,7 +79,7 @@ function getJournalData(id) {
 }
 
 /**
- * Builds the table of journal entries that appears on the right-side of the user's screen.
+ * Builds the table of journal entries that appears on the left-side of the user's screen.
  * @param {object} data - The json journal data from the server in object-form.
  */
 function buildJournalTable(data) {
@@ -240,6 +242,7 @@ async function newEntryHandler() {
   
   hasBeenRecentSave = true;
   await journalInitHandler();
+  await fillJournalEntries();
   openNewEntry();
 
 }
