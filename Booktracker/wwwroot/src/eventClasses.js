@@ -355,6 +355,141 @@ class JournalEvent extends BookEvent {
 
 }
 
+/**
+ * Class to be used for booktracker events with a status of "progress".
+ * async buildRow() method should be called after initializing object.
+ */
+class ProgressEvent extends BookEvent {
+    
+    constructor(eventResponse) {
+        super(eventResponse);
+    }
+
+    getBadge() {
+        let badge = document.createElement("span");
+        badge.classList.add("badge", "bg-lime-lt");
+        badge.innerText = "Progress";
+        return badge;
+    }
+
+    getMainInfo() {
+        let mainInfo = document.createElement("p");
+        mainInfo.innerHTML = "Progress event created.";
+        return mainInfo;
+    }
+
+    /**
+     * Creates a div and fills it with a progress element showing the user's
+     * current progress with the book as well as a "p" element that is only 
+     * added if the user added a comment and/or linked a journal entry to this progress event.
+     * @returns A div with a progress element and an optional p element.
+     */
+    async getSecondaryInfo() {
+        let details = document.createElement("div");
+        let progressResponse = await this.getProgressData();
+
+        let progressContainer = document.createElement("div");
+        progressContainer.style.display = "flex";
+        progressContainer.style.alignItems = "center";
+        progressContainer.style.gap = "10px";
+
+        let progressBar = document.createElement("progress");
+        progressBar.classList.add("progress", "progress-lg");
+        progressBar.style.maxWidth = "250px";
+        progressBar.max = globalPageCount;
+        progressBar.value = progressResponse.currentPosition;
+        progressContainer.append(progressBar);
+
+        let numbers = document.createElement("p");
+        numbers.classList.add("text-secondary", "event-details");
+        numbers.innerText = progressResponse.currentPosition + "/" + globalPageCount
+        progressContainer.append(numbers);
+
+        details.append(progressContainer);
+
+        if (progressResponse.comment != null) {
+            let comment = document.createElement("div");
+            comment.classList.add("text-secondary", "event-details");
+            comment.innerHTML = "<b>Comment: </b>" + progressResponse.comment;
+            details.append(comment);
+        }
+
+        if (progressResponse.journal != null) {
+            let journalSection = await this.getJournalInfo(progressResponse.journal);
+            details.append(journalSection);
+        }
+
+        return details;
+        
+    }
+
+    async getProgressData() {
+        let sessionKey = localStorage.getItem("sessionKey");
+      
+        return fetch(`/api/BookList/${getBookIDfromURL()}/progress/${this.value}?sessionKey=${sessionKey}`, {
+          method: 'GET',
+      })
+      .then(response => {
+          if (response.status === 401) {
+              informIncorrectPassword()
+          }
+          
+          return response.json()
+      })
+      .then(data => {
+        
+        return data;
+      })
+      
+    }
+
+    /**
+     * Creates an html "p" element that contains the journal's title with a link to open it.
+     * If that entry has been deleted, returns a "p" elemenet that indicates so.
+     * @returns An html "p" element.
+     */
+    async getJournalInfo(journalID) {
+        let title = document.createElement("p");
+        title.classList.add("text-secondary", "event-details");
+        let titleContent = await this.getJournalTitle(journalID)
+        if (titleContent.includes("<code>")) {
+            title.innerHTML = titleContent;
+        } else {
+            title.innerHTML = `<b>Linked Journal: </b> <a href="bookPage.html?bookListId=${getBookIDfromURL()}&journalID=${journalID}">${titleContent}</a>`
+        }
+        return title;
+    }
+
+    async getJournalTitle(journalID) {
+        let data = await this.getJournalData(journalID);
+        if (data == "deleted entry") {
+            return "<code>This entry has been deleted.</code>"
+        }
+        return data.title;
+    }
+
+    async getJournalData(journalID) {
+        let sessionKey = localStorage.getItem("sessionKey");
+      
+        return fetch(`/api/journal/${journalID}?sessionKey=${sessionKey}`, {
+          method: 'GET',
+      })
+      .then(response => {
+          if (response.status === 401) {
+              informIncorrectPassword()
+          }
+          
+          return response.json()
+      })
+      .then(data => {
+        
+        return data;
+      })
+      
+    }
+
+}
+
 let test = {
     "id": 10,
     "userID": 1,

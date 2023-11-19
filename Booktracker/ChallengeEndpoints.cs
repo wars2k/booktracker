@@ -16,6 +16,12 @@ namespace bookTrackerApi {
                 }
                 List<ChallengeTypes.Challenge> challenges = ChallengeDB.getAll(currentSession);
                 return Results.Ok(challenges);
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<List<ChallengeTypes.Challenge>>(StatusCodes.Status200OK)
+            .WithTags("Challenges")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Gets all challenges for a specific user."
             });
 
             app.MapPost("/api/challenges", async (HttpContext context, string sessionKey) => {
@@ -35,7 +41,15 @@ namespace bookTrackerApi {
                 ChallengeDB.create(payload, currentSession);
                 ChallengeDB.storeChallenges();
                 return Results.Ok();
+            })
+            .Accepts<ChallengeTypes.NewChallenge>("application/json")
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status200OK)
+            .WithTags("Challenges")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Creates a new user-specific challenge."
             });
+            
 
             app.MapDelete("/api/challenges/{challengeID}", async (HttpContext context, string sessionKey, string challengeID) => {
                 string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
@@ -45,7 +59,14 @@ namespace bookTrackerApi {
                     return Results.BadRequest(errorMessage);
                 }
                 ChallengeDB.delete(challengeID);
+                ChallengeDB.storeChallenges();
                 return Results.Ok();
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status200OK)
+            .WithTags("Challenges")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Deletes a specific challenge."
             });
 
         }

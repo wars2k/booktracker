@@ -79,7 +79,7 @@ function getJournalData(id) {
 }
 
 /**
- * Builds the table of journal entries that appears on the right-side of the user's screen.
+ * Builds the table of journal entries that appears on the left-side of the user's screen.
  * @param {object} data - The json journal data from the server in object-form.
  */
 function buildJournalTable(data) {
@@ -242,6 +242,7 @@ async function newEntryHandler() {
   
   hasBeenRecentSave = true;
   await journalInitHandler();
+  await fillJournalEntries();
   openNewEntry();
 
 }

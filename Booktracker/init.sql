@@ -114,6 +114,19 @@ CREATE TABLE IF NOT EXISTS 'book_events' (
   FOREIGN KEY ('idbookList') REFERENCES 'user_books' ('iduser_books') ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS 'progress_updates' (
+  'id' INTEGER PRIMARY KEY AUTOINCREMENT,
+  'iduser' INTEGER NOT NULL,
+  'idbookList' INTEGER NOT NULL,
+  'dateTime' TEXT NOT NULL,
+  'currentPosition' INTEGER NOT NULL,
+  'journalID' INTEGER DEFAULT NULL,
+  'comment' TEXT,
+  FOREIGN KEY ('iduser') REFERENCES 'users' ('idusers') ON DELETE CASCADE,
+  FOREIGN KEY ('idbookList') REFERENCES 'user_books' ('iduser_books') ON DELETE CASCADE,
+  FOREIGN KEY ('journalID') REFERENCES 'journal_entries' ('id') ON DELETE SET NULL
+);
+
 CREATE VIEW IF NOT EXISTS book_list2 AS
 SELECT
     t1.iduser_books AS iduser_books, 
