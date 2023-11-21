@@ -71,6 +71,7 @@ function fillBookData(data) {
 
     let coverImage = document.getElementById("coverImage");
     coverImage.src = data.imageLink;
+    
 
 }
 

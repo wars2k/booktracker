@@ -4,7 +4,7 @@
     height: 60%;
     width: 100%;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap
 }
 
 #imageContainer {
@@ -49,7 +49,7 @@
 
 }
 
-#buttonContainer {
+#buttonContainer2 {
     margin-top: 25px;
 }
 
@@ -73,5 +73,14 @@ td {
 .journalRowTitle {
     font-weight: 600;
     width: 80%
+}
+
+#buttonContainer {
+    width: 100%;
+    height: 30px;
+    margin: 0px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 15px;
 }
 
