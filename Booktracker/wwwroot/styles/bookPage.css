@@ -4,13 +4,13 @@
     height: 60%;
     width: 100%;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap
 }
 
 #imageContainer {
     
     height: 100%;
-    width: 50%;
+    width: 43%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,7 +20,7 @@
     
     height: 100%;
     
-    width: 50%;
+    width: 57%;
     padding: 10px;
     padding-top: 30px;
     
@@ -49,7 +49,7 @@
 
 }
 
-#buttonContainer {
+#buttonContainer2 {
     margin-top: 25px;
 }
 
@@ -73,5 +73,19 @@ td {
 .journalRowTitle {
     font-weight: 600;
     width: 80%
+}
+
+#buttonContainer {
+    width: 100%;
+    height: 30px;
+    margin: 0px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 15px;
+}
+
+.datagrid-item {
+    width: 124px !important;
+    margin-right: 0px !important;
 }
 

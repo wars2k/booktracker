@@ -2,6 +2,7 @@ let globalBookListID = null;
 let globalPageCount;
 let globalStatus;
 let globalFinishedDate;
+let globalRating;
 
 setUpBookPage()
 
@@ -18,12 +19,25 @@ function getBookIDfromURL() {
 async function setUpBookPage() {
     let id = getBookIDfromURL();
     let data = await getBookData(id);
+    if (data.id == null) {
+      alert("This book ID could not be found.")
+      location.href = "booklist.html";
+    }
     globalPageCount = data.pageCount;
     globalStatus = data.status;
     globalFinishedDate = data.dateFinished;
+    globalRating = data.rating;
     fillBookData(data);
     fillBookMetaData(data);
     console.log(data);
+}
+
+function displayNoBookFound() {
+  let mainContainer = document.getElementById("mainContainer");
+  let code = document.createElement("code");
+  code.innerText = `No book found for bookList ID: ${getBookIDfromURL()}.`
+  code.style.fontSize = "20pt";
+  
 }
 
 function getBookData(id) {
@@ -71,16 +85,17 @@ function fillBookData(data) {
 
     let coverImage = document.getElementById("coverImage");
     coverImage.src = data.imageLink;
+    
 
 }
 
 function fillBookMetaData(data) {
 
     let startDate = document.getElementById("startDate");
-    startDate.innerText = data.dateStarted;
+    startDate.value = data.dateStarted;
 
     let finishDate = document.getElementById("finishDate");
-    finishDate.innerText = data.dateFinished;
+    finishDate.value = data.dateFinished;
 
     let owner = document.getElementById("owner");
     owner.innerText = data.username;
@@ -90,7 +105,7 @@ function fillBookMetaData(data) {
 
     let rating = document.getElementById("rating");
         if (data.rating != null) {
-            rating.classList.add("status");
+            //rating.classList.add("status");
             switch (data.rating) {
               case "1":
                 rating.classList.add("status-red");
@@ -145,4 +160,108 @@ function fillBookMetaData(data) {
                 break;
             }
         }
+}
+
+function toggleModal() {
+  if (document.getElementById("deleteBookModal").style.display == "none") {
+      document.getElementById("deleteBookModal").style.display = "block";
+  } else {
+      document.getElementById("deleteBookModal").style.display = "none"
+  }
+}
+
+function submitBookDelete() {
+  sessionKey = localStorage.getItem("sessionKey");
+  let id = getBookIDfromURL()
+  let payload = {
+    "sessionKey": sessionKey
+  }
+
+  fetch(`/api/BookList/${id}/delete`, {
+    method: 'DELETE',
+    body: JSON.stringify(payload),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => redirectToBookList())
+  .catch(error => redirectToBookList());
+}
+
+function redirectToBookList() {
+  window.location = "booklist.html"
+}
+
+function submitUpdate(payload) {
+  let bookListID = getBookIDfromURL()
+  fetch(`/api/BookList/${bookListID}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+  }
+  })
+  .then(response => response.json())
+  .then(data => refreshPage(data))
+  .catch(error => refreshPage(error));
+}
+
+class UpdateBody {
+  sessionKey;
+  data;
+
+  constructor(id) {
+
+    this.sessionKey = localStorage.getItem("sessionKey");
+    this.data = {
+      "id": id,
+      "rating": null,
+      "status": null,
+      "startDate": null,
+      "finishedDate": null
+    }
+
+  }
+
+}
+
+function updateRating(rating) {
+  if (rating == globalRating) {
+    return;
+  }
+  let payload = new UpdateBody(getBookIDfromURL());
+  payload.data.rating = rating;
+  submitUpdate(payload)
+}
+
+function updateStatus(status) {
+  if (status == globalStatus) {
+    return;
+  }
+  let payload = new UpdateBody(getBookIDfromURL());
+  payload.data.status = status;
+  submitUpdate(payload)
+}
+
+function refreshPage() {
+  location.reload();
+}
+
+function updateDate(type) {
+  let payload = new UpdateBody(getBookIDfromURL());
+
+  if (type == "start") {
+    if (document.getElementById("startDate").value == "") {
+      return;
+    }
+    payload.data.startDate = document.getElementById("startDate").value;
+  } else {
+    if (document.getElementById("finishDate").value == "") {
+      return;
+    }
+    payload.data.finishedDate = document.getElementById("finishDate").value;
+  }
+
+  submitUpdate(payload);
 }

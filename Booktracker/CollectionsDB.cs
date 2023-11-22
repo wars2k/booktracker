@@ -174,6 +174,25 @@ namespace bookTrackerApi {
             DB.closeConnection(connection);
         }
 
+        public static List<int> getIDsForBookListID(int id) {
+            SqliteConnection connection = DB.initiateConnection();
+            string sql = "SELECT idcollection FROM collection_entries WHERE iduser_book = @id";
+            using (SqliteCommand command = new SqliteCommand(sql, connection)) {
+                command.Parameters.AddWithValue("@id", id);
+                using (SqliteDataReader reader = command.ExecuteReader()) {
+                    List<int> list = new();
+                    while (reader.Read()) {
+                        int collectionID = reader.GetInt32(0);
+                        list.Add(collectionID);
+                        
+                    }
+                    DB.closeConnection(connection);
+                    return list;
+                }
+            }
+
+        }
+
 
 
     }

@@ -78,10 +78,10 @@
             </div>
           </div>
           <div class="page-body" style="height: 77vh">
-            <div class="container-xl">
+            <div class="container-xl" id="mainContainer">
               <div class="row row-deck row-cards" style="height: 95%">
                 <div class="col-sm-10" style="width:600px; height: 100%">
-                  <div class="card" style="overflow-y: auto">
+                  <div class="card" style="overflow-y: auto; height: 700px;">
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                           <li class="nav-item">
@@ -90,20 +90,53 @@
                           <li class="nav-item">
                             <a href="#tabs-profile-ex1" class="nav-link" data-bs-toggle="tab" id="journalTabButton" onclick="journalInitHandler()">Journal</a>
                           </li>
+                          <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add to Collections</a>
+                            <div class="dropdown-menu" id="collectionContainer"></div>
+                          </li>
+                          <li class="nav-item">
+                            
+                            <button class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal">Document Progress</button>
+                          </li>
+                          <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More</a>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" id="editButton">Edit Metadata</a>
+                              <a class="dropdown-item" href="#" onclick="toggleModal()"><span class="badge bg-red">Delete Book</span></a>
+                            </div>
+                          </li>
                         </ul>
                     </div>
                     <div class="card-body" style="height: 100%">
                         <div class="tab-content">
                             <div class="tab-pane active show" id="tabs-home-ex1">
-                              <h3 id="title">Title</h3>
+                              <h2 id="title">Title</h2>
                               <h4><span id="author">Author</span> | <span id="publisher">Publisher</span></h4>
                               <div id="category">Genre / Genre / Genre</div>
                               <p><span id="pageCount">243 pages</span> | <span id="isbn">9781408827000</span></p>
-                              <div id="description">Description: Cursus turpis vestibulum, dui in pharetra vulputate
-                                Fringilla egestas nunc quis tellus diam rhoncus ultricies tristique enim at diam, sem nunc amet, pellentesque id egestas velit sed
-                                 id sed non turpis ultricies fringilla at sed facilisis lacus pellentesque purus nibh</div>
-                                 <div class="hr"></div>
+                              
+                                 <div class="accordion" id="accordion-example" style="margin-bottom: 15px">
+                                  <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading-1" style="height: 30px">
+                                      <button class="accordion-button collapsed" style="height: 25px" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1" aria-expanded="false">
+                                        <b>Description</b>
+                                      </button>
+                                    </h2>
+                                    <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#accordion-example" style="">
+                                      <div class="accordion-body pt-0" id="description">
+                                        
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                </div>
+                                 
+                                
+                                
                                 <div id="bottomContainer">
+                                    
+
+
                                     <div id="imageContainer">
                                         <img id="coverImage">
                                     </div>
@@ -112,26 +145,43 @@
                                             <div class="datagrid-item">
                                               <div class="datagrid-title">STATUS</div>
                                               <div class="datagrid-content">
-                                                <span class="status" id="status">STATUS</span>
+                                                <span class="status dropdown-toggle" id="status" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Unknown</span>
+                                                  <div class="dropdown-menu">
+                                                    <label class="dropdown-item" onclick="updateStatus('UNASSIGNED')"><span class="status status-yellow">UNASSIGNED</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('READING')"><span class="status status-green">READING</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('UP NEXT')"><span class="status status-teal">UP NEXT</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('TO READ')"><span class="status status-azure">TO READ</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('WISHLIST')"><span class="status status-blue">WISHLIST</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('FINISHED')"><span class="status status-purple">FINISHED</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('DNF')"><span class="status status-red">DNF</span></label>
+                                                  </div>
+
                                               </div>
                                             </div>
                                             <div class="datagrid-item">
                                                 <div class="datagrid-title">RATING</div>
                                                 <div class="datagrid-content">
-                                                  <span class="status" id="rating">RATING</span>
+                                                  
+                                                  <span class="status dropdown-toggle" id="rating" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">None</span>
+                                                  <div class="dropdown-menu">
+                                                    <label class="dropdown-item" onclick="updateRating(5)"><span class="status status-green">&#9734&#9734&#9734&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(4)"><span class="status status-blue">&#9734&#9734&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(3)"><span class="status status-yellow">&#9734&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(2)"><span class="status status-orange">&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(1)"><span class="status status-red">&#9734</span></label>
+                                                  </div>
                                                 </div>
                                             </div>
                                             <div class="datagrid-item">
                                                 <div class="datagrid-title">DATE STARTED</div>
-                                                <div class="datagrid-content" id="startDate">
+                                                
+                                                <input type="date" class="form-control" id="startDate" onchange="updateDate('start')">
                                                   
-                                                </div>
+                                                
                                             </div>
                                             <div class="datagrid-item">
                                                 <div class="datagrid-title">DATE FINISHED</div>
-                                                <div class="datagrid-content" id="finishDate">
-                                                  
-                                                </div>
+                                                <input type="date" class="form-control" id="finishDate" onchange="updateDate('finish')">
                                             </div>
                                             <div class="datagrid-item">
                                                 <div class="datagrid-title">OWNER</div>
@@ -146,9 +196,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="buttonContainer">
-                                            <a class="btn" id="editButton">Edit Book</a>
-                                            <button class="btn" style="margin-top: 15px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Document Progress</button>
+                                        <div id="buttonContainer2">
+                                            
                                         </div>
                                     </div>
                                     
@@ -190,6 +239,7 @@
                           <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Finish Date"/><span class="badge bg-cyan-lt">Finish Date</span></label>
                           <label class="dropdown-item" onclick="filterByType()"><input class="form-check-input m-0 me-2" type="checkbox" value="Progress"/><span class="badge bg-lime-lt">Progress</span></label>
                           
+                          
                         </div>
                       </div>
                     </div>
@@ -229,6 +279,37 @@
                   <div class="modal-footer">
                     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="newEntryHandler()">Create</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal" id="deleteBookModal" style="display: none">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  
+                  <div class="modal-status bg-danger"></div>
+                  <div class="modal-body text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 9v2m0 4v.01" />
+                      <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                    </svg>
+                    <h3>Are you sure?</h3>
+                    <div class="text-muted">Do you really want to delete this book from your book list? This will permanently delete all associated journal entries,
+                      events, and progress documentation. This action cannot be undone.</div>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="w-100">
+                      <div class="row">
+                        <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal" onclick="toggleModal()">
+                            Cancel
+                          </a></div>
+                        <div class="col"><a href="#" class="btn btn-danger w-100" data-bs-dismiss="modal" onclick="submitBookDelete()">
+                            Delete
+                          </a></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -325,6 +406,7 @@
     <script src="src/eventClasses.js"></script>
     <script src="src/events.js"></script>
     <script src="src/docProgress.js"></script>
+    <script src="src/bookPageCollections.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/libs/tinymce/tinymce.min.js" defer></script>
 <script>
@@ -337,7 +419,7 @@
         });
       },
       menubar: true,
-      height: "600px",
+      height: "700px",
       statusbar: true,
       branding: false,
       plugins: 'save',

@@ -8,7 +8,7 @@ namespace bookTrackerApi {
         public static void configureCollectionEndpoints(WebApplication app) {
 
             //Get a list of arrays with various data depending on what "include" parameter is set to.
-            app.MapGet("/api/collections", (String include, String sessionKey, HttpContext context) => {
+            app.MapGet("/api/collections", (String include, String sessionKey, HttpContext context, String? bookListID) => {
                 string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
                 SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
                 if (currentSession == null) {
@@ -20,6 +20,10 @@ namespace bookTrackerApi {
                     return Results.BadRequest(errorMessage);
                 }
                 if (include == "name") {
+                    if (bookListID != null) {
+                        List<int> collectionIDs = CollectionsDB.getIDsForBookListID(Int32.Parse(bookListID));
+                        return Results.Ok(collectionIDs);
+                    }
                     List<CollectionTypes.CollectionNames> collections = CollectionsDB.getCollectionsNames(currentSession);
                     return Results.Ok(collections);
                 } else if (include == "metadata") {
