@@ -19,6 +19,10 @@ function getBookIDfromURL() {
 async function setUpBookPage() {
     let id = getBookIDfromURL();
     let data = await getBookData(id);
+    if (data.id == null) {
+      alert("This book ID could not be found.")
+      location.href = "booklist.html";
+    }
     globalPageCount = data.pageCount;
     globalStatus = data.status;
     globalFinishedDate = data.dateFinished;
@@ -26,6 +30,14 @@ async function setUpBookPage() {
     fillBookData(data);
     fillBookMetaData(data);
     console.log(data);
+}
+
+function displayNoBookFound() {
+  let mainContainer = document.getElementById("mainContainer");
+  let code = document.createElement("code");
+  code.innerText = `No book found for bookList ID: ${getBookIDfromURL()}.`
+  code.style.fontSize = "20pt";
+  
 }
 
 function getBookData(id) {
@@ -240,8 +252,14 @@ function updateDate(type) {
   let payload = new UpdateBody(getBookIDfromURL());
 
   if (type == "start") {
+    if (document.getElementById("startDate").value == "") {
+      return;
+    }
     payload.data.startDate = document.getElementById("startDate").value;
   } else {
+    if (document.getElementById("finishDate").value == "") {
+      return;
+    }
     payload.data.finishedDate = document.getElementById("finishDate").value;
   }
 

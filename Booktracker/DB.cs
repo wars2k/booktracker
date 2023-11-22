@@ -363,6 +363,10 @@ namespace bookTrackerApi {
                 
                 }
             }
+
+            if (book.Id == null) {
+                return book;
+            }
             SqliteConnection connection2 = initiateConnection();
             sql = "SELECT * FROM books WHERE id = @id";
             using (SqliteCommand command2 = new SqliteCommand(sql, connection2)) {
