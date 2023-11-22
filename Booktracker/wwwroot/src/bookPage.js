@@ -80,10 +80,10 @@ function fillBookData(data) {
 function fillBookMetaData(data) {
 
     let startDate = document.getElementById("startDate");
-    startDate.innerText = data.dateStarted;
+    startDate.value = data.dateStarted;
 
     let finishDate = document.getElementById("finishDate");
-    finishDate.innerText = data.dateFinished;
+    finishDate.value = data.dateFinished;
 
     let owner = document.getElementById("owner");
     owner.innerText = data.username;
@@ -234,4 +234,16 @@ function updateStatus(status) {
 
 function refreshPage() {
   location.reload();
+}
+
+function updateDate(type) {
+  let payload = new UpdateBody(getBookIDfromURL());
+
+  if (type == "start") {
+    payload.data.startDate = document.getElementById("startDate").value;
+  } else {
+    payload.data.finishedDate = document.getElementById("finishDate").value;
+  }
+
+  submitUpdate(payload);
 }
