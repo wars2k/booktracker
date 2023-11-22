@@ -10,7 +10,7 @@
 #imageContainer {
     
     height: 100%;
-    width: 50%;
+    width: 45%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,7 +20,7 @@
     
     height: 100%;
     
-    width: 50%;
+    width: 55%;
     padding: 10px;
     padding-top: 30px;
     
@@ -82,5 +82,10 @@ td {
     margin-bottom: 10px;
     display: flex;
     gap: 15px;
+}
+
+.datagrid-item {
+    width: 120px !important;
+    margin-right: 0px !important;
 }
 

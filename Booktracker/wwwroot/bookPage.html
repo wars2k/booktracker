@@ -91,7 +91,7 @@
                             <a href="#tabs-profile-ex1" class="nav-link" data-bs-toggle="tab" id="journalTabButton" onclick="journalInitHandler()">Journal</a>
                           </li>
                           <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Collections</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add to Collections</a>
                             <div class="dropdown-menu" id="collectionContainer"></div>
                           </li>
                           <li class="nav-item">
@@ -101,8 +101,8 @@
                           <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More</a>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" href="#">Edit Metadata</a>
-                              <a class="dropdown-item" href="#"><span class="badge bg-red">Delete Book</span></a>
+                              <a class="dropdown-item" id="editButton">Edit Metadata</a>
+                              <a class="dropdown-item" href="#" onclick="toggleModal()"><span class="badge bg-red">Delete Book</span></a>
                             </div>
                           </li>
                         </ul>
@@ -131,17 +131,7 @@
                                   
                                 </div>
                                  
-                                <div id="buttonContainer" style="width: 100%; height: 30px">
-                                  <div class="dropdown">
-                                    <button class="btn btn-sm dropdown-toggle" style="height: 30px" data-bs-toggle="dropdown">Add to Collections</button>
-                                    <div class="dropdown-menu" id="collectionContainer">
-                                      
-                                    </div>
-                                  </div>
-                                  <a class="btn btn-sm" id="editButton">Edit Metadata</a>
-                                  <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Document Progress</button>
-                                  <button class="btn btn-sm">More Options</button>
-                                </div>
+                                
                                 
                                 <div id="bottomContainer">
                                     
@@ -155,13 +145,31 @@
                                             <div class="datagrid-item">
                                               <div class="datagrid-title">STATUS</div>
                                               <div class="datagrid-content">
-                                                <span class="status" id="status">STATUS</span>
+                                                <span class="status dropdown-toggle" id="status" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Unknown</span>
+                                                  <div class="dropdown-menu">
+                                                    <label class="dropdown-item" onclick="updateStatus('UNASSIGNED')"><span class="status status-yellow">UNASSIGNED</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('READING')"><span class="status status-green">READING</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('UP NEXT')"><span class="status status-teal">UP NEXT</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('TO READ')"><span class="status status-azure">TO READ</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('WISHLIST')"><span class="status status-blue">WISHLIST</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('FINISHED')"><span class="status status-purple">FINISHED</span></label>
+                                                    <label class="dropdown-item" onclick="updateStatus('DNF')"><span class="status status-red">DNF</span></label>
+                                                  </div>
+
                                               </div>
                                             </div>
                                             <div class="datagrid-item">
                                                 <div class="datagrid-title">RATING</div>
                                                 <div class="datagrid-content">
-                                                  <span class="status" id="rating">RATING</span>
+                                                  
+                                                  <span class="status dropdown-toggle" id="rating" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">None</span>
+                                                  <div class="dropdown-menu">
+                                                    <label class="dropdown-item" onclick="updateRating(5)"><span class="status status-green">&#9734&#9734&#9734&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(4)"><span class="status status-blue">&#9734&#9734&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(3)"><span class="status status-yellow">&#9734&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(2)"><span class="status status-orange">&#9734&#9734</span></label>
+                                                    <label class="dropdown-item" onclick="updateRating(1)"><span class="status status-red">&#9734</span></label>
+                                                  </div>
                                                 </div>
                                             </div>
                                             <div class="datagrid-item">
@@ -272,6 +280,37 @@
                   <div class="modal-footer">
                     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="newEntryHandler()">Create</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal" id="deleteBookModal" style="display: none">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  
+                  <div class="modal-status bg-danger"></div>
+                  <div class="modal-body text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M12 9v2m0 4v.01" />
+                      <path d="M5 19h14a2 2 0 0 0 1.84 -2.75l-7.1 -12.25a2 2 0 0 0 -3.5 0l-7.1 12.25a2 2 0 0 0 1.75 2.75" />
+                    </svg>
+                    <h3>Are you sure?</h3>
+                    <div class="text-muted">Do you really want to delete this book from your book list? This will permanently delete all associated journal entries,
+                      events, and progress documentation. This action cannot be undone.</div>
+                  </div>
+                  <div class="modal-footer">
+                    <div class="w-100">
+                      <div class="row">
+                        <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal" onclick="toggleModal()">
+                            Cancel
+                          </a></div>
+                        <div class="col"><a href="#" class="btn btn-danger w-100" data-bs-dismiss="modal" onclick="submitBookDelete()">
+                            Delete
+                          </a></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

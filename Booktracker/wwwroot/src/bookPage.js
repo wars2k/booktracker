@@ -2,6 +2,7 @@ let globalBookListID = null;
 let globalPageCount;
 let globalStatus;
 let globalFinishedDate;
+let globalRating;
 
 setUpBookPage()
 
@@ -21,6 +22,7 @@ async function setUpBookPage() {
     globalPageCount = data.pageCount;
     globalStatus = data.status;
     globalFinishedDate = data.dateFinished;
+    globalRating = data.rating;
     fillBookData(data);
     fillBookMetaData(data);
     console.log(data);
@@ -91,7 +93,7 @@ function fillBookMetaData(data) {
 
     let rating = document.getElementById("rating");
         if (data.rating != null) {
-            rating.classList.add("status");
+            //rating.classList.add("status");
             switch (data.rating) {
               case "1":
                 rating.classList.add("status-red");
@@ -146,4 +148,90 @@ function fillBookMetaData(data) {
                 break;
             }
         }
+}
+
+function toggleModal() {
+  if (document.getElementById("deleteBookModal").style.display == "none") {
+      document.getElementById("deleteBookModal").style.display = "block";
+  } else {
+      document.getElementById("deleteBookModal").style.display = "none"
+  }
+}
+
+function submitBookDelete() {
+  sessionKey = localStorage.getItem("sessionKey");
+  let id = getBookIDfromURL()
+  let payload = {
+    "sessionKey": sessionKey
+  }
+
+  fetch(`/api/BookList/${id}/delete`, {
+    method: 'DELETE',
+    body: JSON.stringify(payload),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => redirectToBookList())
+  .catch(error => redirectToBookList());
+}
+
+function redirectToBookList() {
+  window.location = "booklist.html"
+}
+
+function submitUpdate(payload) {
+  let bookListID = getBookIDfromURL()
+  fetch(`/api/BookList/${bookListID}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+  }
+  })
+  .then(response => response.json())
+  .then(data => refreshPage(data))
+  .catch(error => refreshPage(error));
+}
+
+class UpdateBody {
+  sessionKey;
+  data;
+
+  constructor(id) {
+
+    this.sessionKey = localStorage.getItem("sessionKey");
+    this.data = {
+      "id": id,
+      "rating": null,
+      "status": null,
+      "startDate": null,
+      "finishedDate": null
+    }
+
+  }
+
+}
+
+function updateRating(rating) {
+  if (rating == globalRating) {
+    return;
+  }
+  let payload = new UpdateBody(getBookIDfromURL());
+  payload.data.rating = rating;
+  submitUpdate(payload)
+}
+
+function updateStatus(status) {
+  if (status == globalStatus) {
+    return;
+  }
+  let payload = new UpdateBody(getBookIDfromURL());
+  payload.data.status = status;
+  submitUpdate(payload)
+}
+
+function refreshPage() {
+  location.reload();
 }
