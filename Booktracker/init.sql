@@ -127,6 +127,16 @@ CREATE TABLE IF NOT EXISTS 'progress_updates' (
   FOREIGN KEY ('journalID') REFERENCES 'journal_entries' ('id') ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS 'upgrade_scripts' (
+  'id' INTEGER PRIMARY KEY AUTOINCREMENT,
+  'version' TEXT NOT NULL,
+  'title' TEXT NOT NULL,
+  'description' TEXT NOT NULL,
+  'hasRan' INTEGER NOT NULL DEFAULT 0,
+  'completedDateTime' TEXT,
+  'logFile' TEXT
+);
+
 CREATE VIEW IF NOT EXISTS book_list2 AS
 SELECT
     t1.iduser_books AS iduser_books, 

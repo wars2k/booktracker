@@ -51,6 +51,8 @@ namespace bookTrackerApi {
             
             ChallengeDB.storeChallenges();
 
+            Upgrades.EntryPoint.HandleUpgrades();
+            
             app.Run();
         }
 
