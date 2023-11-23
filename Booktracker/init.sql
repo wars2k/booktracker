@@ -134,7 +134,8 @@ CREATE TABLE IF NOT EXISTS 'upgrade_scripts' (
   'description' TEXT NOT NULL,
   'hasRan' INTEGER NOT NULL DEFAULT 0,
   'completedDateTime' TEXT,
-  'logFile' TEXT
+  'logPath' TEXT,
+  'backupPath' TEXT
 );
 
 CREATE VIEW IF NOT EXISTS book_list2 AS

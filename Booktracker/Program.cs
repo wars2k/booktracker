@@ -11,7 +11,7 @@ namespace bookTrackerApi {
         
         public static void Main(string[] args) {
             DB.InitiateDatabase();
-            DB.initiateConnection();
+            //DB.initiateConnection();
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddCors();
 
@@ -52,7 +52,7 @@ namespace bookTrackerApi {
             ChallengeDB.storeChallenges();
 
             Upgrades.EntryPoint.HandleUpgrades();
-            
+
             app.Run();
         }
 

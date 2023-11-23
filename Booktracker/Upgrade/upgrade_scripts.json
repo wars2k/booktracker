@@ -9,5 +9,11 @@
         "Version": "v0.8-beta",
         "Title": "A different upgrade script",
         "Description": "Let's try again to make sure a new one is added."
+    },
+
+    {
+        "Version": "v0.8-beta",
+        "Title": "A different upgrade script with a unique name",
+        "Description": "This is a test upgrade script that makes sure the functionality works as expected."
     }
 ]
