@@ -15,9 +15,12 @@ namespace bookTrackerApi.Upgrades {
                 if (script == null) {
                     continue;
                 }
+                if (ScriptFinder(script.Title, false) != "found") {
+                    continue;
+                }
                 string? backupPath = Utilities.CreateBackup(script);
 
-                string logPath = ScriptFinder(script.Title);
+                string logPath = ScriptFinder(script.Title, true);
                 if (logPath == "notFound") {
                     continue;
                 }
@@ -33,16 +36,22 @@ namespace bookTrackerApi.Upgrades {
 
 
 
-        public static string ScriptFinder(string? title) {
+        public static string ScriptFinder(string? title, Boolean runScript) {
 
             string pathToLog;
 
             switch (title) {
                 case "Test upgrade script":
-                    pathToLog = "path/to/log";
+                    if (!runScript) {
+                        return "found";
+                    }
+                    pathToLog = "external/log/log.txt";
                     break;
                 case "A different upgrade script":
-                    pathToLog = "path/to/log2";
+                    if (!runScript) {
+                        return "found";
+                    }
+                    pathToLog = "external/log/log.txt";
                     break;
                 default:
                     return "notFound";

@@ -19,7 +19,7 @@ namespace bookTrackerApi.Upgrades {
             String cleanedPath = path.Replace(":","-");
             File.Copy("external/db/database.db", cleanedPath);
 
-            return path;
+            return cleanedPath;
 
 
         }
@@ -61,6 +61,17 @@ namespace bookTrackerApi.Upgrades {
             command.Parameters.AddWithValue("@backupPath", backupPath);
             command.ExecuteNonQuery();
             DB.closeConnection(connection);
+
+        }
+
+        public static string GetLogText(string path) {
+
+            if (File.Exists(path)) {
+                string fileContent = File.ReadAllText(path);
+                return fileContent;
+            } else {
+                return "This file does not exist.";
+            }
 
         }
 
