@@ -177,8 +177,8 @@ upgradeTableHandler();
 
 async function upgradeTableHandler() {
   let rows = await getUpgradeData();
-  if (rows.length == 0) {
-    document.getElementById("tableWrapper").innerHTML = '<code>No upgrades scripts have ran.</code>'
+  if (rows == "unauthorized" || rows.length == 0) {
+    document.getElementById("tableWrapper").innerHTML = '<code>No upgrades scripts found. Reminder: Admin privileges are required to view upgrades scripts.</code>'
     return;
   }
   for (let i = 0; i < rows.length; i++) {
@@ -194,6 +194,9 @@ async function getUpgradeData() {
           method: 'GET',
       })
       .then(response => {
+          if (response.status == 401) {
+            return "unauthorized"
+          }
           return response.json()
       })
       .then(data => {
