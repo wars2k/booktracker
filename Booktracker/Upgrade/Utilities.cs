@@ -4,7 +4,9 @@ using Microsoft.Data.Sqlite;
 namespace bookTrackerApi.Upgrades {
 
     public static class Utilities {
-
+        
+        ///<summary>Creates a backup of the database and stores it in the backupus directory.</summary>
+        ///<returns>The path of the created backup.</returns>
         public static string? CreateBackup(UpgradeTypes.ScriptsToRun row) {
 
             if (row.Title == null) {
@@ -24,6 +26,7 @@ namespace bookTrackerApi.Upgrades {
 
         }
 
+        ///<summary>Finds and returns all scripts that have not yet run.</summary.
         public static List<UpgradeTypes.ScriptsToRun> FindScriptsToRun() {
 
             using (SqliteConnection connection = DB.initiateConnection()) {
@@ -49,6 +52,7 @@ namespace bookTrackerApi.Upgrades {
 
         }
 
+        ///<summary>Marks a given script as ran in the database. Fills in completion date/time, log path, backup path.</summary>
         public static void MarkComplete(UpgradeTypes.ScriptsToRun script, string? backupPath, string logPath) {
 
             SqliteConnection connection = DB.initiateConnection();
@@ -64,6 +68,7 @@ namespace bookTrackerApi.Upgrades {
 
         }
 
+        ///<summary>For a given path to a text file, returns the text content.</summary>
         public static string GetLogText(string path) {
 
             if (File.Exists(path)) {

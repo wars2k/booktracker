@@ -1,7 +1,9 @@
 namespace bookTrackerApi.Upgrades {
 
     public static class EntryPoint {
-
+        
+        ///<summary>Called on startup. Does the following: Adds missing upgrade rows to the database, finds which ones have not yet run,
+        ///loops through each one that should run, creates backups, runs the upgrade, then documents that it has ran in the database.</summary>
         public static void HandleUpgrades() {
 
             //first, we want to add any new upgrade scripts to the database if there are any.
@@ -35,7 +37,10 @@ namespace bookTrackerApi.Upgrades {
         }
 
 
-
+        ///<summary>Using the upgrade script's title, determines which code to run when performing an upgrade.</summary>
+        ///<param name="title">The title of the upgrade script.</param>
+        ///<param name="runScript">Set to true if the script should actually run if it's found. If 'false', it will
+        ///return 'found' rather than actually running the script.</param>
         public static string ScriptFinder(string? title, Boolean runScript) {
 
             string pathToLog;

@@ -2,10 +2,12 @@ using Newtonsoft.Json;
 using Microsoft.Data.Sqlite;
 
 namespace bookTrackerApi.Upgrades {
-
+    
+    ///<summary>This class handles all functionality surrounding keeping the upgrade_scripts table up to date.</summary>
     public static class ScriptDatabaseUpdater {
         
-        //Gets all upgrade script rows from the JSON file and returns them. 
+        ///<summary>Gets all upgrade script rows from the JSON file and returns them.</summary>
+        ///<returns>A lislt of upgrade objects containing title, version, and description.</returns>
         public static List<UpgradeTypes.JSONScriptInfo>? GetAllRows() {
 
             List<UpgradeTypes.JSONScriptInfo>? upgradeScripts = new();
@@ -18,8 +20,8 @@ namespace bookTrackerApi.Upgrades {
 
         }
 
-        //Loops through each row pulled from the JSON. Adds it to the database if it doesn't already exist.
-        //This is the main entry point for this class. 
+        ///<summary>This is the main entry point for this class.
+        ///Loops through each row pulled from the JSON. Adds it to the database if it doesn't already exist.</summary>
         public static void AddMissingRows() {
             
             List<UpgradeTypes.JSONScriptInfo>? rows = GetAllRows();
@@ -38,7 +40,8 @@ namespace bookTrackerApi.Upgrades {
 
         }
 
-        //Checks to see if the row exists by searching with version and title.
+        ///<summary>Checks to see if the row exists by searching with version and title.</summary>
+        ///<param name="row">The "row" that we are checking to see already exists in the database.</param>
         public static bool DoesRowExist(UpgradeTypes.JSONScriptInfo row) {
 
             using (SqliteConnection connection = DB.initiateConnection()) {
@@ -56,7 +59,8 @@ namespace bookTrackerApi.Upgrades {
         }
 
 
-        //adds a new row to the database. Includes version, title, and description. 
+        ///<summary>Adds a new row to the database in the 'upgrade_scripts' table. Includes version, title, and description.</summary>
+        ///<param name="row">The row that will be added to the database</param>
         public static void AddRow(UpgradeTypes.JSONScriptInfo row) {
 
             using (SqliteConnection connection = DB.initiateConnection()) {
