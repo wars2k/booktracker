@@ -102,3 +102,105 @@ function updateLoggingLevel() {
     .then(data => console.log(data))
     .catch(error => console.error(error));
 }
+
+
+class UpgradeRow {
+  id;
+  version;
+  title;
+  dateTime;
+  backupStatus = false;
+  row;
+
+  constructor(response) {
+    this.id = response.id;
+    this.version = response.version;
+    this.title = response.title;
+    this.dateTime = this.formatDateTime(response.completedDateTime);
+
+    if (response.backupPath != null) {
+      this.backupStatus = true;
+    }
+
+    this.buildRow()
+
+  }
+
+  formatDateTime(dateTime) {
+
+    //dateTime = dateTime.replace(/-/g, '/');
+    dateTime = dateTime.split(".")
+
+    return dateTime[0]
+
+  }
+
+  buildRow() {
+
+    let row = document.createElement("tr");
+    row.style.fontSize = "11pt"
+
+    let id = document.createElement("td");
+    id.innerText = this.id;
+    row.append(id);
+
+    let version = document.createElement("td");
+    let versionContent = document.createElement("code");
+    versionContent.innerText = this.version;
+    version.append(versionContent);
+    row.append(version);
+    
+    let title = document.createElement("td");
+    title.innerHTML = `<a href="upgradeDetails.html?id=${this.id}">${this.title}</a>`
+    row.append(title)
+
+    let dateTime = document.createElement("td");
+    dateTime.innerText = this.dateTime;
+    row.append(dateTime);
+
+    let backupData = document.createElement("td");
+    let badge = document.createElement("span");
+    badge.classList.add("badge", "bg-green-lt");
+    badge.innerText = "Successful";
+    if (this.backupStatus == true) {
+      backupData.append(badge);
+    }
+
+    row.append(backupData);
+
+    this.row = row;
+    
+  }
+}
+
+upgradeTableHandler();
+
+async function upgradeTableHandler() {
+  let rows = await getUpgradeData();
+  if (rows == "unauthorized" || rows.length == 0) {
+    document.getElementById("tableWrapper").innerHTML = '<code>No upgrades scripts found. Reminder: Admin privileges are required to view upgrades scripts.</code>'
+    return;
+  }
+  for (let i = 0; i < rows.length; i++) {
+    let rowObject = new UpgradeRow(rows[i]);
+    document.getElementById("upgradeTableBody").append(rowObject.row);
+  }
+}
+
+async function getUpgradeData() {
+  let sessionKey = localStorage.getItem("sessionKey");
+      
+      return fetch(`/api/settings/upgrades?sessionKey=${sessionKey}`, {
+          method: 'GET',
+      })
+      .then(response => {
+          if (response.status == 401) {
+            return "unauthorized"
+          }
+          return response.json()
+      })
+      .then(data => {
+        return data;
+      })
+      .catch(error => console.error(error));
+}
