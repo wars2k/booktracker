@@ -77,11 +77,14 @@
                     <div class="card-status-start bg-blue"></div>
                     <div class="card-body" style="height: 100%">
                         <div>
-                            <h3 class="card-title">Info</h3>
-                            <p><b>Title:</b> <span id="upgradeTitle"></span></p>
-                            <p><b>Version:</b> <code id="upgradeVersion"></code></p>
-                            <p><b>Backup:</b> <code id="backupSize"></code> at <code id="backupPath"></code></code></p>
-                            <p><b>Description:</b> <span id="upgradeDescription"></span></p>
+                            <div style="display: flex; gap: 15px; align-items: flex-start">
+                                <span class="badge bg-gray" style="margin-top: 4px" id="upgradeVersion"></span>
+                                <h3 class="card-title" id="upgradeTitle">Info </h3>
+                                
+                            </div>
+                            <p id="upgradeDescription"></p>
+                            <p><b>Database Backup:</b> <code id="backupSize"></code> at <code id="backupPath"></code></code></p>
+                            
                         </div>
                     </div>
                   </div>
