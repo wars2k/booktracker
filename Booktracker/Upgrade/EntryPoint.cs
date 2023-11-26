@@ -41,18 +41,7 @@ namespace bookTrackerApi.Upgrades {
             string pathToLog;
 
             switch (title) {
-                case "Test upgrade script":
-                    if (!runScript) {
-                        return "found";
-                    }
-                    pathToLog = "external/log/log.txt";
-                    break;
-                case "A different upgrade script":
-                    if (!runScript) {
-                        return "found";
-                    }
-                    pathToLog = "external/log/log.txt";
-                    break;
+                
                 default:
                     return "notFound";
             }
