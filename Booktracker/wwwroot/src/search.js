@@ -122,6 +122,7 @@ function searchForBook(event) {
 }
 
 function createSuccessIndicator(data, index) {
+  console.log(data);
   let button = document.getElementById("button" + index);
   button.classList.add("btn-green");
 }

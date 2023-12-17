@@ -25,4 +25,15 @@
     padding-right: 10px;
 }
 
+.imageContainer {
+    max-width: 120px;
+    padding: 15px;
+    padding-right: 0px;
+}
+
+.resultCard {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
 
