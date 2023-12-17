@@ -34,6 +34,24 @@ namespace bookTrackerApi.Loans {
                 Summary = "Creates a new loan and returns the newly created ID."
             });
 
+            app.MapGet("/api/loans", async (HttpContext context, string sessionKey, int? bookListID, string? status, int? loaneeID) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "loan_create", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
+                }
+
+                List<Types.BasicLoanInfo> loans = LoanDB.GetLoans(Int32.Parse(currentSession.AssociatedID), bookListID, status, loaneeID);
+                return Results.Ok(loans);
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<List<Types.BasicLoanInfo>>(StatusCodes.Status200OK)
+            .WithTags("Loans")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Gets all loans for a given user. Can filter by status, bookListID, and loaneeID."
+            });
+
         }
 
     }

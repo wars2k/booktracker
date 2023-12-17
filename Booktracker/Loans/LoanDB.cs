@@ -32,6 +32,81 @@ namespace bookTrackerApi.Loans {
 
         }
 
+
+        public static List<Types.BasicLoanInfo> GetLoans(int userID, int? bookListID, string? status, int? loaneeID) {
+
+            using (SqliteConnection connection = DB.initiateConnection()) {
+
+                string sql = @"
+                    SELECT
+                        loans.id,
+                        loans.status,
+                        loans.loanDate,
+                        loans.returnDate,
+                        loans.idbookList,
+                        book_list2.title,
+                        loans.idloanee,
+                        loanees.name
+                    FROM loans
+                        JOIN book_list2 ON loans.idbookList = book_list2.iduser_books
+                        JOIN loanees ON loans.idloanee = loanees.id
+                    WHERE 
+                        loans.iduser = @iduser
+                ";
+
+                if (bookListID != null) {
+                    sql += " AND loans.idbookList = @idbookList";
+                }
+
+                if (status != null) {
+                    sql += " AND loans.status = @status";
+                }
+
+                if (loaneeID != null) {
+                    sql += " AND loans.idloanee = @idloanee";
+                }
+
+                using (SqliteCommand command = new SqliteCommand(sql, connection)) {
+                    command.Parameters.AddWithValue("@iduser", userID);
+
+                    if (bookListID != null) {
+                        command.Parameters.AddWithValue("@idbookList", bookListID);
+                    }
+
+                    if (status != null) {
+                        command.Parameters.AddWithValue("@status", status);
+                    }
+
+                    if (loaneeID != null) {
+                        command.Parameters.AddWithValue("@idloanee", loaneeID);
+                    }
+
+                    using (SqliteDataReader reader = command.ExecuteReader()) {
+
+                        List<Types.BasicLoanInfo> loans = new();
+                        while (reader.Read()) {
+                            Types.BasicLoanInfo loan = new();
+                            loan.Id = reader.GetInt32(0);
+                            loan.Status = reader.GetString(1);
+                            loan.LoanDate = reader.IsDBNull(2) ? null: reader.GetString(2);
+                            loan.ReturnDate = reader.IsDBNull(3) ? null : reader.GetString(3);
+                            loan.BookListID = reader.GetInt32(4);
+                            loan.BookTitle = reader.GetString(5);
+                            loan.LoaneeID = reader.GetInt32(6);
+                            loan.LoaneeName = reader.GetString(7);
+                            loans.Add(loan);
+                        }
+                        DB.closeConnection(connection);
+                        return loans;
+                    }
+
+                }
+
+            }
+
+        }
+
+
     }
 
 }
