@@ -138,6 +138,30 @@ CREATE TABLE IF NOT EXISTS 'upgrade_scripts' (
   'backupPath' TEXT
 );
 
+CREATE TABLE IF NOT EXISTS 'loanees' (
+  'id' INTEGER PRIMARY KEY AUTOINCREMENT,
+  'iduser' INTEGER NOT NULL,
+  'name' TEXT NOT NULL,
+  'email' TEXT,
+  'phone' TEXT,
+  'note' TEXT,
+  FOREIGN KEY ('iduser') REFERENCES 'users' ('idusers') ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS 'loans' (
+  'id' INTEGER PRIMARY KEY AUTOINCREMENT,
+  'iduser' INTEGER NOT NULL,
+  'idbookList' INTEGER NOT NULL,
+  'idloanee' INTEGER DEFAULT '-1',
+  'status' TEXT NOT NULL,
+  'loanDate' TEXT,
+  'returnDate' TEXT,
+  'comment' TEXT,
+  FOREIGN KEY ('iduser') REFERENCES 'users' ('idusers') ON DELETE CASCADE,
+  FOREIGN KEY ('idbookList') REFERENCES 'user_books' ('iduser_books') ON DELETE CASCADE,
+  FOREIGN KEY ('idloanee') REFERENCES 'loanees' ('id') ON DELETE SET DEFAULT
+);
+
 CREATE VIEW IF NOT EXISTS book_list2 AS
 SELECT
     t1.iduser_books AS iduser_books, 

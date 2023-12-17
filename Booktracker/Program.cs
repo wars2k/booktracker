@@ -49,6 +49,8 @@ namespace bookTrackerApi {
             EventEndpoints.configure(app);
             ProgressEndpoints.configure(app);
             Upgrades.UpgradeEndpoints.Configure(app);
+            Loans.LoaneeEndpoints.Configure(app);
+            Loans.LoanEndpoints.Configure(app);
             
             ChallengeDB.storeChallenges();
 
