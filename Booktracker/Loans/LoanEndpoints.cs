@@ -52,6 +52,66 @@ namespace bookTrackerApi.Loans {
                 Summary = "Gets all loans for a given user. Can filter by status, bookListID, and loaneeID."
             });
 
+            app.MapDelete("/api/loans/{id}", async (HttpContext context, string sessionKey, int id) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "loan_delete", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
+                }
+
+                int owner = LoanDB.GetOwner(id);
+                if (owner != Int32.Parse(currentSession.AssociatedID)) {
+                    return Results.Unauthorized();
+                }
+
+                LoanDB.DeleteLoan(id);
+                return Results.Ok();
+
+            })
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .WithTags("Loans")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Deletes a given loan."
+            });
+
+            app.MapPut("/api/loans/{id}", async (HttpContext context, string sessionKey, int id) => {
+                string? remoteIp = context.Connection.RemoteIpAddress?.ToString();
+                SessionInfo? currentSession = Program.Sessions.Find(s => s.Session == sessionKey);
+                if (currentSession == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "loan_update", null, remoteIp);
+                    return Results.BadRequest(errorMessage);
+                }
+
+                int owner = LoanDB.GetOwner(id);
+                if (owner != Int32.Parse(currentSession.AssociatedID)) {
+                    return Results.Unauthorized();
+                }
+
+                using var reader = new StreamReader(context.Request.Body);
+                var requestBody = await reader.ReadToEndAsync();
+                var payload = JsonConvert.DeserializeObject<Types.LoanUpdate>(requestBody);
+                if (payload == null) {
+                    ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.missing_request_body, "loan_update", currentSession, remoteIp);
+                    return Results.BadRequest(errorMessage);
+                }
+
+                LoanDB.UpdateLoan(payload, id);
+
+                return Results.Ok();
+
+            })
+            .Accepts<Types.LoanUpdate>("application/json")
+            .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .WithTags("Loans")
+            .WithOpenApi(operation => new(operation) {
+                Summary = "Updates a given loan."
+            });
+
         }
 
     }

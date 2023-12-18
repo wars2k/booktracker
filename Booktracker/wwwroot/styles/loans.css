@@ -1,0 +1,23 @@
+#rightSideContainer {
+    display: flex;
+    gap: 15px;
+}
+
+
+
+#titleList {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.statusCell {
+    width: 120px;
+}
+
+.date-input {
+    width: 130px !important;
+}
+
+.dateCell {
+    width: 140px;
+}

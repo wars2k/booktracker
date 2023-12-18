@@ -28,6 +28,16 @@ namespace bookTrackerApi.Loans {
 
         }
 
+        ///<summary>Contains all info for a loan that can be updated.</summary>
+        public class LoanUpdate {
+
+            public string? Status { get; set; }
+            public string? LoanDate { get; set; }
+            public string? ReturnDate { get; set; }
+            public string? Comment { get; set; }
+
+        }
+
         ///<summary>Contains all info that might be collected when creating a new 'loanee'.</summary>
         public class NewLoanee {
 

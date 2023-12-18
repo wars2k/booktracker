@@ -32,7 +32,12 @@ namespace bookTrackerApi.Loans {
 
         }
 
-
+        ///<summary>Gets all loans for a given userID. Optional filters are available and will be described in the parameters.</summary>
+        ///<param name="userID">The user ID who owns the loans that will be returned.</param>
+        ///<param name="bookListID">OPTIONAL. If provided, only returns loans for that book.</param>
+        ///<param name="status">OPTIONAL. If provided, only returns loans with that status.</param>
+        ///<param name="loaneeID">OPTIONAL. If provided, only returns loan given to that loanee.</param>
+        ///<returns>A list of loan info objects that should be used to build a table on the client-side.</returns>
         public static List<Types.BasicLoanInfo> GetLoans(int userID, int? bookListID, string? status, int? loaneeID) {
 
             using (SqliteConnection connection = DB.initiateConnection()) {
@@ -105,6 +110,85 @@ namespace bookTrackerApi.Loans {
             }
 
         }
+
+        ///<summary>Deletes a loan.</summary>
+        ///<param name="loanID">The ID of the loan that should be deleted.</param>
+        public static void DeleteLoan(int loanID) {
+
+            SqliteConnection connection = DB.initiateConnection();
+            string sql = "DELETE FROM loans WHERE id = @id";
+            SqliteCommand command = new SqliteCommand(sql, connection);
+            command.Parameters.AddWithValue("@id", loanID);
+            command.ExecuteNonQuery();
+            DB.closeConnection(connection);
+
+        }
+
+        public static int GetOwner(int loanID) {
+
+            SqliteConnection connection = DB.initiateConnection();
+            string sql = "SELECT iduser FROM loans WHERE id = @id";
+            using (SqliteCommand command = new SqliteCommand(sql, connection)) {
+                command.Parameters.AddWithValue("@id", loanID);
+                using (SqliteDataReader reader = command.ExecuteReader()) {
+                    int owner = 0;
+                    while (reader.Read()) {
+                        owner = reader.GetInt32(0);
+                    }
+                    DB.closeConnection(connection);
+                    return owner;
+                }
+            }
+
+        }
+
+        ///<summary>Updates the status, loanDate, returnDate, and comment for a given loan.</summary>
+        ///<param name="updateInfo">The update info from the client. Things that don't change should be null.</param>
+        public static void UpdateLoan(Types.LoanUpdate updateInfo, int id) {
+
+            SqliteConnection connection = DB.initiateConnection();
+            string sql = "UPDATE loans SET";
+            if (updateInfo.Status != null) {
+                sql += " status=@status,";
+            }
+
+            if (updateInfo.LoanDate != null) {
+                sql += " loanDate=@loanDate,";
+            }
+
+            if (updateInfo.ReturnDate != null) {
+                sql += " returnDate=@returnDate,";
+            }
+
+            if (updateInfo.Comment != null) {
+                sql += " comment=@comment,";
+            }
+            sql += " WHERE id=@id";
+            int location = sql.LastIndexOf(",");
+            sql = sql.Remove(location, 1);
+            SqliteCommand command = new SqliteCommand(sql, connection);
+            command.Parameters.AddWithValue("@id", id);
+            if (updateInfo.Status != null) {
+                command.Parameters.AddWithValue("@status", updateInfo.Status);
+            }
+
+            if (updateInfo.LoanDate != null) {
+                command.Parameters.AddWithValue("@loanDate", updateInfo.LoanDate);
+            }
+
+            if (updateInfo.ReturnDate != null) {
+                command.Parameters.AddWithValue("@returnDate", updateInfo.ReturnDate);
+            }
+
+            if (updateInfo.Comment != null) {
+                command.Parameters.AddWithValue("@comment", updateInfo.Comment);
+            }
+            command.ExecuteNonQuery();
+            DB.closeConnection(connection);
+
+        }
+
+
 
 
     }
