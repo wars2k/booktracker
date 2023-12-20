@@ -29,7 +29,13 @@ async function setUpBookPage() {
     globalRating = data.rating;
     fillBookData(data);
     fillBookMetaData(data);
+    buildLoanRedirect(id);
     console.log(data);
+}
+
+function buildLoanRedirect(id) {
+  let link = document.getElementById("newLoan");
+  link.href = `loanBuilder.html?bookListId=${id}`;
 }
 
 function displayNoBookFound() {

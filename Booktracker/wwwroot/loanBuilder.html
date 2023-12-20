@@ -1,0 +1,122 @@
+<html>
+    <body>
+        <link rel="stylesheet" href="styles/styles.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css">
+        <link rel="stylesheet" href="styles/search.css">
+        <link rel="stylesheet" href="styles/challengeBuilder.css">
+    </body>
+
+    <div class="page">
+        <!-- Sidebar -->
+        <header class="navbar navbar-expand-sm navbar-light d-print-none">
+          <div class="container-xl" id="test">
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+              <a href="index.html">
+                Book Tracker
+              </a>
+            </h1>
+      
+            <div class="navbar-nav flex-row order-md-last">
+              <div class="nav-item">
+                  <div>
+                    <a class="btn" href="search.html">Add New Book</a>
+                    <button class="btn" onclick="logOut()">Log Out</button>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <header class="navbar navbar-expand-sm navbar-light d-print-none" style="max-height: 56px">
+          <div class="container-xl">
+            <div class="nav nav-tabs border-0 flex-column flex-lg-row menuTest" style="flex-wrap: nowrap;">
+              <a class="nav-itemMenu" href="index.html">Home</a>
+              <a class="nav-itemMenu" href="booklist.html">My Books</a>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Collections</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="collections.html">Collections Home</a>
+                  <a class="dropdown-item" href="addNewCollection.html">Add New Collection</a>
+                </div>
+              </div>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Challenges</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="challenges.html">Challenges Home</a>
+                  <a class="dropdown-item" href="challengeBuilder.html">Add New Challenge</a>
+                </div>
+              </div>
+              <a class="nav-itemMenu" href="statistics.html">Statistics</a>
+              <div class="dropdown" style="height: 48px !important">
+                <a class="nav-itemMenu dropdown-toggle" data-bs-toggle="dropdown">Settings</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="settings.html">Settings</a>
+                  <a class="dropdown-item" href="books.html">Main Book Database</a>
+                  <a class="dropdown-item" href="users.html">User Management</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="page-wrapper">
+          
+          <div class="page-body" style="height: 77vh">
+            <div class="container-xl" id="container">
+                <div class="card builderCard" id="cardZero">
+                    <div class="card-header builderCardTitle">
+                      <h3 class="card-title">Loan Builder</h3>
+                    </div>
+                    <div class="card-body builderCardBody" id="cardOneBody">
+                        <div class="mb-3">
+                            <div class="form-label required">What book are you loaning?</div>
+                            <input type="text" class="form-control" id="bookTitle" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-label required">Who are you loaning to?</div>
+                            <select class="form-control" id="loanee" onchange="handleLoaneeChange()">
+                                <option value="new">Create new loanee</option>
+                            </select>
+                        </div>
+                        <div id="loaneeInfo">
+                          <h2>Loanee Info</h2>
+                          <div class="mb-3">
+                            <div class="form-label required">What is their name?</div>
+                            <input type="text" class="form-control" id="name">
+                          </div>
+                          <div class="mb-3">
+                            <div class="form-label">Email</div>
+                            <input type="text" class="form-control" id="email">
+                          </div>
+                          <div class="mb-3">
+                            <div class="form-label">Phone Number</div>
+                            <input type="text" class="form-control" id="phone">
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="mb-3">
+                            <div class="form-label">When did you loan it to them?</div>
+                            <input type="date" class="form-control" id="loanDate">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-label">Have any comments?</div>
+                            <textarea class="form-control" id="loanComment"></textarea>
+                        </div>
+                        <button class="btn btn-green" onclick="handleSubmission()">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js"></script>
+    <script src="src/checkAuth.js"></script>
+    <script src="src/loanBuilder.js"></script>
+    
+</html>

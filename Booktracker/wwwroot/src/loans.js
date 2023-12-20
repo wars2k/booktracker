@@ -109,10 +109,10 @@ async function buildLoanTable() {
     tableBody.innerHTML = "";
 
     let loans = await getLoans();
-    console.log(loans);
+    
 
     for (let loan of loans) {
-        console.log("we made it here");
+        
         addLineToLoanTable(loan);
     }
 }
