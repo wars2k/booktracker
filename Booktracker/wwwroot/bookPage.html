@@ -103,6 +103,7 @@
                             <div class="dropdown-menu">
                               <a class="dropdown-item" id="editButton">Edit Metadata</a>
                               <a class="dropdown-item" id="newLoan">Loan this book</a>
+                              <a class="dropdown-item" id="loanHistoryButton">View Loan History</a>
                               <a class="dropdown-item" href="#" onclick="toggleModal()"><span class="badge bg-red">Delete Book</span></a>
                               
                             </div>
@@ -112,7 +113,11 @@
                     <div class="card-body" style="height: 100%">
                         <div class="tab-content">
                             <div class="tab-pane active show" id="tabs-home-ex1">
-                              <h2 id="title">Title</h2>
+                              <div class="bookTitleContainer" style="display: flex; justify-content: space-between;">
+                                <h2 id="title">Title</h2>
+                                <a class="badge bg-blue-lt" id="loanIndicator" style="height: 21px !important; display: none">ON LOAN</a>
+                              </div>
+                              
                               <h4><span id="author">Author</span> | <span id="publisher">Publisher</span></h4>
                               <div id="category">Genre / Genre / Genre</div>
                               <p><span id="pageCount">243 pages</span> | <span id="isbn">9781408827000</span></p>

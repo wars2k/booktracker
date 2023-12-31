@@ -67,6 +67,7 @@
                     Loans
                   </h2>
                   <div id="rightSideContainer">
+                    <button class="btn" onclick="clearFilters()">Clear Filters</button>
                     <div class="dropdown">
                         <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown" id="titleButton">Book Title</a>
                         <div class="dropdown-menu" id="titleList">
@@ -135,17 +136,19 @@
           </div>
 
           <div class="modal" id="loanInfoModal" tabindex="-1">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title">Loan Info</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                  <h5 class="modal-title">Loan Comment</h5>
                   <textarea id="loanComment" class="form-control"></textarea>
                 </div>
                 <div class="modal-footer">
                   <button type="button" onclick="insertTimestamp()" class="btn me-auto">Insert Timestamp</button>
+                  <button type="button" id="loanDeleteButton" class="btn btn-danger" data-bs-dismiss="modal">Delete Loan</button>
                   <button type="button" id="updateCommentButton" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
                 </div>
               </div>

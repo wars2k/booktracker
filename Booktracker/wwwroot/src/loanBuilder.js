@@ -108,7 +108,7 @@ async function handleSubmission() {
     }
 
     if (document.getElementById("loanComment").value != "") {
-        body.date = document.getElementById("loanComment").value;
+        body.comment = document.getElementById("loanComment").value;
     }
 
     if (loanee.value == "new") {

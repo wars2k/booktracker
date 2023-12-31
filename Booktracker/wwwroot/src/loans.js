@@ -9,12 +9,30 @@ let filters = {
 async function init() {
     await buildLoaneeList();
     await buildTitleList();
+
+    let ID = getBookIDfromURL();
+    
+    if (ID != null) {
+        filters.bookListID = ID;
+    }
+
     await buildLoanTable();
 }
 
 async function buildLoaneeList() {
     let loanees = await getLoanees();
-    
+    loanees.sort((a, b) => {
+        const titleA = a.name.toUpperCase(); 
+        const titleB = b.name.toUpperCase(); 
+      
+        if (titleA < titleB) {
+          return -1;
+        }
+        if (titleA > titleB) {
+          return 1;
+        }
+        return 0; 
+    });
     
     for (let loanee of loanees) {
         
@@ -50,6 +68,19 @@ function addLoaneeToList(loanee) {
 
 async function buildTitleList() {
     let books = await getTitles();
+    books.sort((a, b) => {
+        const titleA = a.title.toUpperCase(); 
+        const titleB = b.title.toUpperCase(); 
+      
+        if (titleA < titleB) {
+          return -1;
+        }
+        if (titleA > titleB) {
+          return 1;
+        }
+        return 0; 
+    });
+
     for (let book of books) {
         addBookToList(book);
     }
@@ -301,14 +332,58 @@ function openModal(comment, id) {
     clone.addEventListener("click", function() {
         updateLoan("comment", id, null)
     })
+
+    const deleteButton = document.getElementById("loanDeleteButton");
+    const deleteCloan = deleteButton.cloneNode(true);
+    deleteButton.parentNode.replaceChild(deleteCloan, deleteButton);
+    deleteCloan.addEventListener("click", function() {
+        deleteLoan(id);
+    })
 }
 
 function insertTimestamp() {
     let date = new Date;
-    let timestamp = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+
+    let minutes = date.getMinutes();
+    if (minutes < 10) {
+        minutes = "0" + minutes.toString();
+    }
+    
+    let timestamp = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${minutes}`;
     if (document.getElementById("loanComment").value == "") {
         document.getElementById("loanComment").value = timestamp + " - ";
         return;
     }
     document.getElementById("loanComment").value += `\r\n\r\n${timestamp} -  `
+}
+
+async function deleteLoan(id) {
+    let sessionKey = localStorage.getItem("sessionKey");
+    fetch(`/api/loans/${id}?sessionkey=${sessionKey}`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        buildLoanTable();
+    })
+    
+    .catch(error => console.error(error));
+}
+
+function clearFilters() {
+    filters.bookListID = null;
+    filters.loaneeID = null;
+    filters.status = null;
+
+    document.getElementById("titleButton").innerText = "Book Title";
+    document.getElementById("statusButton").innerText = "Status";
+    document.getElementById("loaneeButton").innerText = "Loanee";
+
+    buildLoanTable();
+}
+
+function getBookIDfromURL() {
+    let urlParams = new URLSearchParams(window.location.search);
+    bookListID = urlParams.get('bookListID');
+    globalBookListID = bookListID;
+    return bookListID
 }

@@ -30,12 +30,16 @@ async function setUpBookPage() {
     fillBookData(data);
     fillBookMetaData(data);
     buildLoanRedirect(id);
+    checkForActiveLoan();
     console.log(data);
 }
 
 function buildLoanRedirect(id) {
   let link = document.getElementById("newLoan");
   link.href = `loanBuilder.html?bookListId=${id}`;
+
+  let historyLink = document.getElementById("loanHistoryButton");
+  historyLink.href = `loans.html?bookListID=${id}`;
 }
 
 function displayNoBookFound() {
@@ -270,4 +274,36 @@ function updateDate(type) {
   }
 
   submitUpdate(payload);
+}
+
+async function checkForActiveLoan() {
+  loanInfo = await getLoanInfo();
+  if (loanInfo.length == 0) {
+    return
+  }
+
+  let badge = document.getElementById("loanIndicator");
+  badge.style.display = "";
+  badge.href = `loans.html?bookListID=${getBookIDfromURL()}`;
+
+  document.getElementById("newLoan").classList.add("disabled");
+}
+
+async function getLoanInfo() {
+  let sessionKey = localStorage.getItem("sessionKey");
+    let url = `/api/loans/?sessionKey=${sessionKey}`;
+
+    url += `&bookListID=${getBookIDfromURL()}`
+    url += `&status=LOANED`
+
+      return fetch(url, {
+          method: 'GET',
+      })
+      .then(response => {
+          return response.json()
+      })
+      .then(data => {
+        return data;
+      })
+      .catch(error => console.error(error));
 }
