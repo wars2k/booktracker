@@ -51,7 +51,8 @@ namespace bookTrackerApi.Loans {
                         loans.idbookList,
                         book_list2.title,
                         loans.idloanee,
-                        loanees.name
+                        loanees.name,
+                        loans.comment
                     FROM loans
                         JOIN book_list2 ON loans.idbookList = book_list2.iduser_books
                         JOIN loanees ON loans.idloanee = loanees.id
@@ -99,6 +100,7 @@ namespace bookTrackerApi.Loans {
                             loan.BookTitle = reader.GetString(5);
                             loan.LoaneeID = reader.GetInt32(6);
                             loan.LoaneeName = reader.GetString(7);
+                            loan.Comment = reader.IsDBNull(8) ? null: reader.GetString(8);
                             loans.Add(loan);
                         }
                         DB.closeConnection(connection);

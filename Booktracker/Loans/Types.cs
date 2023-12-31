@@ -14,6 +14,7 @@ namespace bookTrackerApi.Loans {
             public string? BookTitle { get; set; }
             public int? LoaneeID { get; set; }
             public string? LoaneeName { get; set; }
+            public string? Comment { get; set; }
 
         }
 

@@ -168,6 +168,18 @@ function addLineToLoanTable(loan) {
     returnDate.append(getDateInput(loan.returnDate, loan.id, "returnDate"))
     row.append(returnDate);
 
+    let info = document.createElement("td");
+    let infoButton = document.createElement("button");
+    infoButton.classList.add("btn", "btn-sm");
+    infoButton.innerText = "Info";
+    infoButton.setAttribute("data-bs-toggle", "modal");
+    infoButton.setAttribute("data-bs-target", "#loanInfoModal");
+    infoButton.addEventListener("click", function() {
+        openModal(loan.comment, loan.id);
+    });
+    info.append(infoButton);
+    row.append(info);
+
     tableBody.append(row);
 }
 
@@ -237,6 +249,9 @@ async function updateLoan(type, id, value) {
         case "returnDate":
             body.returnDate = value.value;
             break;
+        case "comment":
+            body.comment = document.getElementById("loanComment").value;
+            break;
         default:
             break;
     }
@@ -270,4 +285,30 @@ function getDateInput(date, id, type) {
 
     input.onchange = function() {updateLoan(type, id, input)}
     return input;
+}
+
+function openModal(comment, id) {
+    
+    if (comment != undefined) {
+        document.getElementById("loanComment").value = comment;
+    } else {
+        document.getElementById("loanComment").value = "";
+    }
+    document.getElementById("loanComment").style.height = "150px";
+    const button = document.getElementById("updateCommentButton");
+    const clone = button.cloneNode(true);
+    button.parentNode.replaceChild(clone, button);
+    clone.addEventListener("click", function() {
+        updateLoan("comment", id, null)
+    })
+}
+
+function insertTimestamp() {
+    let date = new Date;
+    let timestamp = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+    if (document.getElementById("loanComment").value == "") {
+        document.getElementById("loanComment").value = timestamp + " - ";
+        return;
+    }
+    document.getElementById("loanComment").value += `\r\n\r\n${timestamp} -  `
 }
