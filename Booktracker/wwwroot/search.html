@@ -228,6 +228,78 @@
                     </div>
 
                 </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  Launch modal with form
+                </button>
+
+                <div class="modal" id="exampleModal" tabindex="-1">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Edit Metadata</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body" style="display: flex; justify-content: space-between;">
+                        <div class="left" style="width: 30%">
+                          <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <div class="dropdown">
+                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="status" id="editStatusBox">NO CHANGES</span></a>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('NO CHANGES', 'status')"><span class="status">NO CHANGES</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('UNASSIGNED', 'status-yellow')"><span class="status status-yellow">UNASSIGNED</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('READING', 'status-green')"><span class="status status-green">READING</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('UP NEXT', 'status-teal')"><span class="status status-teal">UP NEXT</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('TO READ', 'status-azure')"><span class="status status-azure">TO READ</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('WISHLIST', 'status-blue')"><span class="status status-blue">WISHLIST</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('FINISHED', 'status-purple')"><span class="status status-purple">FINISHED</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateStatusView('DNF', 'status-red')"><span class="status status-red">DNF</span></a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="dropdown">
+                              <a href="#" class="btn dropdown-toggle" data-bs-toggle="dropdown"><span class="status" id="editRatingBox">NO CHANGES</span></a>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status')"><span class="status">NO CHANGES</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-green')"><span class="status status-green">&#9734&#9734&#9734&#9734&#9734</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-blue')"><span class="status status-blue">&#9734&#9734&#9734&#9734</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-yellow')"><span class="status status-yellow">&#9734&#9734&#9734</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-orange')"><span class="status status-orange">&#9734&#9734</span></a>
+                                <a class="dropdown-item" href="#" onclick="updateRatingView(this, 'status-red')"><span class="status status-red">&#9734</span></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="right" style="width: 50%">
+                          <div class="mb-3">
+                            <label class="form-label">Start Date</label>
+                            <input class="form-control" type="date" style="height: 40px !important">
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label">Finish Date</label>
+                            <input class="form-control" type="date" style="height: 40px !important">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label class="form-label">Add to Collections</label>
+                          <div id="test" style="width: 100%; height: 120px; border: 1px solid #e2e8f0; border-radius: 6px;"></div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                          Cancel
+                        </a>
+                        <a href="#" class="btn btn-success ms-auto" data-bs-dismiss="modal">
+                          Save Changes
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
             </div>
         </div>

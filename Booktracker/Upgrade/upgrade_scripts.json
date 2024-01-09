@@ -1,3 +1,7 @@
 [
-    
+    {
+        "Version": "v0.8-beta",
+        "Title": "preventDuplicateSaves",
+        "Description": "This upgrade adds a column to the 'books' table that tracks the Google Books ID of each book. This makes it easier to track which books have and haven't been added when searching for new books to add."
+    }
 ]

@@ -80,6 +80,15 @@ namespace bookTrackerApi.Upgrades {
 
         }
 
+        ///<summary>Writes a message with timestamp to the provided log file.</summary>
+        public static void WriteLog(string name, string content) {
+            string message = "";
+            string timestamp = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ssZ");
+
+            message += $"[{timestamp}] {content}";
+            File.AppendAllText($"external/log/{name}.txt", message + Environment.NewLine);
+        }
+
     }
 
 }

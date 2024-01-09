@@ -46,7 +46,12 @@ namespace bookTrackerApi.Upgrades {
             string pathToLog;
 
             switch (title) {
-                
+                case "preventDuplicateSaves":
+                    if (!runScript) {
+                        return "found";
+                    }
+                    pathToLog=Upgrades.PreventDuplicateSaves();
+                    break;
                 default:
                     return "notFound";
             }
