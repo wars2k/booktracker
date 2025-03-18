@@ -86,12 +86,80 @@
                                 <button class="btn searchBookButton" onclick="searchForBook(event)" type="button">Search</button> 
                                 
                                 <button class="btn searchBookButton" onclick="manualEntry()">Manual Entry</button>
+                                
+                                <button class="btn searchBookButton" id="scanIsbnButton"  onclick="startScanner()">Scan ISBN</button>
                                 </div>
                             </div>
                         </div>
                       </div>
                     </div>
                     
+		<video id="scanner" playsinline style="width: 400px; object-fit: cover; height: 400px; display: none;"></video>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script>
+	//In the case the client ist using https, this disables the button (browsers won't let web apps access the camera on http)
+	document.addEventListener("DOMContentLoaded", function () {
+    	  let scanButton = document.getElementById("scanIsbnButton");
+	    if (window.location.protocol !== "https:") {
+        	scanButton.disabled = true;
+		scanButton.style.display = "none"; // Hides the button
+		console.log("HTTP detected - hiding Scan ISBN button.");
+	    } else {
+		console.log("HTTPS detected - button remains visible.");
+		}
+	});
+      function startScanner() {
+        let scannerElement = document.getElementById("scanner");
+	
+	// Makes sure video element is visible,not full screen and the size of the container
+    	scannerElement.style.display = "block";
+	scannerElement.style.width = "400px";
+   	scannerElement.style.height = "300px";
+    	scannerElement.setAttribute("playsinline", "true"); // Prevents full screen on mobile
+
+    	// Request camera access and attach stream
+    	navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    	.then(function (stream) {
+        	scannerElement.srcObject = stream;
+        	scannerElement.play();
+    	})
+    	.catch(function (err) {
+        	console.error("Camera access denied:", err);
+        	alert("Failed to access camera. Please check browser permissions.");
+  	  });
+        Quagga.init(
+          {
+            inputStream: {
+              name: "Live",
+              type: "LiveStream",
+              target: scannerElement,
+              constraints: {
+                facingMode: "environment",
+              },
+            },
+            decoder: {
+              readers: ["ean_reader"],
+            },
+          },
+          function (err) {
+            if (err) {
+              console.error("QuaggaJS Initialization Error:", err);
+              return;
+            }
+            Quagga.start();
+            console.log("QuaggaJS started successfully.");
+          }
+        );
+
+        Quagga.onDetected(function (result) {
+          let isbn = result.codeResult.code;
+          document.getElementById("bookSearchID").value = isbn;
+          Quagga.stop();
+          scannerElement.style.display = "none";
+        });
+      }
+    </script>
 
       
                 </div>
