@@ -275,3 +275,16 @@ __pycache__/
 # tools/
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
+
+# LazyTrails local workflow support
+prompts/
+.lazytrails/
+.codexignore
+AGENTS.md
+**/AGENTS.md
+
+# Local agent and codebase analysis outputs
+.serena/
+**/.serena/
+graphify-out/
+**/graphify-out/
