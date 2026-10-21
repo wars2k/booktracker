@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Booktracker\Booktracker.csproj" />
+    <None Include="..\Booktracker\init.sql" Link="init.sql" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

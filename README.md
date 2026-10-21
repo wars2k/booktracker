@@ -81,6 +81,17 @@ Using metadata grabbed from Google Books, easily add books and organize them int
     docker compose up -d
     ```
 
+## Focused development checks
+
+From the repository root, with the .NET 7 SDK and Node.js 18 or newer installed:
+
+```bash
+dotnet run --project Booktracker.Tests/Booktracker.Tests.csproj
+node --test Booktracker.Tests/search.test.js
+```
+
+The .NET console harness uses fake Google Books responses and a temporary SQLite database that it removes after each endpoint check. It covers provider retries, timeouts, API errors, failed-save writes, and Manual Entry independence. The JavaScript checks run `search.js` with stub fetch/DOM objects, including overlapping requests; they do not replace browser/layout validation. No real Google Books key is needed.
+
 ## Screenshots
 
 **Home Page**

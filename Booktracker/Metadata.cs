@@ -116,15 +116,13 @@ namespace bookTrackerApi {
         {
             for (var attempt = 0; attempt < MaxAttempts; attempt++) {
                 try {
-                    using var response = await _client.GetAsync(
-                        requestUri,
-                        HttpCompletionOption.ResponseHeadersRead,
-                        cancellationToken);
+                    using var response = await _client.GetAsync(requestUri, cancellationToken);
 
                     if (response.StatusCode == HttpStatusCode.TooManyRequests) {
                         var retryDelay = GetRetryDelay(response.Headers.RetryAfter, attempt);
 
-                        if (attempt == MaxAttempts - 1) {
+                        // .NET 7 Task.Delay cannot represent a delay above this millisecond limit.
+                        if (attempt == MaxAttempts - 1 || retryDelay.TotalMilliseconds > uint.MaxValue - 1) {
                             throw new GoogleBooksApiException(response.StatusCode, retryDelay);
                         }
 

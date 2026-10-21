@@ -21,7 +21,7 @@ namespace bookTrackerApi {
             if (string.IsNullOrWhiteSpace(googleBooksApiKey)) {
                 googleBooksApiKey = app.Configuration["GoogleBooks:ApiKey"];
             }
-            var googleBooksClient = new ApiClient(googleBooksApiKey);
+            var googleBooksClient = app.Services.GetService<ApiClient>() ?? new ApiClient(googleBooksApiKey);
             ApiClient.ConfigureDefault(googleBooksClient);
 
             //receives a title from the front-end as "name", then searches for that title in the Google Books API. 

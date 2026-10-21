@@ -25,6 +25,18 @@ internal static class TestRunner
             ("transport failure becomes safe provider failure", TransportFailureIsSafe),
             ("malformed JSON becomes safe provider failure", MalformedJsonIsSafeFailure),
             ("caller cancellation is preserved", CallerCancellationIsPreserved),
+            ("stalled search and detail bodies respect the HTTP timeout", StalledBodiesRespectTimeout),
+            ("caller cancellation interrupts stalled search and detail bodies", StalledBodiesRespectCancellation),
+            ("oversized Retry-After delta returns rate limit without delay", OversizedRetryAfterDeltaIsSafe),
+            ("oversized Retry-After date returns rate limit without delay", OversizedRetryAfterDateIsSafe),
+            ("search endpoint returns safe 429 without writes", EndpointTests.Search429),
+            ("search endpoint returns safe 503 without writes", EndpointTests.Search503),
+            ("save endpoint returns safe 429 without writes", EndpointTests.Save429),
+            ("save endpoint returns safe 503 without writes", EndpointTests.Save503),
+            ("save endpoint safely returns oversized Retry-After delta", EndpointTests.OversizedDelta429),
+            ("save endpoint safely returns oversized Retry-After date", EndpointTests.OversizedDate429),
+            ("invalid sessions cannot query the provider or write data", EndpointTests.InvalidSessionsDoNotQueryProvider),
+            ("manual entry persists independently of the provider", EndpointTests.ManualEntryDoesNotQueryProvider),
         };
 
         var failures = 0;
@@ -198,6 +210,87 @@ internal static class TestRunner
 
         await ExpectThrows<OperationCanceledException>(
             () => client.CallApiAsync("cancel", "1", cancellation.Token));
+    }
+
+    private static async Task StalledBodiesRespectTimeout()
+    {
+        foreach (var detail in new[] { false, true })
+        {
+            using var cancellation = new CancellationTokenSource();
+            var content = new StalledContent();
+            var handler = new QueueHttpMessageHandler((_, _) => Task.FromResult(
+                new HttpResponseMessage(HttpStatusCode.OK) { Content = content }));
+            using var http = new HttpClient(handler) { Timeout = TimeSpan.FromMilliseconds(150) };
+            var client = new ApiClient(client: http);
+            Task operation = detail
+                ? client.GetBookFromID("fixture-volume", cancellation.Token)
+                : client.CallApiAsync("fixture-query", "1", cancellation.Token);
+
+            try
+            {
+                var exception = await ExpectThrows<GoogleBooksApiException>(
+                    () => operation.WaitAsync(TimeSpan.FromSeconds(3)));
+                AssertFalse(exception.IsRateLimited, "Body timeout must be a provider-unavailable failure.");
+                AssertFalse(cancellation.IsCancellationRequested, "HTTP timeout must not require caller cancellation.");
+            }
+            finally
+            {
+                cancellation.Cancel();
+            }
+        }
+    }
+
+    private static async Task StalledBodiesRespectCancellation()
+    {
+        foreach (var detail in new[] { false, true })
+        {
+            using var cancellation = new CancellationTokenSource();
+            var content = new StalledContent();
+            var handler = new QueueHttpMessageHandler((_, _) => Task.FromResult(
+                new HttpResponseMessage(HttpStatusCode.OK) { Content = content }));
+            using var http = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(5) };
+            var client = new ApiClient(client: http);
+            Task operation = detail
+                ? client.GetBookFromID("fixture-volume", cancellation.Token)
+                : client.CallApiAsync("fixture-query", "1", cancellation.Token);
+
+            try
+            {
+                await content.Started.Task.WaitAsync(TimeSpan.FromSeconds(2));
+                cancellation.Cancel();
+                await ExpectThrows<OperationCanceledException>(
+                    () => operation.WaitAsync(TimeSpan.FromSeconds(2)));
+            }
+            finally
+            {
+                cancellation.Cancel();
+            }
+        }
+    }
+
+    private static Task OversizedRetryAfterDeltaIsSafe() => OversizedRetryAfterIsSafe(false);
+
+    private static Task OversizedRetryAfterDateIsSafe() => OversizedRetryAfterIsSafe(true);
+
+    private static async Task OversizedRetryAfterIsSafe(bool useDate)
+    {
+        var now = new DateTimeOffset(2026, 10, 20, 12, 0, 0, TimeSpan.Zero);
+        var requestedDelay = TimeSpan.FromDays(60);
+        var retryAfter = useDate
+            ? new RetryConditionHeaderValue(now + requestedDelay)
+            : new RetryConditionHeaderValue(requestedDelay);
+        var handler = new QueueHttpMessageHandler(Respond(HttpStatusCode.TooManyRequests, retryAfter: retryAfter));
+        using var http = new HttpClient(handler);
+        var client = new ApiClient(client: http,
+            delayAsync: (_, _) => throw new InvalidOperationException("Oversized Retry-After reached the delay callback."),
+            utcNow: () => now);
+
+        var exception = await ExpectThrows<GoogleBooksApiException>(
+            () => client.CallApiAsync("fixture-query", "1", CancellationToken.None));
+
+        AssertTrue(exception.IsRateLimited, "Oversized delay must remain a rate-limit failure.");
+        AssertEqual<TimeSpan?>(requestedDelay, exception.RetryAfter, "Retry timing must not be silently shortened.");
+        AssertEqual(1, handler.RequestUris.Count, "Unsupported delay must not cause another request.");
     }
 
     private static ApiClient CreateClient(

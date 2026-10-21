@@ -1,9 +1,12 @@
+let latestSearchRequest = 0;
+
 function searchForBook(event) {
     if (event) {
         event.preventDefault();
     }
 
     const sessionKey = localStorage.getItem("sessionKey");
+    const requestId = ++latestSearchRequest;
     const searchBar = document.getElementById("bookSearchID");
     const resultsValue = document.getElementById("resultsToSearch").value;
 
@@ -12,8 +15,15 @@ function searchForBook(event) {
         method: 'GET'
     })
     .then(readApiResponse)
-    .then(data => displaySearchResults(data))
+    .then(data => {
+        if (requestId === latestSearchRequest) {
+            displaySearchResults(data);
+        }
+    })
     .catch(error => {
+        if (requestId !== latestSearchRequest) {
+            return;
+        }
         document.getElementById("cardContainer").textContent = "";
         searchData = [];
         displayProviderError(error);
