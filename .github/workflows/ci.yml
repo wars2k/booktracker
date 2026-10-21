@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  node-checks:
+    name: Node checks
+    if: github.repository == 'DaHokeyPokey/booktracker'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.1'
+          package-manager-cache: false
+
+      - name: Validate workflows with pinned actionlint
+        run: |
+          curl --fail --silent --show-error --location \
+            "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz" \
+            --output "$RUNNER_TEMP/actionlint.tar.gz"
+          echo "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8  $RUNNER_TEMP/actionlint.tar.gz" | sha256sum --check --strict
+          tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint" .github/workflows/*.yml
+
+      - name: Run all Node suites
+        run: node --test Booktracker.Tests/*.test.js
+
+  dotnet-compatibility:
+    name: .NET compatibility
+    if: github.repository == 'DaHokeyPokey/booktracker'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # Unsupported .NET 7 is checked for compatibility, not production approval.
+      SDK_IMAGE: mcr.microsoft.com/dotnet/sdk:7.0@sha256:a291948a5e5ceb50e3eaa75cb1e6377660146b385e475938d6855e220afaaeed
+      HARNESS_IMAGE: mcr.microsoft.com/dotnet/aspnet:7.0@sha256:8a7717ff21c245feacd25dae5ff23306aae0e058578725ad987fd4b8509c36ec
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Restore and Release build in SDK container
+        run: |
+          docker run --rm --platform linux/amd64 \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/source" \
+            --workdir /source \
+            --env DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+            "$SDK_IMAGE" \
+            sh -ec 'dotnet restore Booktracker.Tests/Booktracker.Tests.csproj
+                    dotnet build Booktracker.Tests/Booktracker.Tests.csproj -c Release --no-restore'
+
+      - name: Run compiled console harness without network
+        run: |
+          docker run --rm --platform linux/amd64 --network none \
+            --mount "type=bind,source=$GITHUB_WORKSPACE/Booktracker.Tests/bin/Release/net7.0,target=/checks,readonly" \
+            --workdir /tmp \
+            --env DOTNET_CLI_TELEMETRY_OPTOUT=1 \
+            "$HARNESS_IMAGE" dotnet /checks/Booktracker.Tests.dll

@@ -3,7 +3,11 @@
 
 Using metadata grabbed from Google Books, easily add books and organize them into collections. Set each book’s status, give it a rating, and track how long it took to read. 
 
-**Disclaimer:** I am an English Lit graduate learning to program, and Booktracker is my first major project. Booktracker is still under active development, so expect bugs and breaking changes.
+This fork's primary repository is [DaHokeyPokey/booktracker](https://github.com/DaHokeyPokey/booktracker). Open pull requests against its [`main` branch](https://github.com/DaHokeyPokey/booktracker/tree/main); see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Booktracker is under active development; expect bugs and breaking changes.
+
+Licensed under [MIT](LICENSE), with the original Copyright (c) 2023 wars2k notice retained.
 
 ![Collection Page](/screenshots/collections.JPG)
 
@@ -19,9 +23,21 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 - Import book data and bookshelves from Goodreads.
 - Export data to JSON or CSV.
 
+## Documentation
+
+- [Development and focused checks](docs/development.md)
+- [Deployment contracts, configuration, and backups](docs/deployment.md)
+- [Planned releases and publication gates](docs/releases.md)
+
 ## Installation
 
-**Docker Compose (recommended)**
+**Original-project Docker Compose example (not this fork's image)**
+
+The example below references the original project's `wars2k/booktracker:latest`, not a verified build of this fork. Its contents and availability have not been verified here.
+
+The intended fork image is `ghcr.io/dahokeypokey/booktracker`, but no fork image has been verified or published by this workflow. That namespace is planned, not a working installation target.
+
+**Source-build warning:** This fork still targets unsupported .NET 7. The current Dockerfile copies `Booktracker/external`; do not build it with real user data. Safe packaging, supported-runtime and publication gates remain unresolved; see the [deployment guide](docs/deployment.md#status-and-prerequisites).
 
 1. Paste this `docker-compose.yml` file into an empty directory, replacing with the correct info where necessary
     
@@ -83,10 +99,13 @@ Using metadata grabbed from Google Books, easily add books and organize them int
 
 ## Focused development checks
 
-From the repository root, with the .NET 7 SDK and Node.js 18 or newer installed:
+From the repository root, in an isolated .NET 7 SDK environment with Node.js 18 or newer:
+
+Both .NET projects currently target unsupported .NET 7. These are compatibility checks, not production-release approval. Use a supported Node.js release; the Node minimum describes test compatibility, not lifecycle support.
 
 ```bash
-dotnet run --project Booktracker.Tests/Booktracker.Tests.csproj
+dotnet restore Booktracker.Tests/Booktracker.Tests.csproj
+dotnet run --project Booktracker.Tests/Booktracker.Tests.csproj --no-restore
 node --test Booktracker.Tests/search.test.js
 ```
 
