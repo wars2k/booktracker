@@ -32,11 +32,33 @@ Using metadata grabbed from Google Books, easily add books and organize them int
         booktracker:
             image: wars2k/booktracker:latest
             restart: unless-stopped
+            environment:
+                GOOGLE_BOOKS_API_KEY: ${GOOGLE_BOOKS_API_KEY}
             volumes:
                 - ./data:/app/external
             ports:
                 - 2341:5000 #replace 2341 with your desired port.
     ```
+
+    The Google Books API key is optional. Supply it through the deployment environment before running Docker Compose. Do not place a real key directly in this file or commit it to the repository.
+
+    Supported configuration sources:
+
+    - `GOOGLE_BOOKS_API_KEY` — preferred exact environment variable.
+    - `GoogleBooks__ApiKey` — standard ASP.NET environment-variable mapping for `GoogleBooks:ApiKey`.
+    - `GoogleBooks:ApiKey` — application configuration key.
+
+    Equivalent application configuration:
+
+    ```json
+    {
+      "GoogleBooks": {
+        "ApiKey": ""
+      }
+    }
+    ```
+
+    `GOOGLE_BOOKS_API_KEY` takes precedence when it is non-empty. If no key is supplied, Booktracker continues using unauthenticated Google Books requests. Rate-limit or provider failures are shown in the Add New Book page, where Manual Entry remains available.
     
 2. Create the `data` directory with the following three subdirectories: 
     - `db`

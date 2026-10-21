@@ -1,45 +1,109 @@
 function searchForBook(event) {
-    //event.preventDefault();
-    sessionKey = localStorage.getItem("sessionKey");
-    let searchBar = document.getElementById("bookSearchID");
-    let results = document.getElementById("resultsToSearch")
-    resultsValue = results.value;
-    console.log(resultsValue);
-    fetch(`/api/books/new?name=${searchBar.value}&results=${resultsValue}&sessionKey=${sessionKey}`, {
-    method: 'GET'
+    if (event) {
+        event.preventDefault();
+    }
+
+    const sessionKey = localStorage.getItem("sessionKey");
+    const searchBar = document.getElementById("bookSearchID");
+    const resultsValue = document.getElementById("resultsToSearch").value;
+
+    clearProviderError();
+    fetch(`/api/books/new?name=${encodeURIComponent(searchBar.value)}&results=${encodeURIComponent(resultsValue)}&sessionKey=${encodeURIComponent(sessionKey ?? "")}`, {
+        method: 'GET'
     })
-    .then(response => response.json())
+    .then(readApiResponse)
     .then(data => displaySearchResults(data))
-    .catch(error => console.error(error));
-  }
-  //takes the response from the back-end and creates cards for each of the 5 responses. 
-  function displaySearchResults(data) {
-    console.log(data);
-    let cards = document.getElementsByClassName("bookResponse");
-    let cardsArray = Array.from(cards);
-    document.getElementById("cardContainer").innerHTML = "";
+    .catch(error => {
+        document.getElementById("cardContainer").textContent = "";
+        searchData = [];
+        displayProviderError(error);
+    });
+}
+
+async function readApiResponse(response) {
+    let data = null;
+
+    try {
+        data = await response.json();
+    } catch (error) {
+        if (response.ok) {
+            throw createUserError("The server returned an invalid response. Try again later or use Manual Entry.");
+        }
+    }
+
+    if (!response.ok) {
+        const message = [data?.message, data?.details].filter(Boolean).join(" ");
+        throw createUserError(message || "Google Books is temporarily unavailable. Try again later or use Manual Entry.");
+    }
+
+    return data;
+}
+
+function createUserError(message) {
+    const error = new Error(message);
+    error.userMessage = message;
+    return error;
+}
+
+function clearProviderError() {
+    const existingError = document.getElementById("googleBooksError");
+    if (existingError) {
+        existingError.remove();
+    }
+}
+
+function displayProviderError(error) {
+    clearProviderError();
+
+    const banner = document.createElement("div");
+    banner.id = "googleBooksError";
+    banner.classList.add("alert", "alert-danger");
+    banner.setAttribute("role", "alert");
+
+    const title = document.createElement("h4");
+    title.classList.add("alert-title");
+    title.textContent = "Google Books unavailable";
+
+    const message = document.createElement("p");
+    message.textContent = error?.userMessage || "Google Books is temporarily unavailable. Try again later or use Manual Entry.";
+
+    banner.append(title, message);
+    document.getElementById("row").prepend(banner);
+}
+
+//takes the response from the back-end and creates cards for each response.
+function displaySearchResults(data) {
+    if (!Array.isArray(data)) {
+        throw createUserError("The server returned an invalid response. Try again later or use Manual Entry.");
+    }
+
+    clearProviderError();
+    document.getElementById("cardContainer").textContent = "";
+    searchData = data;
+
     for (let i = 0; i < data.length; i++) {
         createBookResponse(data[i], i);
-        searchData = data;    
     }
-  }
+}
 
-  let searchData;
-  //called from the button on cards in the "add new book page"
-  //POSTS the Google Books API id of the desired volume.
-  function addBook(i) {
-    sessionKey = localStorage.getItem("sessionKey");
-    let id = searchData[i].id;
-    fetch(`/api/books/save?id=${id}&sessionKey=${sessionKey}`, {
-    method: 'POST'
+let searchData = [];
+
+//called from the button on the cards in the "add new book page"
+//POSTS the Google Books API id of the desired volume.
+function addBook(i) {
+    const sessionKey = localStorage.getItem("sessionKey");
+    const id = searchData[i].id;
+
+    clearProviderError();
+    fetch(`/api/books/save?id=${encodeURIComponent(id)}&sessionKey=${encodeURIComponent(sessionKey ?? "")}`, {
+        method: 'POST'
     })
-    .then(response => response.json())
+    .then(readApiResponse)
     .then(data => createSuccessIndicator(data, i))
-    .catch(error => console.error(error));
-    
-  }
+    .catch(error => displayProviderError(error));
+}
 
-  function manualEntry() {
+function manualEntry() {
     let entryBox = document.getElementById("manualEntryBox");
     entryBox.style.display = "block";
   }

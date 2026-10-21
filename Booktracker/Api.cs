@@ -17,6 +17,13 @@ namespace bookTrackerApi {
         
         public static void configureBookEndpoints(WebApplication app) {
 
+            string? googleBooksApiKey = app.Configuration["GOOGLE_BOOKS_API_KEY"];
+            if (string.IsNullOrWhiteSpace(googleBooksApiKey)) {
+                googleBooksApiKey = app.Configuration["GoogleBooks:ApiKey"];
+            }
+            var googleBooksClient = new ApiClient(googleBooksApiKey);
+            ApiClient.ConfigureDefault(googleBooksClient);
+
             //receives a title from the front-end as "name", then searches for that title in the Google Books API. 
             //the Google Books API returns the top 5 results, which are then returned to the front-end to be displayed.
             app.MapGet("/api/books/new", async (string name, string sessionKey, string results, HttpContext context) => {
@@ -30,14 +37,20 @@ namespace bookTrackerApi {
                     ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_search", null, remoteIp);
                     return Results.BadRequest(errorMessage);
                 }
-                var content = await ApiClient.CallApiAsync(name, results);
-                JsonLog.writeLog($"Google Books API queried for '{name}'.", "INFO", "book_search", currentSession, remoteIp);
-                return Results.Ok(content);
+                try {
+                    var content = await googleBooksClient.CallApiAsync(name, results, context.RequestAborted);
+                    JsonLog.writeLog($"Google Books API queried for '{name}'.", "INFO", "book_search", currentSession, remoteIp);
+                    return Results.Ok(content);
+                } catch (GoogleBooksApiException exception) {
+                    return createGoogleBooksErrorResult(exception, "book_search", currentSession, remoteIp, context);
+                }
                 
             })
             .Produces<List<object>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status429TooManyRequests)
+            .Produces<ErrorMessage>(StatusCodes.Status503ServiceUnavailable)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
@@ -114,7 +127,12 @@ namespace bookTrackerApi {
                     ErrorMessage errorMessage = JsonLog.logAndCreateErrorMessage(ErrorMessages.invalid_sessionKey, "book_save", null, remoteIp);
                     return Results.BadRequest(errorMessage);
                 }
-                VolumeInfo book = await ApiClient.GetBookFromID(id);
+                VolumeInfo book;
+                try {
+                    book = await googleBooksClient.GetBookFromID(id, context.RequestAborted);
+                } catch (GoogleBooksApiException exception) {
+                    return createGoogleBooksErrorResult(exception, "book_save", currentSession, remoteIp, context);
+                }
                 if (book == null) {
                     return Results.BadRequest("book not found");
                 }
@@ -129,6 +147,8 @@ namespace bookTrackerApi {
             .Produces<VolumeInfo>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces<ErrorMessage>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorMessage>(StatusCodes.Status429TooManyRequests)
+            .Produces<ErrorMessage>(StatusCodes.Status503ServiceUnavailable)
             .WithTags("Books")
             .WithOpenApi(operation => new(operation)
             {
@@ -195,6 +215,32 @@ namespace bookTrackerApi {
             });
 
 
+        }
+
+        private static IResult createGoogleBooksErrorResult(
+            GoogleBooksApiException exception,
+            string eventType,
+            SessionInfo currentSession,
+            string? remoteIp,
+            HttpContext context)
+        {
+            ErrorMessage errorMessage;
+            int statusCode;
+
+            if (exception.IsRateLimited) {
+                errorMessage = ErrorMessages.google_books_rate_limited;
+                statusCode = StatusCodes.Status429TooManyRequests;
+
+                if (exception.RetryAfter is TimeSpan retryAfter && retryAfter > TimeSpan.Zero) {
+                    context.Response.Headers["Retry-After"] = Math.Ceiling(retryAfter.TotalSeconds).ToString();
+                }
+            } else {
+                errorMessage = ErrorMessages.google_books_unavailable;
+                statusCode = StatusCodes.Status503ServiceUnavailable;
+            }
+
+            JsonLog.logAndCreateErrorMessage(errorMessage, eventType, currentSession, remoteIp);
+            return Results.Json(errorMessage, statusCode: statusCode);
         }
 
         public class EditBookData {

@@ -37,6 +37,18 @@ namespace bookTrackerApi {
             Details = "Some requests (updating books, deleting books, adding users, etc.) require admin privileges."
         };
 
+        public static ErrorMessage google_books_rate_limited = new ErrorMessage {
+            Code = "google_books_rate_limited",
+            Message = "Google Books is temporarily rate limited.",
+            Details = "Try again later or use Manual Entry."
+        };
+
+        public static ErrorMessage google_books_unavailable = new ErrorMessage {
+            Code = "google_books_unavailable",
+            Message = "Google Books is temporarily unavailable.",
+            Details = "Try again later or use Manual Entry."
+        };
+
     }
 
     public class ErrorMessage {
